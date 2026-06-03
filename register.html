@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="BIAKA Debate Club - Register now to join our community of student leaders and speakers.">
+  <meta property="og:url" content="https://biakadebateclub.com/register">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Join BIAKA Debate Club">
+  <meta property="og:description" content="Register to join the Biaka Audacious Agora Debate Club - Membership Registration">
+  <title>BIAKA Debate Club - Register</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="index.html" aria-label="BIAKA Debate Club home">
+      <img id="schoolLogo" alt="BIAKA University Institute of Buea logo">
+      <span>
+        <strong data-i18n="clubName">BIAKA Debate Club</strong>
+        <small data-i18n="schoolName">BIAKA University Institute of Buea</small>
+      </span>
+    </a>
+    <button class="menu-button" id="menuButton" type="button" aria-label="Open navigation" data-i18n="menuLabel">Menu</button>
+    <nav id="mainNav" aria-label="Primary navigation">
+      <a href="/" data-i18n="navHome">Home</a>
+      <a href="/#about" data-i18n="navAbout">About</a>
+      <a href="/register" data-i18n="navRegister">Register</a>
+      <a href="/news" data-i18n="navNews">News</a>
+      <a href="/#contact" data-i18n="navContact">Contact</a>
+    </nav>
+    <div class="language-toggle" aria-label="Language selector">
+      <button type="button" class="active" data-lang="en">ENG</button>
+      <button type="button" data-lang="fr">FRE</button>
+    </div>
+  </header>
+
+  <main>
+    <section id="register" class="registration-section">
+      <div class="section-heading">
+        <p class="eyebrow" data-i18n="registerEyebrow">Agenda</p>
+        <h2 data-i18n="registerTitle">The Biaka Audacious Agora Debate Club Membership Registration</h2>
+      </div>
+      <div class="form-layout">
+        <article class="info-panel">
+          <h3 data-i18n="welcomeTitle">Welcome</h3>
+          <p data-i18n="welcomeText">Welcome to the Biaka Audacious Agora Debate Club! After our Pan Africa 2026 Success and with <span class="president-name">TERCY WAINWUL</span> Raising BIAKA Visibility Flag High, we are building something big. This comes with a lot of Opportunities at hands - Competitions, Leadership, Training and Networking.</p>
+          <p data-i18n="registrationInstruction">Fill in this 1 mins form to Register.</p>
+          <p><strong data-i18n="meetingDate">Our Brief meeting is Friday June 5 th 2026.</strong></p>
+          <p data-i18n="meetingReminder">Don't miss out.</p>
+        </article>
+        <form id="registrationForm" class="club-form">
+          <label><span data-i18n="fieldName">Full Name</span><input name="name" required></label>
+          <label><span data-i18n="fieldDepartment">Department + Level</span><input name="department" placeholder="e.g. Computer Science 200" required></label>
+          <label class="wide"><span data-i18n="fieldPhone">Phone Number / WhatsApp Number</span><input name="phone" required></label>
+          <label><span data-i18n="fieldExperience">Debate Experience</span>
+            <select name="experience" required>
+              <option value="">Select experience level</option>
+              <option value="Beginner: Never Debated">Beginner: Never Debated</option>
+              <option value="Intermediate: Some Experience">Intermediate: Some Experience</option>
+              <option value="Advanced: Competed Before">Advanced: Competed Before</option>
+            </select>
+          </label>
+          <label class="wide"><span data-i18n="fieldReason">Why do you want to Join the Biaka Audacious Agora Debate Club?</span><textarea name="reason" rows="5" required></textarea></label>
+          <button type="submit" data-i18n="submitRegistration">Submit Registration</button>
+          <p id="formMessage" class="form-message"></p>
+        </form>
+        <aside class="registrations-panel">
+          <h3 data-i18n="latestRegistrations">Latest Registrations</h3>
+          <div id="registrationsList"></div>
+        </aside>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <span data-i18n="footerText">BIAKA Debate Club - Built for student leadership, civic reasoning and public speaking.</span>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>

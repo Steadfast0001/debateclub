@@ -1,0 +1,55 @@
+# BIAKA DEBATE CLUB - NETLIFY CONFIGURATION
+# Deployment configuration for Netlify
+
+[build]
+# Build command - installs dependencies before deployment
+command = "npm install"
+
+# Directory containing serverless functions
+functions = "api"
+
+# Publish directory (where built/static files are served from)
+publish = "."
+
+# Environment variables
+[build.environment]
+NODE_VERSION = "18"
+NODE_ENV = "production"
+
+# URL Redirects - route requests to proper endpoints
+[[redirects]]
+# Direct /register requests to index.html (enables /register route)
+from = "/register"
+to = "/index.html"
+status = 200
+
+[[redirects]]
+# Route API calls to serverless functions
+from = "/api/*"
+to = "/.netlify/functions/:splat"
+status = 200
+
+[[redirects]]
+# Fallback for SPA - any route not matched goes to index.html
+from = "/*"
+to = "/index.html"
+status = 200
+
+# HTTP Headers - configure CORS for API requests
+[[headers]]
+for = "/api/*"
+[headers.values]
+  Access-Control-Allow-Origin = "*"
+  Access-Control-Allow-Methods = "GET, POST, PUT, DELETE, OPTIONS"
+  Access-Control-Allow-Headers = "Content-Type, Authorization, X-Admin-Key"
+
+# Cache headers for static content
+[[headers]]
+for = "/*.{js,css,png,jpg,jpeg,gif,svg,ico,webp}"
+[headers.values]
+  Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+for = "/index.html"
+[headers.values]
+  Cache-Control = "public, max-age=0, must-revalidate"

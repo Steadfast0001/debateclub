@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BIAKA Debate Club - Admin</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .hidden { display: none !important; }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="index.html">
+      <img id="schoolLogo" alt="BIAKA University Institute of Buea logo">
+      <span>
+        <strong>BIAKA Debate Club</strong>
+        <small>Admin Portal</small>
+      </span>
+    </a>
+    <nav id="mainNav">
+      <a href="/">Home</a>
+      <a href="/news">News</a>
+    </nav>
+  </header>
+
+  <main>
+    <section id="admin-login-section" class="info-panel">
+      <h2>Admin Login</h2>
+      <form id="adminLoginForm" class="club-form compact">
+        <label><span>Admin Key</span><input type="password" id="adminKeyInput" required></label>
+        <button type="submit">Login</button>
+      </form>
+      <p id="adminLoginMessage" style="margin-top: 10px;"></p>
+    </section>
+
+    <section id="admin-dashboard-section" class="hidden">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <h2>Admin Dashboard</h2>
+        <button id="logoutBtn" style="background: var(--red); color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer;">Logout</button>
+      </div>
+      
+      <article class="info-panel post-panel" style="margin-top: 20px;">
+        <h3>Post an update</h3>
+        <form id="newsForm" class="club-form compact">
+          <label><span>Title</span><input name="title" required></label>
+          <label><span>Media Type</span>
+            <select name="type">
+              <option>Image</option>
+              <option>Video</option>
+              <option>Text</option>
+            </select>
+          </label>
+          <label><span>Image or Video Link</span><input name="media" placeholder="https://..."></label>
+          <label><span>Update Text</span><textarea name="text" rows="4" required></textarea></label>
+          <button type="submit">Publish Update</button>
+        </form>
+        <p id="newsFormMessage" style="margin-top: 10px; font-weight: bold;"></p>
+      <article class="info-panel post-panel" style="margin-top: 20px;">
+        <h3>Manage News Posts</h3>
+        <p style="color: var(--muted); font-size: 13px; margin-bottom: 15px;">Delete old or incorrect news updates.</p>
+        <button id="loadAdminNewsBtn" style="padding: 8px 12px; border: none; background: var(--blue); color: white; border-radius: 4px; cursor: pointer; margin-bottom: 15px;">Load News Posts</button>
+        <div id="adminNewsList" style="display: grid; gap: 10px;"></div>
+      </article>
+
+      <article class="info-panel post-panel" style="margin-top: 20px;">
+        <h3>Update Quick Stats</h3>
+        <form id="statsForm" class="club-form compact">
+          <label><span>Executive Leaders</span><input type="number" name="leaders" id="adminStatLeaders" required></label>
+          <label><span>Planned Activities</span><input type="number" name="activities" id="adminStatActivities" required></label>
+          <label><span>Campus Community</span><input type="text" name="campus" id="adminStatCampus" required></label>
+          <button type="submit">Update Stats</button>
+        </form>
+        <p id="statsFormMessage" style="margin-top: 10px; font-weight: bold;"></p>
+      </article>
+
+      <article class="info-panel post-panel" style="margin-top: 20px;">
+        <h3>Manage Gallery Images</h3>
+        <p style="color: var(--muted); font-size: 13px; margin-bottom: 15px;">Upload new photos or delete old ones from the homepage gallery.</p>
+        <form id="galleryUploadForm" class="club-form compact" style="margin-bottom: 15px;">
+          <label><span>Select Photo</span><input type="file" name="image" accept="image/*" required></label>
+          <button type="submit">Upload Image</button>
+        </form>
+        <p id="galleryUploadMessage" style="margin-top: 10px; font-weight: bold;"></p>
+        <button id="loadAdminGalleryBtn" style="padding: 8px 12px; border: none; background: var(--blue); color: white; border-radius: 4px; cursor: pointer; margin-bottom: 15px;">Load Gallery Images</button>
+        <div id="adminGalleryList" style="display: grid; gap: 10px;"></div>
+      </article>
+
+      <article class="info-panel post-panel" style="margin-top: 20px;">
+        <h3>Registration Applications</h3>
+        <p style="color: var(--muted); font-size: 13px; margin-bottom: 15px;">View all student registrations securely.</p>
+        <button id="loadRegistrationsBtn" style="padding: 8px 12px; border: none; background: var(--blue); color: white; border-radius: 4px; cursor: pointer; margin-bottom: 15px;">Load Recent Registrations</button>
+        <div id="adminRegistrationsList" style="display: grid; gap: 10px;"></div>
+      </article>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>

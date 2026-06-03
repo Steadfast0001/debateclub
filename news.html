@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="BIAKA Debate Club - Register now to join our community of student leaders and speakers.">
+  <title>BIAKA Debate Club - News</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="index.html" aria-label="BIAKA Debate Club home">
+      <img id="schoolLogo" alt="BIAKA University Institute of Buea logo">
+      <span>
+        <strong data-i18n="clubName">BIAKA Debate Club</strong>
+        <small data-i18n="schoolName">BIAKA University Institute of Buea</small>
+      </span>
+    </a>
+    <button class="menu-button" id="menuButton" type="button" aria-label="Open navigation" data-i18n="menuLabel">Menu</button>
+    <nav id="mainNav" aria-label="Primary navigation">
+      <a href="/" data-i18n="navHome">Home</a>
+      <a href="/#about" data-i18n="navAbout">About</a>
+      <a href="/register" data-i18n="navRegister">Register</a>
+      <a href="/news" data-i18n="navNews">News</a>
+      <a href="/#contact" data-i18n="navContact">Contact</a>
+    </nav>
+    <div class="language-toggle" aria-label="Language selector">
+      <button type="button" class="active" data-lang="en">ENG</button>
+      <button type="button" data-lang="fr">FRE</button>
+    </div>
+  </header>
+
+  <main>
+    <section id="news">
+      <div class="section-heading">
+        <p class="eyebrow" data-i18n="newsEyebrow">News and updates</p>
+        <h2 data-i18n="newsTitle">Latest club activities</h2>
+      </div>
+      <div class="news-layout">
+        <div id="newsGrid" class="news-grid"></div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <span data-i18n="footerText">BIAKA Debate Club - Built for student leadership, civic reasoning and public speaking.</span>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>

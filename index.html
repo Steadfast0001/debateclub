@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="BIAKA Debate Club - Register now to join our community of student leaders and speakers.">
+  <meta property="og:url" content="https://biakadebateclub.com/register">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Join BIAKA Debate Club">
+  <meta property="og:description" content="Register to join the Biaka Audacious Agora Debate Club - Membership Registration">
+  <title>BIAKA Debate Club</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="index.html" aria-label="BIAKA Debate Club home">
+      <img id="schoolLogo" alt="BIAKA University Institute of Buea logo">
+      <span>
+        <strong data-i18n="clubName">BIAKA Debate Club</strong>
+        <small data-i18n="schoolName">BIAKA University Institute of Buea</small>
+      </span>
+    </a>
+    <button class="menu-button" id="menuButton" type="button" aria-label="Open navigation" data-i18n="menuLabel">Menu</button>
+    <nav id="mainNav" aria-label="Primary navigation">
+      <a href="/" data-i18n="navHome">Home</a>
+      <a href="/#about" data-i18n="navAbout">About</a>
+      <a href="/register" data-i18n="navRegister">Register</a>
+      <a href="/news" data-i18n="navNews">News</a>
+      <a href="/#contact" data-i18n="navContact">Contact</a>
+    </nav>
+    <div class="language-toggle" aria-label="Language selector">
+      <button type="button" class="active" data-lang="en">ENG</button>
+      <button type="button" data-lang="fr">FRE</button>
+    </div>
+  </header>
+
+  <main>
+    <section id="home" class="hero">
+      <div class="hero-content">
+        <p class="eyebrow" data-i18n="heroEyebrow">Speak. Reason. Lead.</p>
+        <h1 data-i18n="heroTitle">The official debate club for sharp voices and stronger minds.</h1>
+        <p class="lead" data-i18n="heroLead">Join students who train in public speaking, critical thinking, research, leadership, diplomacy and respectful argument.</p>
+        <div class="hero-actions">
+          <a class="primary-action" href="/register" data-i18n="registerNow">Register Now</a>
+          <a class="secondary-action" href="/news" data-i18n="seeUpdates">See Updates</a>
+        </div>
+      </div>
+      <div class="mission-board">
+        <article>
+          <span data-i18n="visionLabel">Vision</span>
+          <p data-i18n="visionText">To build confident student leaders who can defend ideas with facts, discipline and respect.</p>
+        </article>
+        <article>
+          <span data-i18n="missionLabel">Mission</span>
+          <p data-i18n="missionText">To train members through debates, workshops, research tasks, school events and inter-university competitions.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="quick-stats" aria-label="Club highlights">
+      <article><strong id="memberCount">0</strong><span data-i18n="statMembers">Registered Members</span></article>
+      <article><strong id="statLeadersCount">4</strong><span data-i18n="statLeaders">Executive Leaders</span></article>
+      <article><strong id="statActivitiesCount">12</strong><span data-i18n="statActivities">Planned Activities</span></article>
+      <article><strong id="statCampusText">BUIB</strong><span data-i18n="statCampus">Campus Community</span></article>
+      <article><strong id="statVisitsCount">0</strong><span data-i18n="statVisits">Unique Visitors</span></article>
+    </section>
+
+    <section id="about">
+      <div class="section-heading">
+        <p class="eyebrow" data-i18n="aboutEyebrow">About the club</p>
+        <h2 data-i18n="aboutTitle">Administrative team and club identity</h2>
+      </div>
+      <div class="about-layout">
+        <article class="info-panel">
+          <h3 data-i18n="aboutClubTitle">What the club does</h3>
+          <p data-i18n="aboutClubText">The BIAKA Debate Club creates a structured space where students learn to think quickly, research deeply, speak clearly and listen with maturity. Members participate in debates, mock panels, leadership forums, public speaking practice and campus events.</p>
+          <div class="values">
+            <span data-i18n="valueResearch">Research</span>
+            <span data-i18n="valueRespect">Respect</span>
+            <span data-i18n="valueConfidence">Confidence</span>
+            <span data-i18n="valueLeadership">Leadership</span>
+          </div>
+        </article>
+        <div class="leaders-grid" id="leadersGrid"></div>
+      </div>
+    </section>
+
+    <section id="gallery" aria-label="Photo Gallery">
+      <div class="section-heading">
+        <p class="eyebrow" data-i18n="galleryEyebrow">Moments</p>
+        <h2 data-i18n="galleryTitle">Photo Gallery</h2>
+      </div>
+      <div id="publicGalleryGrid" class="gallery-grid">
+        <!-- Dynamic images will be inserted here -->
+      </div>
+    </section>    <section id="contact">
+      <div class="section-heading">
+        <p class="eyebrow" data-i18n="contactEyebrow">Contact</p>
+        <h2 data-i18n="contactTitle">Reach the club and the school</h2>
+      </div>
+      <div class="contact-grid">
+        <article class="info-panel">
+          <h3 data-i18n="clubContacts">Club Contacts</h3>
+          <div id="contactList" class="contact-list"></div>
+        </article>
+        <article class="info-panel">
+          <h3 data-i18n="schoolContacts">School Contact</h3>
+          <p><strong>BIAKA University Institute of Buea</strong></p>
+          <p data-i18n="schoolAddress">Bokoko, Biaka Street, Buea, South West Region, Cameroon</p>
+          <p><a href="https://biakahc.org/contact/" target="_blank" rel="noreferrer" data-i18n="schoolWebsite">School Website</a></p>
+          <p><a href="mailto:infocm@biakahc.org">infocm@biakahc.org</a></p>
+          <p><a href="tel:+237671710796">+237 671 710 796</a></p>
+        </article>
+        <article class="info-panel">
+          <h3 data-i18n="socialMedia">Social Media</h3>
+          <div class="social-links">
+            <a href="https://facebook.com/biakadebateclub" target="_blank" rel="noreferrer">Facebook: @biakadebateclub</a>
+            <a href="https://instagram.com/biakadebateclub" target="_blank" rel="noreferrer">Instagram: @biakadebateclub</a>
+            <a href="https://x.com/biakadebate" target="_blank" rel="noreferrer">X: @biakadebate</a>
+            <a href="https://wa.me/237690000000" target="_blank" rel="noreferrer">WhatsApp: +237 690 000 000</a>
+          </div>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <span data-i18n="footerText">BIAKA Debate Club - Built for student leadership, civic reasoning and public speaking.</span>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
