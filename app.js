@@ -34,7 +34,7 @@ const leaders = [
   { role: "President", roleFr: "President", name: "Grace Ngwa", phone: "+237 690 100 101", email: "president@biakadebate.club", photo: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=900&q=80" },
   { role: "Vice President", roleFr: "Vice-presidente", name: "Daniel Ebot", phone: "+237 680 811 299", email: "vp@biakadebate.club", photo: "images/vp.jpg" },
   { role: "Secretary General", roleFr: "Secretaire general", name: "Nora Tabe", phone: "+237 681 300 303", email: "secretary@biakadebate.club", photo: "https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=900&q=80" },
-  { role: "Public Relations Officer", roleFr: "Charge de communication", name: "Kevin Mbella", phone: "+237 699 400 404", email: "pro@biakadebate.club", photo: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=900&q=80" }
+  { role: "Public Relations Officer", roleFr: "Charge de communication", name: "Kevin Mbella", phone: "+237 652 577 218", email: "pro@biakadebate.club", photo: "images/pro.jpg" }
 ];
 
 const defaultNews = [
