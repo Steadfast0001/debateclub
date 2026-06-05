@@ -11,26 +11,26 @@ app.use(cors());
 app.use(express.json());
 
 // API routes
-app.all('/api/register', require('./api/register'));
-app.all('/api/news', require('./api/news'));
-app.all('/api/stats', require('./api/stats'));
-app.all('/api/visit', require('./api/visit'));
-app.all('/api/gallery', require('./api/gallery'));
-app.all('/api/admin/registrations', require('./api/admin/registrations'));
-app.use('/api/leaders', require('./api/leaders'));
+app.all('/api/register', require('../routes/register'));
+app.all('/api/news', require('../routes/news'));
+app.all('/api/stats', require('../routes/stats'));
+app.all('/api/visit', require('../routes/visit'));
+app.all('/api/gallery', require('../routes/gallery'));
+app.all('/api/admin/registrations', require('../routes/admin/registrations'));
+app.use('/api/leaders', require('../routes/leaders'));
 
 // Serve static HTML files without requiring .html extension (optional but nice)
-app.use(express.static(__dirname, { extensions: ['html'] }));
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+app.use(express.static(path.join(__dirname, '..', 'public'), { extensions: ['html'] }));
+app.use('/uploads', express.static(path.join(__dirname, '..', 'uploads')));
 
 // Legacy direct registration link
 app.get('/register', (req, res) => {
-  res.sendFile(path.join(__dirname, 'register.html'));
+  res.sendFile(path.join(__dirname, '..', 'public', 'register.html'));
 });
 
 // Fallback for static files
 app.use((req, res) => {
-  res.sendFile(path.join(__dirname, 'index.html'));
+  res.sendFile(path.join(__dirname, '..', 'public', 'index.html'));
 });
 
 // For local development, start the server

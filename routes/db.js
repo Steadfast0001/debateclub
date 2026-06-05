@@ -77,6 +77,21 @@ async function initializeDatabase() {
       );
     `);
 
+    // Create app stats table
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS app_stats (
+        id SERIAL PRIMARY KEY,
+        campus VARCHAR(255) DEFAULT 'BUIB',
+        visits INTEGER DEFAULT 0
+      );
+    `);
+    
+    // Ensure one stats row exists
+    await pool.query(`
+      INSERT INTO app_stats (campus, visits) 
+      SELECT 'BUIB', 0 WHERE NOT EXISTS (SELECT 1 FROM app_stats);
+    `);
+
     // Create indexes for better performance
     await pool.query(`CREATE INDEX IF NOT EXISTS idx_registrations_created ON registrations(created_at DESC);`);
     await pool.query(`CREATE INDEX IF NOT EXISTS idx_news_posts_created ON news_posts(created_at DESC);`);
