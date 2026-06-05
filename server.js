@@ -33,7 +33,13 @@ app.use((req, res) => {
   res.sendFile(path.join(__dirname, 'index.html'));
 });
 
-app.listen(port, host, () => {
-  console.log(`BIAKA Debate Club website running at http://${host}:${port}`);
-  console.log(`Direct registration link: http://${host}:${port}/register`);
-});
+// For local development, start the server
+if (process.env.NODE_ENV !== 'production') {
+  app.listen(port, host, () => {
+    console.log(`BIAKA Debate Club website running at http://${host}:${port}`);
+    console.log(`Direct registration link: http://${host}:${port}/register`);
+  });
+}
+
+// Export for Vercel Serverless Functions
+module.exports = app;

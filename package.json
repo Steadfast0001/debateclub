@@ -20,10 +20,12 @@
     "node": "14.x || 16.x || 18.x || 20.x"
   },
   "dependencies": {
+    "cloudinary": "^1.41.3",
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
     "multer": "^2.1.1",
+    "multer-storage-cloudinary": "^4.0.0",
     "nodemailer": "^8.0.10",
     "pg": "^8.21.0"
   }

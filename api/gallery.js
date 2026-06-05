@@ -3,18 +3,19 @@ const path = require('path');
 const fs = require('fs');
 const pool = require('./db');
 
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    const dir = path.join(__dirname, '..', 'uploads');
-    if (!fs.existsSync(dir)){
-        fs.mkdirSync(dir, { recursive: true });
-    }
-    cb(null, dir);
+const cloudinary = require('cloudinary').v2;
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
+
+// Configure Cloudinary (requires CLOUDINARY_URL in .env)
+// If not set, it won't work in production, but local dev might fail gracefully or throw.
+// It's expected to be set in Vercel/Neon.
+
+const storage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: {
+    folder: 'debateclub/gallery',
+    allowed_formats: ['jpg', 'jpeg', 'png', 'gif', 'webp']
   },
-  filename: function (req, file, cb) {
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-    cb(null, uniqueSuffix + path.extname(file.originalname));
-  }
 });
 
 const upload = multer({ 
@@ -57,7 +58,7 @@ module.exports = async (req, res) => {
         return res.status(400).json({ error: 'No image uploaded' });
       }
 
-      const filePath = '/uploads/' + req.file.filename;
+      const filePath = req.file.path;
       try {
         const result = await pool.query(
           'INSERT INTO gallery_images (file_path) VALUES ($1) RETURNING *',
@@ -78,10 +79,8 @@ module.exports = async (req, res) => {
         return res.status(404).json({ error: 'Image not found' });
       }
       
-      const filePath = path.join(__dirname, '..', result.rows[0].file_path);
-      if (fs.existsSync(filePath)) {
-        fs.unlinkSync(filePath);
-      }
+      // With Cloudinary, we skip local deletion.
+      // (Optional: add Cloudinary deletion logic here later using cloudinary.uploader.destroy)
       
       return res.status(200).json({ success: true, message: 'Image deleted' });
     } catch(e) {

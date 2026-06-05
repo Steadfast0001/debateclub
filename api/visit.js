@@ -14,15 +14,15 @@ module.exports = async (req, res) => {
 
   if (req.method === 'POST') {
     try {
-      let stats = { leaders: 4, activities: 12, campus: 'BUIB', visits: 0 };
-      if (fs.existsSync(statsFile)) {
-        stats = JSON.parse(fs.readFileSync(statsFile, 'utf8'));
+      const pool = require('./db');
+      const result = await pool.query('UPDATE app_stats SET visits = visits + 1 RETURNING visits');
+      
+      let visits = 1;
+      if (result.rows.length > 0) {
+        visits = result.rows[0].visits;
       }
       
-      stats.visits = (stats.visits || 0) + 1;
-      fs.writeFileSync(statsFile, JSON.stringify(stats, null, 2));
-      
-      return res.status(200).json({ success: true, visits: stats.visits });
+      return res.status(200).json({ success: true, visits });
     } catch (err) {
       console.error('Error tracking visit:', err);
       return res.status(500).json({ error: 'Failed to track visit' });

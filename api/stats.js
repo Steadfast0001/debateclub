@@ -21,19 +21,22 @@ module.exports = async (req, res) => {
       // Get DB counts
       const newsResult = await pool.query('SELECT COUNT(*) FROM news_posts');
       const regResult = await pool.query('SELECT COUNT(*) FROM registrations');
+      const leadersResult = await pool.query('SELECT COUNT(*) FROM leaders');
+      const statsResult = await pool.query('SELECT campus, visits FROM app_stats LIMIT 1');
       
       const activitiesCount = parseInt(newsResult.rows[0].count);
       const membersCount = parseInt(regResult.rows[0].count);
+      const leadersCount = parseInt(leadersResult.rows[0].count);
+      
+      const appStats = statsResult.rows[0] || { campus: 'BUIB', visits: 0 };
 
-      // Read JSON for legacy/manual stats (leaders, campus, visits)
-      let stats = { leaders: 4, campus: 'BUIB', visits: 0 };
-      if (fs.existsSync(statsFile)) {
-        stats = { ...stats, ...JSON.parse(fs.readFileSync(statsFile, 'utf8')) };
-      }
-
-      // Override activities and add members count
-      stats.activities = activitiesCount;
-      stats.members = membersCount;
+      const stats = {
+        leaders: leadersCount || 4,
+        activities: activitiesCount,
+        members: membersCount,
+        campus: appStats.campus,
+        visits: appStats.visits
+      };
 
       return res.status(200).json(stats);
     } catch (err) {
@@ -49,19 +52,14 @@ module.exports = async (req, res) => {
     }
 
     try {
-      const { leaders, activities, campus } = req.body;
-      let visits = 0;
-      if (fs.existsSync(statsFile)) {
-        visits = JSON.parse(fs.readFileSync(statsFile, 'utf8')).visits || 0;
+      const { campus } = req.body;
+      const pool = require('./db');
+      
+      if (campus) {
+        await pool.query('UPDATE app_stats SET campus = $1', [campus]);
       }
-      const stats = {
-        leaders: leaders || 4,
-        activities: activities || 12,
-        campus: campus || 'BUIB',
-        visits
-      };
-      fs.writeFileSync(statsFile, JSON.stringify(stats, null, 2));
-      return res.status(200).json({ success: true, stats });
+      
+      return res.status(200).json({ success: true, message: 'Stats updated successfully' });
     } catch (err) {
       console.error('Error saving stats:', err);
       return res.status(500).json({ error: 'Failed to save stats' });

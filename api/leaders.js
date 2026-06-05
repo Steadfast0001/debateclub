@@ -5,19 +5,16 @@ const path = require('path');
 const fs = require('fs');
 const pool = require('./db');
 
-// Setup multer for local file uploads
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    const uploadDir = path.join(__dirname, '..', 'uploads');
-    if (!fs.existsSync(uploadDir)) {
-      fs.mkdirSync(uploadDir, { recursive: true });
-    }
-    cb(null, uploadDir);
+const cloudinary = require('cloudinary').v2;
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
+
+// Setup multer for Cloudinary file uploads
+const storage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: {
+    folder: 'debateclub/leaders',
+    allowed_formats: ['jpg', 'jpeg', 'png', 'gif', 'webp']
   },
-  filename: function (req, file, cb) {
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-    cb(null, 'leader-' + uniqueSuffix + path.extname(file.originalname));
-  }
 });
 const upload = multer({ storage: storage });
 
@@ -49,7 +46,7 @@ router.post('/', isAdmin, upload.single('image'), async (req, res) => {
     let photo_path = '';
 
     if (req.file) {
-      photo_path = '/uploads/' + req.file.filename;
+      photo_path = req.file.path;
     }
 
     if (!name || !role) {
@@ -105,7 +102,7 @@ router.put('/', isAdmin, upload.single('image'), async (req, res) => {
 
     let query, values;
     if (req.file) {
-      const photo_path = '/uploads/' + req.file.filename;
+      const photo_path = req.file.path;
       query = `UPDATE leaders SET name=$1, role=$2, role_fr=$3, phone=$4, email=$5, bio=$6, photo_path=$7 WHERE id=$8 RETURNING *`;
       values = [name, role, role_fr || role, phone || '', email || '', bio || '', photo_path, id];
     } else {
