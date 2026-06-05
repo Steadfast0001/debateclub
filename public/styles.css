@@ -66,12 +66,12 @@ a {
 }
 
 .brand strong {
-  font-size: 16px;
+  font-size: clamp(13px, 4vw, 16px);
 }
 
 .brand small {
   color: var(--muted);
-  font-size: 12px;
+  font-size: clamp(10px, 3vw, 12px);
 }
 
 nav {
@@ -537,14 +537,12 @@ footer {
 
   .brand {
     min-width: 0;
-  }
-
-  .brand span {
-    display: none;
+    flex-wrap: wrap;
+    gap: 8px;
   }
 
   .brand img {
-    width: 150px;
+    width: clamp(100px, 30vw, 150px);
   }
 
   section {
