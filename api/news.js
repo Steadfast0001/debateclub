@@ -47,9 +47,50 @@ module.exports = async (req, res) => {
         [title, type, media || null, text, 1] // author_id 1 for now
       );
 
+      const newPost = result.rows[0];
+
+      // Broadcast to all registered members
+      const emailResult = await pool.query('SELECT email FROM registrations WHERE email IS NOT NULL');
+      const emails = emailResult.rows.map(row => row.email);
+      
+      const { broadcastNewsUpdate } = require('./email');
+      await broadcastNewsUpdate(newPost, emails);
+
       return res.status(201).json({ 
         success: true, 
         message: 'News post created successfully',
+        post: newPost
+      });
+    }
+
+    if (req.method === 'PUT') {
+      // Admin-only: Update news post
+      const adminKey = req.headers['x-admin-key'];
+      if (adminKey !== process.env.ADMIN_KEY) {
+        return res.status(401).json({ error: 'Unauthorized: Admin access required' });
+      }
+
+      const { id, title, type, media, text } = req.body;
+
+      if (!id || !title || !type || !text) {
+        return res.status(400).json({ error: 'ID, title, type, and text are required' });
+      }
+
+      const result = await pool.query(
+        `UPDATE news_posts 
+         SET title = $1, type = $2, media = $3, text = $4
+         WHERE id = $5
+         RETURNING *`,
+        [title, type, media || null, text, id]
+      );
+
+      if (result.rowCount === 0) {
+        return res.status(404).json({ error: 'News post not found' });
+      }
+
+      return res.status(200).json({ 
+        success: true, 
+        message: 'News post updated successfully',
         post: result.rows[0]
       });
     }

@@ -20,10 +20,10 @@ module.exports = async (req, res) => {
   }
 
   try {
-    const { name, department, phone, experience, reason } = req.body;
+    const { name, email, department, phone, experience, reason } = req.body;
 
     // Validate input
-    if (!name || !department || !phone || !experience || !reason) {
+    if (!name || !email || !department || !phone || !experience || !reason) {
       return res.status(400).json({ error: 'All fields are required' });
     }
 
@@ -32,15 +32,15 @@ module.exports = async (req, res) => {
 
     // Insert into database
     const result = await pool.query(
-      `INSERT INTO registrations (full_name, department, phone, experience, reason, ip_address)
-       VALUES ($1, $2, $3, $4, $5, $6)
+      `INSERT INTO registrations (full_name, email, department, phone, experience, reason, ip_address)
+       VALUES ($1, $2, $3, $4, $5, $6, $7)
        RETURNING *`,
-      [name, department, phone, experience, reason, ipAddress]
+      [name, email, department, phone, experience, reason, ipAddress]
     );
 
     const registration = result.rows[0];
 
-    // Send email notification to admin
+    // Send email notifications
     await sendRegistrationEmail(registration);
 
     // Return success response

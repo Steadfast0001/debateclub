@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>BIAKA Debate Club - Admin</title>
+  <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
   <style>
     .hidden { display: none !important; }
@@ -43,17 +44,24 @@
       <article class="info-panel post-panel" style="margin-top: 20px;">
         <h3>Post an update</h3>
         <form id="newsForm" class="club-form compact">
-          <label><span>Title</span><input name="title" required></label>
+          <input type="hidden" name="newsId" id="newsIdInput">
+          <label><span>Title</span><input name="title" id="newsTitleInput" required></label>
           <label><span>Media Type</span>
-            <select name="type">
+            <select name="type" id="newsTypeInput">
               <option>Image</option>
               <option>Video</option>
               <option>Text</option>
             </select>
           </label>
-          <label><span>Image or Video Link</span><input name="media" placeholder="https://..."></label>
-          <label><span>Update Text</span><textarea name="text" rows="4" required></textarea></label>
-          <button type="submit">Publish Update</button>
+          <label><span>Image or Video Link</span><input name="media" id="newsMediaInput" placeholder="https://..."></label>
+          <label><span>Update Text</span>
+            <input type="hidden" name="text" id="newsTextInput">
+            <div id="newsQuillEditor" style="height: 150px; background: white; color: black; border-radius: 0 0 4px 4px;"></div>
+          </label>
+          <div style="display: flex; gap: 10px;">
+            <button type="submit" id="newsSubmitBtn">Publish Update</button>
+            <button type="button" id="newsCancelBtn" class="hidden" style="background: var(--red);">Cancel Edit</button>
+          </div>
         </form>
         <p id="newsFormMessage" style="margin-top: 10px; font-weight: bold;"></p>
       <article class="info-panel post-panel" style="margin-top: 20px;">
@@ -72,6 +80,31 @@
           <button type="submit">Update Stats</button>
         </form>
         <p id="statsFormMessage" style="margin-top: 10px; font-weight: bold;"></p>
+      </article>
+
+      <article class="info-panel post-panel" style="margin-top: 20px;">
+        <h3>Manage Administrative Team</h3>
+        <p style="color: var(--muted); font-size: 13px; margin-bottom: 15px;">Add or update club leaders and their background information.</p>
+        <form id="leaderUploadForm" class="club-form compact" style="margin-bottom: 15px;">
+          <input type="hidden" name="id" id="editLeaderId">
+          <label><span>Name</span><input name="name" id="leaderNameInput" required></label>
+          <label><span>Role (English)</span><input name="role" id="leaderRoleInput" required></label>
+          <label><span>Role (French)</span><input name="role_fr" id="leaderRoleFrInput" required></label>
+          <label><span>Phone</span><input name="phone" id="leaderPhoneInput"></label>
+          <label><span>Email</span><input name="email" type="email" id="leaderEmailInput"></label>
+          <label><span>Background Bio</span>
+            <input type="hidden" name="bio" id="leaderBioInput">
+            <div id="leaderQuillEditor" style="height: 150px; background: white; color: black; border-radius: 0 0 4px 4px;"></div>
+          </label>
+          <label><span>Select Photo (Optional if editing)</span><input type="file" name="image" accept="image/*" id="leaderPhotoInput"></label>
+          <div style="display: flex; gap: 10px;">
+            <button type="submit" id="submitLeaderBtn">Add Leader</button>
+            <button type="button" id="cancelEditLeaderBtn" class="hidden" style="background: var(--muted);">Cancel Edit</button>
+          </div>
+        </form>
+        <p id="leaderUploadMessage" style="margin-top: 10px; font-weight: bold;"></p>
+        <button id="loadAdminLeadersBtn" style="padding: 8px 12px; border: none; background: var(--blue); color: white; border-radius: 4px; cursor: pointer; margin-bottom: 15px;">Load Leaders</button>
+        <div id="adminLeadersList" style="display: grid; gap: 10px;"></div>
       </article>
 
       <article class="info-panel post-panel" style="margin-top: 20px;">
@@ -95,6 +128,7 @@
     </section>
   </main>
 
+  <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
   <script src="app.js"></script>
 </body>
 </html>

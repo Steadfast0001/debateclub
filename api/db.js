@@ -20,6 +20,7 @@ async function initializeDatabase() {
         full_name VARCHAR(255) NOT NULL,
         department VARCHAR(255) NOT NULL,
         phone VARCHAR(20) NOT NULL,
+        email VARCHAR(255),
         experience VARCHAR(50) NOT NULL,
         reason TEXT NOT NULL,
         ip_address VARCHAR(45),
@@ -46,6 +47,21 @@ async function initializeDatabase() {
       CREATE TABLE IF NOT EXISTS gallery_images (
         id SERIAL PRIMARY KEY,
         file_path VARCHAR(255) NOT NULL,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      );
+    `);
+
+    // Create leaders table
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS leaders (
+        id SERIAL PRIMARY KEY,
+        name VARCHAR(255) NOT NULL,
+        role VARCHAR(100) NOT NULL,
+        role_fr VARCHAR(100) NOT NULL,
+        phone VARCHAR(50),
+        email VARCHAR(100),
+        photo_path VARCHAR(255),
+        bio TEXT,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       );
     `);

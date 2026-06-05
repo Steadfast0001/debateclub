@@ -49,8 +49,20 @@
           <p data-i18n="meetingReminder">Don't miss out.</p>
         </article>
         <form id="registrationForm" class="club-form">
-          <label><span data-i18n="fieldName">Full Name</span><input name="name" required></label>
-          <label><span data-i18n="fieldDepartment">Department + Level</span><input name="department" placeholder="e.g. Computer Science 200" required></label>
+        <label>
+          <span data-i18n="fieldName">Full Name</span>
+          <input type="text" name="name" required placeholder="E.g., Jane Doe">
+        </label>
+        
+        <label>
+          <span data-i18n="fieldEmail">Email Address</span>
+          <input type="email" name="email" required placeholder="E.g., jane@example.com">
+        </label>
+
+        <label>
+          <span data-i18n="fieldDepartment">Department + Level</span>
+          <input type="text" name="department" required placeholder="E.g., Nursing, Level 200">
+        </label>
           <label class="wide"><span data-i18n="fieldPhone">Phone Number / WhatsApp Number</span><input name="phone" required></label>
           <label><span data-i18n="fieldExperience">Debate Experience</span>
             <select name="experience" required>
@@ -64,10 +76,6 @@
           <button type="submit" data-i18n="submitRegistration">Submit Registration</button>
           <p id="formMessage" class="form-message"></p>
         </form>
-        <aside class="registrations-panel">
-          <h3 data-i18n="latestRegistrations">Latest Registrations</h3>
-          <div id="registrationsList"></div>
-        </aside>
       </div>
     </section>
   </main>

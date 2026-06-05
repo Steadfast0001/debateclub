@@ -16,12 +16,26 @@ module.exports = async (req, res) => {
 
   if (req.method === 'GET') {
     try {
+      const pool = require('./db');
+      
+      // Get DB counts
+      const newsResult = await pool.query('SELECT COUNT(*) FROM news_posts');
+      const regResult = await pool.query('SELECT COUNT(*) FROM registrations');
+      
+      const activitiesCount = parseInt(newsResult.rows[0].count);
+      const membersCount = parseInt(regResult.rows[0].count);
+
+      // Read JSON for legacy/manual stats (leaders, campus, visits)
+      let stats = { leaders: 4, campus: 'BUIB', visits: 0 };
       if (fs.existsSync(statsFile)) {
-        const stats = JSON.parse(fs.readFileSync(statsFile, 'utf8'));
-        return res.status(200).json(stats);
-      } else {
-        return res.status(200).json({ leaders: 4, activities: 12, campus: 'BUIB', visits: 0 });
+        stats = { ...stats, ...JSON.parse(fs.readFileSync(statsFile, 'utf8')) };
       }
+
+      // Override activities and add members count
+      stats.activities = activitiesCount;
+      stats.members = membersCount;
+
+      return res.status(200).json(stats);
     } catch (err) {
       console.error('Error reading stats:', err);
       return res.status(500).json({ error: 'Failed to read stats' });

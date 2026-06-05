@@ -30,12 +30,7 @@ const translations = {
   }
 };
 
-const leaders = [
-  { role: "President", roleFr: "President", name: "Grace Ngwa", phone: "+237 690 100 101", email: "president@biakadebate.club", photo: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=900&q=80" },
-  { role: "Vice President", roleFr: "Vice-presidente", name: "Daniel Ebot", phone: "+237 680 811 299", email: "vp@biakadebate.club", photo: "images/vp.jpg" },
-  { role: "Secretary General", roleFr: "Secretaire general", name: "Nora Tabe", phone: "+237 681 300 303", email: "secretary@biakadebate.club", photo: "https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=900&q=80" },
-  { role: "Public Relations Officer", roleFr: "Charge de communication", name: "Kevin Mbella", phone: "+237 652 577 218", email: "pro@biakadebate.club", photo: "images/pro.jpg" }
-];
+let leaders = [];
 
 const defaultNews = [
   { title: "Inter-department debate announced", type: "Image", media: "https://images.unsplash.com/photo-1517048676732-d65bc937f952?auto=format&fit=crop&w=1200&q=80", text: "The club will host an inter-department debate on health leadership and youth civic responsibility. Registration is open to all BIAKA students.", date: "Latest Update" },
@@ -130,13 +125,13 @@ function setLanguage(lang) {
 function renderLeaders() {
   const leadersGrid = document.querySelector("#leadersGrid");
   if (leadersGrid) {
-    leadersGrid.innerHTML = leaders.map(leader => `
-      <article class="leader-card">
+    leadersGrid.innerHTML = leaders.map((leader, index) => `
+      <article class="leader-card" onclick="openLeaderModal(${index})">
         <div class="leader-photo" style="background-image:url('${escapeHtml(leader.photo)}')"></div>
         <div class="leader-body">
           <span>${escapeHtml(getLeaderRole(leader))}</span>
           <h3>${escapeHtml(leader.name)}</h3>
-          <p>${escapeHtml(leader.email)}<br>${escapeHtml(leader.phone)}</p>
+          <p><a href="mailto:${escapeHtml(leader.email)}" onclick="event.stopPropagation()">${escapeHtml(leader.email)}</a><br>${escapeHtml(leader.phone)}</p>
         </div>
       </article>
     `).join("");
@@ -148,11 +143,29 @@ function renderLeaders() {
       <div class="contact-item">
         <strong>${escapeHtml(getLeaderRole(leader))}: ${escapeHtml(leader.name)}</strong>
         <span>${escapeHtml(leader.phone)}</span>
-        <span>${escapeHtml(leader.email)}</span>
+        <span><a href="mailto:${escapeHtml(leader.email)}">${escapeHtml(leader.email)}</a></span>
       </div>
     `).join("");
   }
 }
+
+window.openLeaderModal = function(index) {
+  const leader = leaders[index];
+  if (!leader) return;
+  
+  document.querySelector("#modalPhoto").style.backgroundImage = `url('${escapeHtml(leader.photo)}')`;
+  document.querySelector("#modalRole").textContent = getLeaderRole(leader);
+  document.querySelector("#modalName").textContent = leader.name;
+  document.querySelector("#modalPhone").textContent = leader.phone;
+  document.querySelector("#modalEmail").innerHTML = `<a href="mailto:${escapeHtml(leader.email)}">${escapeHtml(leader.email)}</a>`;
+  document.querySelector("#modalBioText").innerHTML = leader.bio || "More information coming soon...";
+  
+  document.querySelector("#leaderModal").classList.remove("hidden");
+};
+
+window.closeLeaderModal = function() {
+  document.querySelector("#leaderModal").classList.add("hidden");
+};
 
 function renderRegistrations() {
   const memberCount = document.querySelector("#memberCount");
@@ -178,9 +191,9 @@ function renderNews() {
       <article class="news-card">
         ${getMediaMarkup(item)}
         <div class="news-body">
-          <span>${escapeHtml(item.date)} - ${escapeHtml(item.type)}</span>
+          <div style="margin-bottom: 10px; color: var(--muted); font-size: 14px;"><strong>${escapeHtml(item.date)}</strong> &bull; ${escapeHtml(item.type)}</div>
           <h3>${escapeHtml(item.title)}</h3>
-          <p>${escapeHtml(item.text)}</p>
+          <div class="news-text">${item.text}</div>
         </div>
       </article>
     `).join("");
@@ -204,6 +217,7 @@ if (registrationForm) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           name: form.get("name"),
+          email: form.get("email"),
           department: form.get("department"),
           phone: form.get("phone"),
           experience: form.get("experience"),
@@ -254,22 +268,44 @@ async function fetchNews() {
   renderNews();
 }
 
+let newsQuill, leaderQuill;
+
+if (document.querySelector('#newsQuillEditor')) {
+  newsQuill = new Quill('#newsQuillEditor', {
+    theme: 'snow',
+    placeholder: 'Write your news update here...',
+    modules: { toolbar: [['bold', 'italic', 'underline'], [{'list': 'ordered'}, {'list': 'bullet'}], [{'header': [1, 2, 3, false]}], ['clean']] }
+  });
+}
+
+if (document.querySelector('#leaderQuillEditor')) {
+  leaderQuill = new Quill('#leaderQuillEditor', {
+    theme: 'snow',
+    placeholder: 'Write their background biography here...',
+    modules: { toolbar: [['bold', 'italic', 'underline'], [{'list': 'ordered'}, {'list': 'bullet'}], [{'header': [1, 2, 3, false]}], ['clean']] }
+  });
+}
+
 const newsForm = document.querySelector("#newsForm");
 if (newsForm) {
   newsForm.addEventListener("submit", async event => {
     event.preventDefault();
+    if (newsQuill) document.querySelector('#newsTextInput').value = newsQuill.root.innerHTML;
     const form = new FormData(event.target);
     const messageEl = document.querySelector("#newsFormMessage");
     const adminKey = localStorage.getItem('debate-admin-key');
+    const newsId = document.querySelector('#newsIdInput').value;
     
     try {
+      const isEditing = !!newsId;
       const res = await fetch('/api/news', {
-        method: 'POST',
+        method: isEditing ? 'PUT' : 'POST',
         headers: {
           'Content-Type': 'application/json',
           'x-admin-key': adminKey || ''
         },
         body: JSON.stringify({
+          id: isEditing ? newsId : undefined,
           title: form.get("title"),
           type: form.get("type"),
           media: form.get("media"),
@@ -279,10 +315,20 @@ if (newsForm) {
       
       const data = await res.json();
       if (res.ok) {
-        messageEl.textContent = 'News posted successfully!';
+        messageEl.textContent = isEditing ? 'News updated successfully!' : 'News posted successfully!';
         messageEl.style.color = 'var(--green)';
+        
+        // Reset form
         event.target.reset();
+        document.querySelector('#newsIdInput').value = '';
+        if (newsQuill) newsQuill.root.innerHTML = '';
+        document.querySelector('#newsSubmitBtn').textContent = 'Publish Update';
+        document.querySelector('#newsCancelBtn').classList.add('hidden');
+        
         fetchNews();
+        if (document.querySelector('#loadAdminNewsBtn')) {
+          document.querySelector('#loadAdminNewsBtn').click();
+        }
       } else {
         messageEl.textContent = data.error || 'Failed to post news';
         messageEl.style.color = 'var(--red)';
@@ -292,6 +338,18 @@ if (newsForm) {
       messageEl.style.color = 'var(--red)';
     }
   });
+
+  const newsCancelBtn = document.querySelector('#newsCancelBtn');
+  if (newsCancelBtn) {
+    newsCancelBtn.addEventListener('click', () => {
+      newsForm.reset();
+      document.querySelector('#newsIdInput').value = '';
+      if (newsQuill) newsQuill.root.innerHTML = '';
+      document.querySelector('#newsSubmitBtn').textContent = 'Publish Update';
+      newsCancelBtn.classList.add('hidden');
+      document.querySelector('#newsFormMessage').textContent = '';
+    });
+  }
 }
 
 // Admin login logic
@@ -337,10 +395,13 @@ async function fetchStats() {
       const activitiesEl = document.querySelector('#statActivitiesCount');
       const campusEl = document.querySelector('#statCampusText');
       const visitsEl = document.querySelector('#statVisitsCount');
+      const memberCountEl = document.querySelector('#memberCount');
+      
       if (leadersEl) leadersEl.textContent = data.leaders;
       if (activitiesEl) activitiesEl.textContent = data.activities;
       if (campusEl) campusEl.textContent = data.campus;
       if (visitsEl) visitsEl.textContent = data.visits || 0;
+      if (memberCountEl) memberCountEl.textContent = data.members || 0;
       
       const aLeaders = document.querySelector('#adminStatLeaders');
       const aActivities = document.querySelector('#adminStatActivities');
@@ -472,12 +533,16 @@ if (loadAdminNewsBtn) {
           adminNewsList.innerHTML = '<p>No news posts found.</p>';
           return;
         }
+        window.loadedAdminNews = data.news;
         adminNewsList.innerHTML = data.news.map(n => `
           <div style="padding: 12px; border: 1px solid var(--line); border-radius: 8px; background: #fafafa; display: flex; justify-content: space-between; align-items: center;">
             <div>
               <strong>${escapeHtml(n.title)}</strong> <small style="color: var(--muted);">(${new Date(n.created_at).toLocaleDateString()})</small>
             </div>
-            <button onclick="deleteNews(${n.id})" style="background: var(--red); color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer;">Delete</button>
+            <div style="display: flex; gap: 8px;">
+              <button onclick="editNewsAdmin(${n.id})" style="background: var(--blue); color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer;">Edit</button>
+              <button onclick="deleteNews(${n.id})" style="background: var(--red); color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer;">Delete</button>
+            </div>
           </div>
         `).join('');
       } else {
@@ -488,6 +553,27 @@ if (loadAdminNewsBtn) {
     }
   });
 }
+window.editNewsAdmin = function(id) {
+  if (!window.loadedAdminNews) return;
+  const newsItem = window.loadedAdminNews.find(n => n.id === id);
+  if (!newsItem) return;
+
+  document.querySelector('#newsIdInput').value = newsItem.id;
+  document.querySelector('#newsTitleInput').value = newsItem.title;
+  document.querySelector('#newsTypeInput').value = newsItem.type;
+  document.querySelector('#newsMediaInput').value = newsItem.media || '';
+  
+  if (newsQuill) {
+    newsQuill.root.innerHTML = newsItem.text || '';
+  }
+
+  document.querySelector('#newsSubmitBtn').textContent = 'Save Update';
+  document.querySelector('#newsCancelBtn').classList.remove('hidden');
+  document.querySelector('#newsFormMessage').textContent = '';
+
+  // Scroll to form
+  document.querySelector('#newsForm').scrollIntoView({ behavior: 'smooth', block: 'center' });
+};
 
 window.deleteNews = async function(id) {
   if (!confirm('Are you sure you want to delete this news post?')) return;
@@ -597,9 +683,13 @@ window.deleteGalleryImage = async function(id) {
   }
 };
 
-document.querySelector("#menuButton").addEventListener("click", () => {
-  document.querySelector("#mainNav").classList.toggle("open");
-});
+const menuBtn = document.querySelector("#menuButton");
+if (menuBtn) {
+  menuBtn.addEventListener("click", () => {
+    const mainNav = document.querySelector("#mainNav");
+    if (mainNav) mainNav.classList.toggle("open");
+  });
+}
 
 document.querySelectorAll(".language-toggle button").forEach(button => {
   button.addEventListener("click", () => setLanguage(button.dataset.lang));
@@ -628,7 +718,163 @@ function highlightActiveNav() {
   });
 }
 
-renderLeaders();
+// Fetch dynamic leaders from DB
+async function fetchLeaders() {
+  try {
+    const res = await fetch('/api/leaders');
+    if (res.ok) {
+      const data = await res.json();
+      if (data.leaders && data.leaders.length > 0) {
+        leaders = data.leaders.map(l => ({
+          id: l.id,
+          role: l.role,
+          roleFr: l.role_fr || l.role,
+          name: l.name,
+          phone: l.phone,
+          email: l.email,
+          photo: l.photo_path || '',
+          bio: l.bio
+        }));
+      }
+    }
+  } catch (err) {
+    console.error('Failed to fetch leaders', err);
+  }
+  renderLeaders();
+}
+
+// Admin Leaders Logic
+const leaderUploadForm = document.querySelector('#leaderUploadForm');
+if (leaderUploadForm) {
+  leaderUploadForm.addEventListener('submit', async event => {
+    event.preventDefault();
+    if (leaderQuill) document.querySelector('#leaderBioInput').value = leaderQuill.root.innerHTML;
+    const messageEl = document.querySelector('#leaderUploadMessage');
+    const adminKey = localStorage.getItem('debate-admin-key');
+    const formData = new FormData(event.target);
+    
+    try {
+      messageEl.textContent = 'Uploading...';
+      messageEl.style.color = 'var(--blue)';
+      
+      const id = document.querySelector('#editLeaderId').value;
+      const method = id ? 'PUT' : 'POST';
+      
+      const res = await fetch('/api/leaders', {
+        method: method,
+        headers: { 'x-admin-key': adminKey || '' },
+        body: formData
+      });
+      const data = await res.json();
+      if (res.ok) {
+        messageEl.textContent = id ? 'Leader updated successfully!' : 'Leader added successfully!';
+        messageEl.style.color = 'var(--green)';
+        leaderUploadForm.reset();
+        if (leaderQuill) leaderQuill.root.innerHTML = '';
+        document.querySelector('#editLeaderId').value = '';
+        document.querySelector('#submitLeaderBtn').textContent = 'Add Leader';
+        const cancelBtn = document.querySelector('#cancelEditLeaderBtn');
+        if (cancelBtn) cancelBtn.classList.add('hidden');
+        
+        const loadBtn = document.querySelector('#loadAdminLeadersBtn');
+        if (loadBtn) loadBtn.click();
+        fetchLeaders(); // Refresh public site if on same page
+      } else {
+        messageEl.textContent = data.error || 'Failed to add leader';
+        messageEl.style.color = 'var(--red)';
+      }
+    } catch (err) {
+      messageEl.textContent = 'Network error.';
+      messageEl.style.color = 'var(--red)';
+    }
+  });
+}
+
+const loadAdminLeadersBtn = document.querySelector('#loadAdminLeadersBtn');
+const adminLeadersList = document.querySelector('#adminLeadersList');
+
+if (loadAdminLeadersBtn) {
+  loadAdminLeadersBtn.addEventListener('click', async () => {
+    try {
+      adminLeadersList.innerHTML = 'Loading...';
+      const res = await fetch('/api/leaders');
+      const data = await res.json();
+      if (res.ok) {
+        if (!data.leaders || data.leaders.length === 0) {
+          adminLeadersList.innerHTML = '<p>No leaders found.</p>';
+          return;
+        }
+        adminLeadersList.innerHTML = data.leaders.map(l => `
+          <div style="padding: 12px; border: 1px solid var(--line); border-radius: 8px; background: #fafafa; display: flex; justify-content: space-between; align-items: center;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <img src="${escapeHtml(l.photo_path)}" style="width: 50px; height: 50px; object-fit: cover; border-radius: 4px;">
+              <div>
+                <strong>${escapeHtml(l.name)}</strong><br>
+                <span style="font-size: 12px; color: var(--muted);">${escapeHtml(l.role)}</span>
+              </div>
+            <div style="display: flex; gap: 5px;">
+              <button onclick='editLeaderAdmin(${JSON.stringify(l).replace(/'/g, "&#39;")})' style="background: var(--blue); color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer;">Edit</button>
+              <button onclick="deleteLeader(${l.id})" style="background: var(--red); color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer;">Delete</button>
+            </div>
+          </div>
+        `).join('');
+      } else {
+        adminLeadersList.innerHTML = `<p style="color: var(--red);">Failed to load leaders.</p>`;
+      }
+    } catch (err) {
+      adminLeadersList.innerHTML = '<p style="color: var(--red);">Network error</p>';
+    }
+  });
+}
+
+window.deleteLeader = async function(id) {
+  if (!confirm('Are you sure you want to delete this leader?')) return;
+  const adminKey = localStorage.getItem('debate-admin-key');
+  try {
+    const res = await fetch(`/api/leaders?id=${id}`, {
+      method: 'DELETE',
+      headers: { 'x-admin-key': adminKey || '' }
+    });
+    const data = await res.json();
+    if (res.ok) {
+      alert('Leader deleted.');
+      if (loadAdminLeadersBtn) loadAdminLeadersBtn.click();
+      fetchLeaders();
+    } else {
+      alert('Failed to delete: ' + data.error);
+    }
+  } catch (err) {
+    alert('Network error while deleting.');
+  }
+};
+
+window.editLeaderAdmin = function(leader) {
+  document.querySelector('#editLeaderId').value = leader.id;
+  document.querySelector('#leaderNameInput').value = leader.name;
+  document.querySelector('#leaderRoleInput').value = leader.role;
+  document.querySelector('#leaderRoleFrInput').value = leader.role_fr || leader.role;
+  document.querySelector('#leaderPhoneInput').value = leader.phone || '';
+  document.querySelector('#leaderEmailInput').value = leader.email || '';
+  document.querySelector('#leaderBioInput').value = leader.bio || '';
+  if (leaderQuill) leaderQuill.root.innerHTML = leader.bio || '';
+  
+  document.querySelector('#submitLeaderBtn').textContent = 'Save Leader';
+  document.querySelector('#cancelEditLeaderBtn').classList.remove('hidden');
+  document.querySelector('#leaderUploadForm').scrollIntoView({ behavior: 'smooth' });
+};
+
+const cancelEditLeaderBtn = document.querySelector('#cancelEditLeaderBtn');
+if (cancelEditLeaderBtn) {
+  cancelEditLeaderBtn.addEventListener('click', () => {
+    document.querySelector('#leaderUploadForm').reset();
+    if (leaderQuill) leaderQuill.root.innerHTML = '';
+    document.querySelector('#editLeaderId').value = '';
+    document.querySelector('#submitLeaderBtn').textContent = 'Add Leader';
+    cancelEditLeaderBtn.classList.add('hidden');
+  });
+}
+
+fetchLeaders();
 renderRegistrations();
 fetchNews();
 fetchStats();

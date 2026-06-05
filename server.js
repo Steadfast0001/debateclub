@@ -17,6 +17,7 @@ app.all('/api/stats', require('./api/stats'));
 app.all('/api/visit', require('./api/visit'));
 app.all('/api/gallery', require('./api/gallery'));
 app.all('/api/admin/registrations', require('./api/admin/registrations'));
+app.use('/api/leaders', require('./api/leaders'));
 
 // Serve static HTML files without requiring .html extension (optional but nice)
 app.use(express.static(__dirname, { extensions: ['html'] }));

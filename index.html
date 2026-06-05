@@ -128,6 +128,25 @@
     <span data-i18n="footerText">BIAKA Debate Club - Built for student leadership, civic reasoning and public speaking.</span>
   </footer>
 
+  <div id="leaderModal" class="modal hidden">
+    <div class="modal-overlay" onclick="closeLeaderModal()"></div>
+    <div class="modal-content">
+      <button class="modal-close" onclick="closeLeaderModal()">&times;</button>
+      <div id="modalPhoto" class="modal-photo"></div>
+      <div class="modal-body">
+        <span id="modalRole"></span>
+        <h3 id="modalName"></h3>
+        <p class="modal-contact">
+          <span id="modalPhone"></span><br>
+          <span id="modalEmail"></span>
+        </p>
+        <div class="modal-bio">
+          <p id="modalBioText"></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <script src="app.js"></script>
 </body>
 </html>
