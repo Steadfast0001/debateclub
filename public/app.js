@@ -735,6 +735,20 @@ async function fetchLeaders() {
           photo: l.photo_path || '',
           bio: l.bio
         }));
+        
+        const roleOrder = {
+          "president": 1,
+          "vice president": 2,
+          "secretary general": 3,
+          "public relation officer": 4,
+          "pro": 4
+        };
+        
+        leaders.sort((a, b) => {
+          const aOrder = roleOrder[(a.role || "").toLowerCase().trim()] || 99;
+          const bOrder = roleOrder[(b.role || "").toLowerCase().trim()] || 99;
+          return aOrder - bOrder;
+        });
       }
     }
   } catch (err) {
