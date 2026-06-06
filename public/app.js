@@ -13,6 +13,8 @@ const translations = {
     registerEyebrow: "Agenda", registerTitle: "The Biaka Audacious Agora Debate Club Membership Registration", fieldName: "Full Name", fieldDepartment: "Department + Level", fieldPhone: "Phone Number / WhatsApp Number", fieldExperience: "Debate Experience", fieldReason: "Why do you want to Join the Biaka Audacious Agora Debate Club?", submitRegistration: "Submit Registration", latestRegistrations: "Latest Registrations", welcomeTitle: "Welcome", welcomeText: "Welcome to the Biaka Audacious Agora Debate Club! After our Pan Africa 2026 Success and with <span class=\"president-name\">TERCY WAINWUL</span> Raising BIAKA Visibility Flag High, we are building something big. This comes with a lot of Opportunities at hands - Competitions, Leadership, Training and Networking.", registrationInstruction: "Fill in this 1 mins form to Register.", meetingDate: "Our Brief meeting is Friday June 5 th 2026.", meetingReminder: "Don't miss out.",
     newsEyebrow: "News and updates", newsTitle: "Latest club activities", postUpdateTitle: "Post an update", postTitle: "Title", postType: "Media Type", postMedia: "Image or Video Link", postText: "Update Text", publishUpdate: "Publish Update",
     contactEyebrow: "Contact", contactTitle: "Reach the club and the school", clubContacts: "Club Contacts", schoolContacts: "School Contact", schoolAddress: "Bokoko, Biaka Street, Buea, South West Region, Cameroon", schoolWebsite: "School Website", socialMedia: "Social Media", footerText: "BIAKA Audacious Agora Debate Club - Built for student leadership, civic reasoning and public speaking.",
+    sendUsMessage: "Send us a message", yourName: "Your Name", yourEmail: "Your Email", yourMessage: "Message", sendMessage: "Send Message",
+    contactSuccess: "Message sent successfully! We will get back to you soon.", contactError: "Failed to send message. Please try again later."
     registered: "Registration submitted successfully.", noRegistrations: "No registrations yet."
   },
   fr: {
@@ -26,6 +28,8 @@ const translations = {
     registerEyebrow: "Agenda", registerTitle: "Inscription au Club Audacieux Agora BIAKA - Adhesion", fieldName: "Nom complet", fieldDepartment: "Departement + Niveau", fieldPhone: "Numero de telephone / WhatsApp", fieldExperience: "Experience en debat", fieldReason: "Pourquoi voulez-vous rejoindre le Club Audacieux Agora BIAKA?", submitRegistration: "Envoyer l'inscription", latestRegistrations: "Dernieres inscriptions", welcomeTitle: "Bienvenue", welcomeText: "Bienvenue au Club de Debat Audacieux Agora BIAKA! Apres notre succes Pan-Afrique 2026 et avec <span class=\"president-name\">TERCY WAINWUL</span> soulevant le drapeau de visibilite BIAKA, nous construisons quelque chose de grand. Cela vient avec beaucoup d'opportunites - Competitions, Leadership, Formation et Reseautage.", registrationInstruction: "Remplissez ce formulaire d'une minute pour vous inscrire.", meetingDate: "Notre reunion est vendredi 5 juin 2026.", meetingReminder: "Ne manquez pas.",
     newsEyebrow: "Actualites", newsTitle: "Dernieres activites du club", postUpdateTitle: "Publier une actualite", postTitle: "Titre", postType: "Type de media", postMedia: "Lien image ou video", postText: "Texte de l'actualite", publishUpdate: "Publier",
     contactEyebrow: "Contact", contactTitle: "Contacter le club et l'ecole", clubContacts: "Contacts du club", schoolContacts: "Contact de l'ecole", schoolAddress: "Bokoko, Rue Biaka, Buea, Region du Sud-Ouest, Cameroun", schoolWebsite: "Site web de l'ecole", socialMedia: "Reseaux sociaux", footerText: "Club de Debat Audacieux Agora BIAKA - Pour le leadership etudiant, le raisonnement civique et la prise de parole.",
+    sendUsMessage: "Envoyez-nous un message", yourName: "Votre Nom", yourEmail: "Votre Email", yourMessage: "Message", sendMessage: "Envoyer le message",
+    contactSuccess: "Message envoye avec succes ! Nous vous repondrons bientot.", contactError: "Echec de l'envoi du message. Veuillez reessayer plus tard."
     registered: "Inscription envoyee avec succes.", noRegistrations: "Aucune inscription pour le moment."
   }
 };
@@ -101,6 +105,7 @@ function getMediaMarkup(item) {
   return imageUrl ? `<div class="news-media" style="background-image:url('${escapeHtml(imageUrl)}')"></div>` : "";
 }
 
+// Translation Logic
 function setLanguage(lang) {
   currentLang = lang;
   localStorage.setItem("debate-lang", lang);
@@ -118,9 +123,34 @@ function setLanguage(lang) {
   document.querySelectorAll(".language-toggle button").forEach(button => {
     button.classList.toggle("active", button.dataset.lang === lang);
   });
-  renderLeaders();
-  renderRegistrations();
+  if (window.location.pathname === '/' || window.location.pathname.endsWith('index.html')) {
+    renderLeaders();
+  }
 }
+
+// Dark Mode Logic
+const savedTheme = localStorage.getItem('clubTheme') || 
+  (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+
+function setTheme(theme) {
+  if (theme === 'dark') {
+    document.documentElement.classList.add('dark');
+    document.querySelectorAll('.theme-toggle').forEach(el => el.textContent = '☀️');
+  } else {
+    document.documentElement.classList.remove('dark');
+    document.querySelectorAll('.theme-toggle').forEach(el => el.textContent = '🌙');
+  }
+  localStorage.setItem('clubTheme', theme);
+}
+
+setTheme(savedTheme);
+
+document.addEventListener('click', (e) => {
+  if (e.target.closest('.theme-toggle')) {
+    const isDark = document.documentElement.classList.contains('dark');
+    setTheme(isDark ? 'light' : 'dark');
+  }
+});
 
 function renderLeaders() {
   const leadersGrid = document.querySelector("#leadersGrid");
@@ -895,3 +925,46 @@ fetchStats();
 setLanguage(currentLang);
 highlightActiveNav();
 window.addEventListener('hashchange', highlightActiveNav);
+
+// Handle Public Contact Form
+const publicContactForm = document.getElementById("publicContactForm");
+if (publicContactForm) {
+  publicContactForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const btn = publicContactForm.querySelector("button[type='submit']");
+    const msg = document.getElementById("contactFormMessage");
+    const originalText = btn.textContent;
+    btn.textContent = "Sending...";
+    btn.disabled = true;
+    msg.textContent = "";
+    msg.style.color = "var(--ink)";
+
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: document.getElementById("contactName").value,
+          email: document.getElementById("contactEmail").value,
+          message: document.getElementById("contactMessage").value
+        })
+      });
+
+      if (response.ok) {
+        msg.textContent = translations[currentLang]?.contactSuccess || "Message sent successfully!";
+        msg.style.color = "var(--green)";
+        publicContactForm.reset();
+      } else {
+        const err = await response.json();
+        throw new Error(err.error || "Failed to send");
+      }
+    } catch (error) {
+      msg.textContent = translations[currentLang]?.contactError || "Failed to send message.";
+      msg.style.color = "var(--red)";
+      console.error(error);
+    } finally {
+      btn.textContent = originalText;
+      btn.disabled = false;
+    }
+  });
+}
