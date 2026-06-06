@@ -36,7 +36,7 @@ app.use((req, res) => {
 // For local development, start the server
 if (process.env.NODE_ENV !== 'production') {
   app.listen(port, host, () => {
-    console.log(`BIAKA Debate Club website running at http://${host}:${port}`);
+    console.log(`BIAKA Audacious Agora Debate Club website running at http://${host}:${port}`);
     console.log(`Direct registration link: http://${host}:${port}/register`);
   });
 }

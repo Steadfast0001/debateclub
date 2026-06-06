@@ -39,7 +39,7 @@ async function sendRegistrationEmail(registration) {
     if (registration.email) {
       const welcomeHTML = `
         <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; color: #333;">
-          <h1 style="color: #0b2e59;">Welcome to the BIAKA Debate Club!</h1>
+          <h1 style="color: #0b2e59;">Welcome to the BIAKA Audacious Agora Debate Club!</h1>
           <p>Hi ${escapeHtml(registration.full_name.split(' ')[0])},</p>
           <p>Thank you for submitting your application to join the Biaka Audacious Agora Debate Club. We have received your registration!</p>
           <p>After our Pan Africa 2026 success, we are building something massive. Get ready for incredible opportunities in leadership, public speaking, and networking.</p>
@@ -49,14 +49,14 @@ async function sendRegistrationEmail(registration) {
             <li>Keep an eye on your email/WhatsApp for the exact time and venue.</li>
           </ul>
           <p>We are thrilled to have you with us. Speak. Reason. Lead.</p>
-          <p>Best regards,<br><strong>Tercy Wainwul</strong><br>President, BIAKA Debate Club</p>
+          <p>Best regards,<br><strong>Tercy Wainwul</strong><br>President, BIAKA Audacious Agora Debate Club</p>
         </div>
       `;
 
       await transporter.sendMail({
-        from: `"BIAKA Debate Club" <${process.env.GMAIL_USER}>`,
+        from: `"BIAKA Audacious Agora Debate Club" <${process.env.GMAIL_USER}>`,
         to: registration.email,
-        subject: 'Welcome to the BIAKA Debate Club!',
+        subject: 'Welcome to the BIAKA Audacious Agora Debate Club!',
         html: welcomeHTML,
       });
       console.log(`Welcome email sent to: ${registration.email}`);
@@ -83,7 +83,7 @@ async function broadcastNewsUpdate(newsItem, emails) {
 
   const newsHTML = `
     <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; color: #333;">
-      <h1 style="color: #0b2e59;">BIAKA Debate Club: News Update</h1>
+      <h1 style="color: #0b2e59;">BIAKA Audacious Agora Debate Club: News Update</h1>
       <h2 style="color: #4a5568;">${escapeHtml(newsItem.title)}</h2>
       <p style="color: #718096; font-size: 14px;"><strong>${escapeHtml(newsItem.type)}</strong></p>
       ${newsItem.media ? `<img src="${escapeHtml(newsItem.media)}" alt="News Media" style="max-width: 100%; border-radius: 8px; margin: 10px 0;">` : ''}
@@ -91,13 +91,13 @@ async function broadcastNewsUpdate(newsItem, emails) {
         ${newsItem.text}
       </div>
       <hr style="margin-top: 30px; border: 0; border-top: 1px solid #e2e8f0;">
-      <p style="font-size: 12px; color: #a0aec0;">You are receiving this email because you are a registered member of the BIAKA Debate Club.</p>
+      <p style="font-size: 12px; color: #a0aec0;">You are receiving this email because you are a registered member of the BIAKA Audacious Agora Debate Club.</p>
     </div>
   `;
 
   try {
     await transporter.sendMail({
-      from: `"BIAKA Debate Club" <${process.env.GMAIL_USER}>`,
+      from: `"BIAKA Audacious Agora Debate Club" <${process.env.GMAIL_USER}>`,
       bcc: emails.join(','),
       subject: `New Update: ${newsItem.title}`,
       html: newsHTML,
