@@ -549,6 +549,81 @@ if (loadRegistrationsBtn) {
   });
 }
 
+const downloadPdfBtn = document.querySelector('#downloadPdfBtn');
+if (downloadPdfBtn) {
+  downloadPdfBtn.addEventListener('click', async () => {
+    const adminKey = localStorage.getItem('debate-admin-key');
+    try {
+      downloadPdfBtn.textContent = 'Generating...';
+      const res = await fetch('/api/admin/registrations', {
+        headers: { 'x-admin-key': adminKey || '' }
+      });
+      const data = await res.json();
+      if (res.ok && data.registrations && data.registrations.length > 0) {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+        
+        // Header
+        doc.setFontSize(16);
+        doc.setFont('helvetica', 'bold');
+        doc.text('BIAKA UNIVERSITY INSTITUTE OF BUEA', 105, 15, null, null, 'center');
+        doc.setFontSize(14);
+        doc.text('BIAKA AUDACIOUS AGORA DEBATE CLUB', 105, 23, null, null, 'center');
+        
+        doc.setFontSize(12);
+        doc.setFont('helvetica', 'normal');
+        doc.text('List of Registered Members', 105, 33, null, null, 'center');
+        
+        // Table Data
+        const tableBody = data.registrations.map((reg, index) => [
+          index + 1,
+          reg.full_name || 'N/A',
+          reg.email || 'N/A',
+          reg.phone || 'N/A',
+          reg.department || 'N/A',
+          reg.reason || 'N/A',
+          new Date(reg.created_at).toLocaleDateString()
+        ]);
+        
+        doc.autoTable({
+          startY: 40,
+          head: [['#', 'Name', 'Email', 'Phone', 'Level/Dept', 'Reason', 'Date']],
+          body: tableBody,
+          styles: { fontSize: 8, cellPadding: 2 },
+          headStyles: { fillColor: [11, 46, 89] }, // var(--blue)
+          columnStyles: {
+            0: { cellWidth: 10 },
+            1: { cellWidth: 35 },
+            2: { cellWidth: 35 },
+            3: { cellWidth: 25 },
+            4: { cellWidth: 30 },
+            5: { cellWidth: 35 },
+            6: { cellWidth: 20 }
+          }
+        });
+        
+        // Signature Line
+        const finalY = doc.lastAutoTable.finalY || 40;
+        doc.setFontSize(11);
+        doc.setFont('helvetica', 'bold');
+        doc.text('Tercy Wainwul', 195, finalY + 30, null, null, 'right');
+        doc.setFont('helvetica', 'normal');
+        doc.text('President, BIAKA Audacious Agora Debate Club', 195, finalY + 35, null, null, 'right');
+        
+        // Save
+        doc.save('BIAKA_Debate_Club_Registrations.pdf');
+      } else {
+        alert('No registrations to download.');
+      }
+    } catch (err) {
+      console.error(err);
+      alert('Error generating PDF.');
+    } finally {
+      downloadPdfBtn.textContent = 'Download as PDF';
+    }
+  });
+}
+
 const loadAdminNewsBtn = document.querySelector('#loadAdminNewsBtn');
 const adminNewsList = document.querySelector('#adminNewsList');
 
