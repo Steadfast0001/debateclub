@@ -39,7 +39,7 @@ async function sendRegistrationEmail(registration) {
     if (registration.email) {
       const welcomeHTML = `
         <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; color: #333;">
-          <h1 style="color: #0b2e59;">WELCOME BIAKA AUDACIOUS AGORA DEBATE CLUB</h1>
+          <h1 style="color: #0b2e59;">WELCOME TO THE BIAKA AUDACIOUS AGORA DEBATE CLUB</h1>
           <p>Hi ${escapeHtml(registration.full_name.split(' ')[0])},</p>
           <p>Thank you for submitting your application to join the Biaka Audacious Agora Debate Club. We have received your registration!</p>
           <p>After our Pan Africa 2026 success, we are building something massive. Get ready for incredible opportunities in leadership, public speaking, and networking.</p>
@@ -56,7 +56,7 @@ async function sendRegistrationEmail(registration) {
       await transporter.sendMail({
         from: `"BIAKA Audacious Agora Debate Club" <${process.env.GMAIL_USER}>`,
         to: registration.email,
-        subject: 'WELCOME BIAKA AUDACIOUS AGORA DEBATE CLUB',
+        subject: 'WELCOME TO THE BIAKA AUDACIOUS AGORA DEBATE CLUB',
         html: welcomeHTML,
       });
       console.log(`Welcome email sent to: ${registration.email}`);
