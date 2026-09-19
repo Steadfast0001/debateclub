@@ -1,4 +1,4 @@
-const pool = require('./api/db');
+const pool = require('./routes/db');
 
 (async () => {
   try {
