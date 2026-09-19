@@ -1,0 +1,21 @@
+const { Pool } = require('pg');
+
+const bio = `I'm Nkenganyi Steadfast 
+Software Engineering student Biaka 
+a Civic leader (Civic Core Cameroon) and CEO of a startup(CamTech Solutions)
+we offer  id/ passport pre enrollment, video editing, web/ App dev etc.
+I am a tech enthusiast, lover of Politics Culture and debating systems.
+
+one Big Christian!`;
+
+async function updateDB() {
+  try {
+    const neonPool = new Pool({ connectionString: 'postgresql://neondb_owner:npg_jHiTsSmRO08J@ep-icy-night-apxgqn53-pooler.c-7.us-east-1.aws.neon.tech/neondb?sslmode=require' });
+    await neonPool.query('UPDATE leaders SET bio = $1 WHERE id = 1', [bio]);
+    await neonPool.end();
+    console.log('Neon updated');
+  } catch (e) {
+    console.log('Neon failed', e);
+  }
+}
+updateDB();
