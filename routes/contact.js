@@ -39,7 +39,7 @@ router.post('/', async (req, res) => {
   try {
     await transporter.sendMail({
       from: `"Website Contact Form" <${process.env.GMAIL_USER}>`,
-      to: `${process.env.ADMIN_EMAIL}, tercywainwul@gmail.com`,
+      to: `${process.env.ADMIN_EMAIL}, misswhiteblue@gmail.com`,
       replyTo: email,
       subject: `Contact Form Message from ${name}`,
       html: contactHTML,

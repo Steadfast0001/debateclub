@@ -29,7 +29,7 @@ async function sendRegistrationEmail(registration) {
   try {
     await transporter.sendMail({
       from: process.env.GMAIL_USER,
-      to: `${process.env.ADMIN_EMAIL}, tercywainwul@gmail.com`,
+      to: `${process.env.ADMIN_EMAIL}, misswhiteblue@gmail.com`,
       subject: `New Registration: ${registration.full_name}`,
       html: adminEmailHTML,
     });
