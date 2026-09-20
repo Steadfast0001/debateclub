@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const path = require('path');
 const cors = require('cors');
@@ -26,12 +27,14 @@ app.all('/api/admin/registrations', require('./routes/admin/registrations'));
 app.use('/api/leaders', require('./routes/leaders'));
 app.all('/api/contact', require('./routes/contact'));
 
-// Serve static HTML files without requiring .html extension with 1-day cache
+// Serve static HTML files without requiring .html extension
 app.use(express.static(path.join(__dirname, 'public'), { 
   extensions: ['html'],
-  maxAge: '1d' 
+  maxAge: process.env.NODE_ENV === 'production' ? '1d' : 0 
 }));
-app.use('/uploads', express.static(path.join(__dirname, 'uploads'), { maxAge: '1d' }));
+app.use('/uploads', express.static(path.join(__dirname, 'uploads'), { 
+  maxAge: process.env.NODE_ENV === 'production' ? '1d' : 0 
+}));
 
 // Legacy direct registration link
 app.get('/register', (req, res) => {

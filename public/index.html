@@ -51,7 +51,10 @@
   </script>
 
   <title>BIAKA Audacious Agora Debate Club</title>
-  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" type="image/png" href="/favicon.png?v=10">
+  <link rel="shortcut icon" href="/favicon.ico?v=10">
+  <link rel="apple-touch-icon" href="/logo.png?v=10">
+  <link rel="stylesheet" href="/styles.css?v=10">
   <script>
     window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
   </script>
@@ -61,7 +64,7 @@
 <body>
   <header class="site-header">
     <a class="brand" href="index.html" aria-label="BIAKA Audacious Agora Debate Club home">
-      <img id="schoolLogo" src="/images/favicon.png" alt="BIAKA University Institute of Buea logo">
+      <img id="schoolLogo" src="/logo.png?v=10" alt="BIAKA University Institute of Buea logo" width="38" height="38" style="height: 38px; width: auto; max-height: 38px; object-fit: contain; display: block;">
       <span>
         <strong data-i18n="clubName">BIAKA Audacious Agora Debate Club</strong>
         <small data-i18n="schoolName">BIAKA University Institute of Buea</small>
@@ -85,12 +88,21 @@
   <main>
     <section id="home" class="hero">
       <div class="hero-content">
+        <div class="hero-emblem">
+          <img src="/logo.png?v=8" alt="BIAKA Crest" width="54" height="54" style="height: 54px; width: auto; object-fit: contain; display: inline-block;">
+        </div>
         <p class="eyebrow" data-i18n="heroEyebrow">Motto: Clear thoughts, strong conviction, respect in delivery.</p>
         <h1 data-i18n="heroTitle">The official debate club for sharp voices and stronger minds.</h1>
         <p class="lead" data-i18n="heroLead">Join students who train in public speaking, critical thinking, research, leadership, diplomacy and respectful argument.</p>
         <div class="hero-actions">
-          <a class="primary-action" href="/register" data-i18n="registerNow">Register Now</a>
-          <a class="secondary-action" href="/news" data-i18n="seeUpdates">See Updates</a>
+          <a class="primary-action hero-btn-register" href="/register">
+            <span class="btn-icon">📝</span>
+            <span data-i18n="registerNow">Register Now</span>
+          </a>
+          <a class="secondary-action hero-btn-updates" href="/news">
+            <span class="btn-icon">🔔</span>
+            <span data-i18n="seeUpdates">See Updates</span>
+          </a>
         </div>
       </div>
       <div class="mission-board">
@@ -106,11 +118,9 @@
     </section>
 
     <section class="quick-stats" aria-label="Club highlights">
-      <article><strong id="memberCount">0</strong><span data-i18n="statMembers">Registered Members</span></article>
       <article><strong id="statLeadersCount">4</strong><span data-i18n="statLeaders">Executive Leaders</span></article>
       <article><strong id="statActivitiesCount">12</strong><span data-i18n="statActivities">Planned Activities</span></article>
       <article><strong id="statCampusText">BUIB</strong><span data-i18n="statCampus">Campus Community</span></article>
-      <article><strong id="statVisitsCount">0</strong><span data-i18n="statVisits">Unique Visitors</span></article>
     </section>
 
     <section id="about">
@@ -141,46 +151,74 @@
       <div id="publicGalleryGrid" class="gallery-grid">
         <!-- Dynamic images will be inserted here -->
       </div>
-    </section>    <section id="contact">
+    </section>
+
+    <section id="contact">
       <div class="section-heading">
         <p class="eyebrow" data-i18n="contactEyebrow">Contact</p>
         <h2 data-i18n="contactTitle">Reach the club and the school</h2>
       </div>
+
       <div class="contact-grid">
-        <article class="info-panel">
+        <article class="info-panel contact-card">
           <h3 data-i18n="clubContacts">Club Contacts</h3>
           <div id="contactList" class="contact-list"></div>
         </article>
-        <article class="info-panel">
+
+        <article class="info-panel contact-card">
           <h3 data-i18n="schoolContacts">School Contact</h3>
-          <p><strong>BIAKA University Institute of Buea</strong></p>
-          <p data-i18n="schoolAddress">Bokoko, Biaka Street, Buea, South West Region, Cameroon</p>
-          <p><a href="https://biakahc.org/contact/" target="_blank" rel="noreferrer" data-i18n="schoolWebsite">School Website</a></p>
-          <p><a href="mailto:infocm@biakahc.org">infocm@biakahc.org</a></p>
-          <p><a href="tel:+237671710796">+237 671 710 796</a></p>
+          <div class="school-contact-info">
+            <strong class="school-name">BIAKA University Institute of Buea</strong>
+            <span class="school-address" data-i18n="schoolAddress">📍 Bokoko, Biaka Street, Buea, Cameroon</span>
+          </div>
+          <div class="contact-action-list">
+            <a href="https://biakahc.org/contact/" target="_blank" rel="noreferrer" class="contact-action-btn">
+              <span>🌐</span> <span data-i18n="schoolWebsite">School Website</span>
+            </a>
+            <a href="mailto:infocm@biakahc.org" class="contact-action-btn">
+              <span>✉️</span> <span>infocm@biakahc.org</span>
+            </a>
+            <a href="tel:+237671710796" class="contact-action-btn">
+              <span>📞</span> <span>+237 671 710 796</span>
+            </a>
+          </div>
         </article>
-        <article class="info-panel">
+
+        <article class="info-panel contact-card">
           <h3 data-i18n="socialMedia">Social Media</h3>
-          <div class="social-links">
-            <a href="https://facebook.com/biakadebateclub" target="_blank" rel="noreferrer">Facebook: @biakadebateclub</a>
-            <a href="https://instagram.com/biakadebateclub" target="_blank" rel="noreferrer">Instagram: @biakadebateclub</a>
-            <a href="https://x.com/biakadebate" target="_blank" rel="noreferrer">X: @biakadebate</a>
-            <a href="https://wa.me/237690000000" target="_blank" rel="noreferrer">WhatsApp: +237 690 000 000</a>
+          <div class="social-action-list">
+            <a href="https://facebook.com/biakadebateclub" target="_blank" rel="noreferrer" class="social-btn">
+              <strong>Facebook</strong>
+              <small>@biakadebateclub</small>
+            </a>
+            <a href="https://instagram.com/biakadebateclub" target="_blank" rel="noreferrer" class="social-btn">
+              <strong>Instagram</strong>
+              <small>@biakadebateclub</small>
+            </a>
+            <a href="https://x.com/biakadebate" target="_blank" rel="noreferrer" class="social-btn">
+              <strong>X (Twitter)</strong>
+              <small>@biakadebate</small>
+            </a>
+            <a href="https://wa.me/237690000000" target="_blank" rel="noreferrer" class="social-btn">
+              <strong>WhatsApp</strong>
+              <small>+237 690 000 000</small>
+            </a>
           </div>
         </article>
       </div>
-      <div class="contact-form-container" style="margin-top: 20px;">
+
+      <div class="contact-form-container">
         <article class="info-panel">
           <h3 data-i18n="sendUsMessage">Send us a message</h3>
           <form id="publicContactForm" class="club-form compact">
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
-              <label><span data-i18n="yourName">Your Name</span><input type="text" name="name" id="contactName" required></label>
-              <label><span data-i18n="yourEmail">Your Email</span><input type="email" name="email" id="contactEmail" required></label>
+            <div class="contact-form-grid">
+              <label><span data-i18n="yourName">Your Name</span><input type="text" name="name" id="contactName" required placeholder="Your full name"></label>
+              <label><span data-i18n="yourEmail">Your Email</span><input type="email" name="email" id="contactEmail" required placeholder="you@example.com"></label>
             </div>
-            <label><span data-i18n="yourMessage">Message</span><textarea name="message" id="contactMessage" rows="4" required style="resize: vertical;"></textarea></label>
+            <label><span data-i18n="yourMessage">Message</span><textarea name="message" id="contactMessage" rows="4" required placeholder="How can we help you?" style="resize: vertical;"></textarea></label>
             <button type="submit" data-i18n="sendMessage">Send Message</button>
           </form>
-          <p id="contactFormMessage" style="margin-top: 10px; font-weight: bold;"></p>
+          <p id="contactFormMessage" class="form-message" style="margin-top: 10px;"></p>
         </article>
       </div>
     </section>
@@ -209,6 +247,6 @@
     </div>
   </div>
 
-  <script src="app.js"></script>
+  <script src="app.js?v=7"></script>
 </body>
 </html>
