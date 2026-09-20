@@ -31,7 +31,7 @@
 </head>
 <body>
   <header class="site-header">
-    <a class="brand" href="index.html" aria-label="BIAKA Audacious Agora Debate Club home">
+    <a class="brand" href="/" aria-label="BIAKA Audacious Agora Debate Club home">
       <img id="schoolLogo" src="/logo.png?v=12" alt="BIAKA University Institute of Buea logo" width="38" height="38" style="height: 38px; width: auto; max-height: 38px; object-fit: contain; display: block;">
       <span>
         <strong data-i18n="clubName">BIAKA Audacious Agora Debate Club</strong>
@@ -40,17 +40,21 @@
     </a>
     <button class="menu-button" id="menuButton" type="button" aria-label="Open navigation" data-i18n="menuLabel">Menu</button>
     <nav id="mainNav" aria-label="Primary navigation">
-      <a href="/" data-i18n="navHome">Home</a>
-      <a href="/#about" data-i18n="navAbout">About</a>
-      <a href="/register" data-i18n="navRegister">Register</a>
-      <a href="/news" data-i18n="navNews">News</a>
-      <a href="/contact" class="active" data-i18n="navContact">Contact</a>
+      <div class="nav-links">
+        <a href="/" data-i18n="navHome">Home</a>
+        <a href="/#about" data-i18n="navAbout">About</a>
+        <a href="/register" data-i18n="navRegister">Register</a>
+        <a href="/news" data-i18n="navNews">News</a>
+        <a href="/contact" class="active" data-i18n="navContact">Contact</a>
+      </div>
+      <div class="nav-controls">
+        <button id="themeToggle" class="theme-toggle" type="button" aria-label="Toggle dark mode" title="Toggle dark/light mode">🌙</button>
+        <div class="language-toggle" aria-label="Language selector">
+          <button type="button" class="active" data-lang="en">ENG</button>
+          <button type="button" data-lang="fr">FRE</button>
+        </div>
+      </div>
     </nav>
-    <button id="themeToggle" class="theme-toggle" type="button" aria-label="Toggle dark mode">🌙</button>
-    <div class="language-toggle" aria-label="Language selector">
-      <button type="button" class="active" data-lang="en">ENG</button>
-      <button type="button" data-lang="fr">FRE</button>
-    </div>
   </header>
 
   <main>

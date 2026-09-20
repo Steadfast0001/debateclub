@@ -21,16 +21,22 @@
 </head>
 <body>
   <header class="site-header">
-    <a class="brand" href="index.html">
-      <img id="schoolLogo" src="/logo.png?v=11" alt="BIAKA University Institute of Buea logo" width="38" height="38" style="height: 38px; width: auto; max-height: 38px; object-fit: contain; display: block;">
+    <a class="brand" href="/">
+      <img id="schoolLogo" src="/logo.png?v=12" alt="BIAKA University Institute of Buea logo" width="38" height="38" style="height: 38px; width: auto; max-height: 38px; object-fit: contain; display: block;">
       <span>
         <strong>BIAKA Debate Club</strong>
         <small>Admin Portal</small>
       </span>
     </a>
+    <button class="menu-button" id="menuButton" type="button" aria-label="Open navigation">Menu</button>
     <nav id="mainNav">
-      <a href="/">Home</a>
-      <a href="/news">News</a>
+      <div class="nav-links">
+        <a href="/">Home</a>
+        <a href="/news">News</a>
+      </div>
+      <div class="nav-controls">
+        <button id="themeToggle" class="theme-toggle" type="button" aria-label="Toggle dark mode" title="Toggle dark/light mode">🌙</button>
+      </div>
     </nav>
   </header>
 

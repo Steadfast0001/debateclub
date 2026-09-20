@@ -884,6 +884,16 @@ if (menuBtn) {
   });
 }
 
+// Close mobile nav when clicking a navigation link
+document.querySelectorAll("#mainNav a").forEach(link => {
+  link.addEventListener("click", () => {
+    const mainNav = document.querySelector("#mainNav");
+    if (mainNav && mainNav.classList.contains("open")) {
+      mainNav.classList.remove("open");
+    }
+  });
+});
+
 document.querySelectorAll(".language-toggle button").forEach(button => {
   button.addEventListener("click", () => setLanguage(button.dataset.lang));
 });
