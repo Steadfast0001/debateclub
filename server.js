@@ -36,9 +36,17 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads'), {
   maxAge: process.env.NODE_ENV === 'production' ? '1d' : 0 
 }));
 
-// Legacy direct registration link
+// Direct page links
 app.get('/register', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'register.html'));
+});
+
+app.get('/contact', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'contact.html'));
+});
+
+app.get('/news', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'news.html'));
 });
 
 // Fallback for static files
