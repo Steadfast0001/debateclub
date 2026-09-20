@@ -51,10 +51,10 @@
   </script>
 
   <title>BIAKA Audacious Agora Debate Club</title>
-  <link rel="icon" type="image/png" href="/favicon.png?v=11">
-  <link rel="shortcut icon" href="/favicon.ico?v=11">
-  <link rel="apple-touch-icon" href="/logo.png?v=11">
-  <link rel="stylesheet" href="/styles.css?v=11">
+  <link rel="icon" type="image/png" href="/favicon.png?v=12">
+  <link rel="shortcut icon" href="/favicon.ico?v=12">
+  <link rel="apple-touch-icon" href="/logo.png?v=12">
+  <link rel="stylesheet" href="/styles.css?v=12">
   <script>
     window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
   </script>
@@ -153,6 +153,21 @@
     </section>
 
     <section id="contact">
+      <div class="contact-form-container" style="margin-bottom: 36px;">
+        <article class="info-panel">
+          <h3 data-i18n="sendUsMessage">Send us a message</h3>
+          <form id="publicContactForm" class="club-form compact">
+            <div class="contact-form-grid">
+              <label><span data-i18n="yourName">Your Name</span><input type="text" name="name" id="contactName" required placeholder="Your full name"></label>
+              <label><span data-i18n="yourEmail">Your Email</span><input type="email" name="email" id="contactEmail" required placeholder="you@example.com"></label>
+            </div>
+            <label><span data-i18n="yourMessage">Message</span><textarea name="message" id="contactMessage" rows="4" required placeholder="How can we help you?" style="resize: vertical;"></textarea></label>
+            <button type="submit" data-i18n="sendMessage">Send Message</button>
+          </form>
+          <p id="contactFormMessage" class="form-message" style="margin-top: 10px;"></p>
+        </article>
+      </div>
+
       <div class="section-heading">
         <p class="eyebrow" data-i18n="contactEyebrow">Contact</p>
         <h2 data-i18n="contactTitle">Reach the club and the school</h2>
@@ -203,21 +218,6 @@
               <small>+237 690 000 000</small>
             </a>
           </div>
-        </article>
-      </div>
-
-      <div class="contact-form-container">
-        <article class="info-panel">
-          <h3 data-i18n="sendUsMessage">Send us a message</h3>
-          <form id="publicContactForm" class="club-form compact">
-            <div class="contact-form-grid">
-              <label><span data-i18n="yourName">Your Name</span><input type="text" name="name" id="contactName" required placeholder="Your full name"></label>
-              <label><span data-i18n="yourEmail">Your Email</span><input type="email" name="email" id="contactEmail" required placeholder="you@example.com"></label>
-            </div>
-            <label><span data-i18n="yourMessage">Message</span><textarea name="message" id="contactMessage" rows="4" required placeholder="How can we help you?" style="resize: vertical;"></textarea></label>
-            <button type="submit" data-i18n="sendMessage">Send Message</button>
-          </form>
-          <p id="contactFormMessage" class="form-message" style="margin-top: 10px;"></p>
         </article>
       </div>
     </section>
