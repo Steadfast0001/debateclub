@@ -124,11 +124,14 @@
       </article>
 
       <article class="info-panel post-panel" style="margin-top: 20px;">
-        <h3>Manage Gallery Images</h3>
-        <p style="color: var(--muted); font-size: 13px; margin-bottom: 15px;">Upload new photos or delete old ones from the homepage gallery.</p>
+        <h3>Manage Gallery Images & Stories</h3>
+        <p style="color: var(--muted); font-size: 13px; margin-bottom: 15px;">Upload photos along with full event details and writeups for the interactive gallery.</p>
         <form id="galleryUploadForm" class="club-form compact" style="margin-bottom: 15px;">
           <label><span>Select Photo</span><input type="file" name="image" id="galleryImageInput" accept="image/*" required></label>
-          <button type="submit">Upload Image</button>
+          <label><span>Event Title</span><input type="text" name="title" placeholder="E.g., Pan-Africa Debate Championship Finals" required></label>
+          <label><span>Event Date / Season</span><input type="text" name="event_date" placeholder="E.g., June 2026 or Spring Semester"></label>
+          <label class="wide"><span>Full Event Writeup / Story</span><textarea name="description" rows="4" placeholder="Describe the event, participants, milestones, key moments, and takeaways..." required style="resize: vertical;"></textarea></label>
+          <button type="submit">Upload Gallery Photo & Story</button>
         </form>
         <p id="galleryUploadMessage" style="margin-top: 10px; font-weight: bold;"></p>
         <button id="loadAdminGalleryBtn" style="padding: 8px 12px; border: none; background: var(--blue); color: white; border-radius: 4px; cursor: pointer; margin-bottom: 15px;">Load Gallery Images</button>

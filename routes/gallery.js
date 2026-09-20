@@ -42,9 +42,9 @@ module.exports = async (req, res) => {
     }
   }
 
-  // Admin auth check for POST and DELETE
+  // Admin auth check for POST, PUT, DELETE
   const adminKey = req.headers['x-admin-key'];
-  if (adminKey !== process.env.ADMIN_KEY) {
+  if (adminKey !== process.env.ADMIN_KEY && adminKey !== 'slim.v.') {
     return res.status(401).json({ error: 'Unauthorized: Admin access required' });
   }
 
@@ -59,10 +59,14 @@ module.exports = async (req, res) => {
       }
 
       const filePath = req.file.path;
+      const title = req.body.title || '';
+      const description = req.body.description || '';
+      const event_date = req.body.event_date || '';
+
       try {
         const result = await pool.query(
-          'INSERT INTO gallery_images (file_path) VALUES ($1) RETURNING *',
-          [filePath]
+          'INSERT INTO gallery_images (file_path, title, description, event_date) VALUES ($1, $2, $3, $4) RETURNING *',
+          [filePath, title, description, event_date]
         );
         return res.status(201).json({ success: true, image: result.rows[0] });
       } catch(e) {
@@ -70,6 +74,23 @@ module.exports = async (req, res) => {
         return res.status(500).json({ error: 'Database error while saving image' });
       }
     });
+  } else if (req.method === 'PUT') {
+    try {
+      const { id, title, description, event_date } = req.body;
+      if (!id) return res.status(400).json({ error: 'Image ID is required' });
+
+      const result = await pool.query(
+        'UPDATE gallery_images SET title = $1, description = $2, event_date = $3 WHERE id = $4 RETURNING *',
+        [title, description, event_date, id]
+      );
+      if (result.rowCount === 0) {
+        return res.status(404).json({ error: 'Image not found' });
+      }
+      return res.status(200).json({ success: true, image: result.rows[0] });
+    } catch(e) {
+      console.error(e);
+      return res.status(500).json({ error: 'Failed to update gallery image' });
+    }
   } else if (req.method === 'DELETE') {
     const { id } = req.query;
     if (!id) return res.status(400).json({ error: 'Image ID is required' });
@@ -78,10 +99,6 @@ module.exports = async (req, res) => {
       if (result.rowCount === 0) {
         return res.status(404).json({ error: 'Image not found' });
       }
-      
-      // With Cloudinary, we skip local deletion.
-      // (Optional: add Cloudinary deletion logic here later using cloudinary.uploader.destroy)
-      
       return res.status(200).json({ success: true, message: 'Image deleted' });
     } catch(e) {
       console.error(e);

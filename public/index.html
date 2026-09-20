@@ -249,8 +249,35 @@
         </div>
       </div>
     </div>
+  <div id="galleryModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="galleryModalTitle">
+    <div class="modal-overlay" onclick="closeGalleryModal()"></div>
+    <div class="modal-content gallery-modal-content">
+      <button class="modal-close" onclick="closeGalleryModal()" aria-label="Close modal">&times;</button>
+      <div class="gallery-modal-layout">
+        <div class="gallery-modal-img-wrap">
+          <img id="galleryModalImage" src="" alt="Event Moment">
+        </div>
+        <div class="gallery-modal-details">
+          <div>
+            <div class="gallery-modal-meta">
+              <span id="galleryModalDate" class="gallery-date-badge"></span>
+              <span class="gallery-event-pill">Debate Club Moment</span>
+            </div>
+            <h3 id="galleryModalTitle"></h3>
+            <div class="gallery-modal-body">
+              <p id="galleryModalDescription"></p>
+            </div>
+          </div>
+          <div class="gallery-modal-nav">
+            <button type="button" class="gallery-nav-btn prev" onclick="prevGalleryImage()">‹ Previous</button>
+            <span id="galleryModalCounter" class="gallery-counter">1 of 1</span>
+            <button type="button" class="gallery-nav-btn next" onclick="nextGalleryImage()">Next ›</button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 
-  <script src="app.js?v=7"></script>
+  <script src="app.js?v=8"></script>
 </body>
 </html>

@@ -49,8 +49,14 @@ async function initializeDatabase() {
       CREATE TABLE IF NOT EXISTS gallery_images (
         id SERIAL PRIMARY KEY,
         file_path VARCHAR(255) NOT NULL,
+        title VARCHAR(255),
+        description TEXT,
+        event_date VARCHAR(100),
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       );
+      ALTER TABLE gallery_images ADD COLUMN IF NOT EXISTS title VARCHAR(255);
+      ALTER TABLE gallery_images ADD COLUMN IF NOT EXISTS description TEXT;
+      ALTER TABLE gallery_images ADD COLUMN IF NOT EXISTS event_date VARCHAR(100);
     `);
 
     // Create leaders table

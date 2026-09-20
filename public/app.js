@@ -473,6 +473,9 @@ async function trackVisit() {
 }
 trackVisit();
 
+let galleryImages = [];
+let currentGalleryIndex = 0;
+
 async function fetchGallery() {
   const publicGrid = document.querySelector('#publicGalleryGrid');
   if (!publicGrid) return;
@@ -480,18 +483,89 @@ async function fetchGallery() {
     const res = await fetch('/api/gallery');
     const data = await res.json();
     if (res.ok && data.images) {
-      if (data.images.length === 0) {
+      galleryImages = data.images;
+      if (galleryImages.length === 0) {
         publicGrid.innerHTML = '<p style="grid-column: 1 / -1; color: var(--muted); text-align: center;">No photos uploaded yet.</p>';
         return;
       }
-      publicGrid.innerHTML = data.images.map(img => `
-        <img src="${img.file_path}" alt="Gallery Image" loading="lazy">
-      `).join('');
+      publicGrid.innerHTML = galleryImages.map((img, index) => {
+        const title = img.title || 'Debate Club Moment';
+        const date = img.event_date || (img.created_at ? new Date(img.created_at).toLocaleDateString(undefined, { month: 'short', year: 'numeric' }) : 'Recent Event');
+        const description = img.description || 'Click to view the full story and details behind this event.';
+        return `
+          <article class="gallery-card" onclick="openGalleryModal(${index})" role="button" tabindex="0" aria-label="View details for ${escapeHtml(title)}">
+            <div class="gallery-card-img-wrap">
+              <img src="${img.file_path}" alt="${escapeHtml(title)}" loading="lazy">
+              <div class="gallery-card-overlay">
+                <span class="gallery-card-badge">${escapeHtml(date)}</span>
+              </div>
+            </div>
+            <div class="gallery-card-info">
+              <h3>${escapeHtml(title)}</h3>
+              <p>${escapeHtml(description)}</p>
+              <div class="gallery-card-cta"><span>Read Full Story</span> <span>→</span></div>
+            </div>
+          </article>
+        `;
+      }).join('');
     }
   } catch(e) {
     console.error('Failed to fetch gallery', e);
   }
 }
+
+window.openGalleryModal = function(index) {
+  if (!galleryImages || galleryImages.length === 0) return;
+  if (index < 0) index = galleryImages.length - 1;
+  if (index >= galleryImages.length) index = 0;
+  
+  currentGalleryIndex = index;
+  const item = galleryImages[index];
+  if (!item) return;
+
+  const modal = document.querySelector('#galleryModal');
+  const modalImg = document.querySelector('#galleryModalImage');
+  const modalTitle = document.querySelector('#galleryModalTitle');
+  const modalDate = document.querySelector('#galleryModalDate');
+  const modalDesc = document.querySelector('#galleryModalDescription');
+  const modalCounter = document.querySelector('#galleryModalCounter');
+
+  if (modalImg) modalImg.src = item.file_path;
+  if (modalTitle) modalTitle.textContent = item.title || 'Debate Club Moment';
+  if (modalDate) modalDate.textContent = item.event_date || (item.created_at ? new Date(item.created_at).toLocaleDateString(undefined, { month: 'short', year: 'numeric' }) : 'Event Update');
+  if (modalDesc) modalDesc.textContent = item.description || 'No additional event writeup provided for this photo.';
+  if (modalCounter) modalCounter.textContent = `${index + 1} of ${galleryImages.length}`;
+
+  if (modal) modal.classList.remove('hidden');
+};
+
+window.closeGalleryModal = function() {
+  const modal = document.querySelector('#galleryModal');
+  if (modal) modal.classList.add('hidden');
+};
+
+window.prevGalleryImage = function() {
+  openGalleryModal(currentGalleryIndex - 1);
+};
+
+window.nextGalleryImage = function() {
+  openGalleryModal(currentGalleryIndex + 1);
+};
+
+// Keyboard listener for modal closing and navigation
+document.addEventListener('keydown', (e) => {
+  const galleryModal = document.querySelector('#galleryModal');
+  if (galleryModal && !galleryModal.classList.contains('hidden')) {
+    if (e.key === 'Escape') closeGalleryModal();
+    if (e.key === 'ArrowLeft') prevGalleryImage();
+    if (e.key === 'ArrowRight') nextGalleryImage();
+  }
+  const leaderModal = document.querySelector('#leaderModal');
+  if (leaderModal && !leaderModal.classList.contains('hidden')) {
+    if (e.key === 'Escape') closeLeaderModal();
+  }
+});
+
 fetchGallery();
 
 
@@ -767,12 +841,16 @@ if (loadAdminGalleryBtn) {
           return;
         }
         adminGalleryList.innerHTML = data.images.map(img => `
-          <div style="padding: 12px; border: 1px solid var(--line); border-radius: 8px; background: #fafafa; display: flex; justify-content: space-between; align-items: center;">
-            <div style="display: flex; align-items: center; gap: 10px;">
-              <img src="${img.file_path}" style="width: 50px; height: 50px; object-fit: cover; border-radius: 4px;">
-              <span style="font-size: 13px; color: var(--muted);">${new Date(img.created_at).toLocaleDateString()}</span>
+          <div style="padding: 12px; border: 1px solid var(--line); border-radius: 8px; background: var(--panel); display: flex; justify-content: space-between; align-items: center; gap: 12px;">
+            <div style="display: flex; align-items: center; gap: 12px; overflow: hidden;">
+              <img src="${img.file_path}" style="width: 56px; height: 56px; object-fit: cover; border-radius: 6px; flex-shrink: 0;">
+              <div style="overflow: hidden;">
+                <strong style="display: block; font-size: 13.5px; color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${escapeHtml(img.title || 'Untitled Moment')}</strong>
+                <small style="display: block; font-size: 11px; color: var(--blue); margin-bottom: 2px;">${escapeHtml(img.event_date || new Date(img.created_at).toLocaleDateString())}</small>
+                <p style="font-size: 11.5px; color: var(--muted); margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${escapeHtml(img.description || 'No writeup')}</p>
+              </div>
             </div>
-            <button onclick="deleteGalleryImage(${img.id})" style="background: var(--red); color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer;">Delete</button>
+            <button onclick="deleteGalleryImage(${img.id})" style="background: var(--red); color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; flex-shrink: 0; font-size: 12px; font-weight: 600;">Delete</button>
           </div>
         `).join('');
       } else {
