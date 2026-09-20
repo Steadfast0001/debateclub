@@ -1520,20 +1520,21 @@ footer {
 }
 
 .footer-bottom {
-  border-top: 1px solid var(--line);
-  padding: 16px 20px;
+  border: none;
+  padding: 8px 20px 24px;
   text-align: center;
-  background: rgba(0, 0, 0, 0.02);
+  background: transparent;
 }
 
 :root.dark .footer-bottom {
-  background: rgba(0, 0, 0, 0.2);
+  background: transparent;
 }
 
 .footer-bottom p {
   margin: 0;
   font-size: 12px;
   color: var(--muted);
+  background: transparent;
 }
 
 @media (max-width: 900px) {
