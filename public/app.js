@@ -490,22 +490,13 @@ async function fetchGallery() {
       }
       publicGrid.innerHTML = galleryImages.map((img, index) => {
         const title = img.title || 'Debate Club Moment';
-        const date = img.event_date || (img.created_at ? new Date(img.created_at).toLocaleDateString(undefined, { month: 'short', year: 'numeric' }) : 'Recent Event');
-        const description = img.description || 'Click to view the full story and details behind this event.';
         return `
-          <article class="gallery-card" onclick="openGalleryModal(${index})" role="button" tabindex="0" aria-label="View details for ${escapeHtml(title)}">
-            <div class="gallery-card-img-wrap">
-              <img src="${img.file_path}" alt="${escapeHtml(title)}" loading="lazy">
-              <div class="gallery-card-overlay">
-                <span class="gallery-card-badge">${escapeHtml(date)}</span>
-              </div>
+          <div class="gallery-photo-item" onclick="openGalleryModal(${index})" role="button" tabindex="0" aria-label="View event story for ${escapeHtml(title)}">
+            <img src="${img.file_path}" alt="${escapeHtml(title)}" loading="lazy">
+            <div class="gallery-photo-overlay">
+              <span class="gallery-photo-icon">🔍</span>
             </div>
-            <div class="gallery-card-info">
-              <h3>${escapeHtml(title)}</h3>
-              <p>${escapeHtml(description)}</p>
-              <div class="gallery-card-cta"><span>Read Full Story</span> <span>→</span></div>
-            </div>
-          </article>
+          </div>
         `;
       }).join('');
     }
