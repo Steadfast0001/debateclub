@@ -108,6 +108,8 @@ async function broadcastNewsUpdate(newsItem, emails) {
     console.error('Error broadcasting news update:', error);
     return false;
   }
+}
+
 async function sendPasswordResetEmail(email, resetToken, origin) {
   const baseUrl = origin || process.env.BASE_URL || 'https://debateclub-one.vercel.app';
   const resetLink = `${baseUrl}/admin.html?reset_token=${encodeURIComponent(resetToken)}&email=${encodeURIComponent(email)}`;
