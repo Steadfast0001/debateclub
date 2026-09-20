@@ -1044,8 +1044,8 @@ p {
    ========================================================================== */
 .gallery-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
-  gap: 12px;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 10px;
 }
 
 .gallery-photo-item {
@@ -1053,10 +1053,11 @@ p {
   border-radius: 8px;
   overflow: hidden;
   cursor: pointer;
-  background: #000;
+  background: var(--panel);
   border: 1px solid var(--line);
   box-shadow: var(--shadow);
-  aspect-ratio: 4 / 3;
+  height: 140px;
+  max-height: 150px;
   transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
 }
 
@@ -1070,6 +1071,7 @@ p {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: center 25%;
   display: block;
   transition: transform 0.35s ease;
 }
@@ -1239,13 +1241,14 @@ p {
   }
 
   .gallery-modal-img-wrap {
-    min-height: 220px;
-    max-height: 280px;
+    min-height: 180px;
+    max-height: 220px;
+    background: #0b1120;
   }
 
   .gallery-modal-img-wrap img {
-    max-height: 280px;
-    object-fit: cover;
+    max-height: 220px;
+    object-fit: contain;
   }
 
   .gallery-modal-details {
@@ -1520,6 +1523,16 @@ footer {
   .contact-grid {
     grid-template-columns: 1fr;
   }
+
+  .gallery-grid {
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 10px;
+  }
+
+  .gallery-photo-item {
+    height: 130px;
+    max-height: 130px;
+  }
 }
 
 @media (max-width: 680px) {
@@ -1600,7 +1613,8 @@ footer {
 
   .gallery-photo-item {
     border-radius: 6px;
-    aspect-ratio: 1 / 1;
+    height: 120px !important;
+    max-height: 120px !important;
   }
 
   .leader-card {
@@ -1870,27 +1884,60 @@ footer {
 @media (max-width: 900px) {
   .footer-container {
     grid-template-columns: 1fr 1fr;
-    gap: 14px;
-    padding: 12px 18px 4px;
+    gap: 16px 14px;
+    padding: 14px 18px 6px;
   }
 
   .footer-bottom {
-    padding: 2px 18px 8px;
+    padding: 4px 18px 8px;
   }
 }
 
 @media (max-width: 600px) {
   .footer-container {
-    grid-template-columns: 1fr;
-    gap: 14px;
-    padding: 12px 14px 4px;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 14px 10px !important;
+    padding: 12px 12px 6px !important;
   }
   
   .footer-col h4 {
     margin-bottom: 4px;
+    font-size: 10px;
+  }
+
+  .footer-brand strong {
+    font-size: 10.5px;
+  }
+
+  .footer-brand small {
+    font-size: 9px;
+  }
+
+  .footer-motto {
+    font-size: 9px;
+    margin-bottom: 4px;
+  }
+
+  .footer-contact-item strong {
+    font-size: 10.5px;
+  }
+
+  .footer-link {
+    font-size: 9.5px;
+    gap: 3px;
+  }
+
+  .footer-nav-links a {
+    font-size: 10px;
+  }
+
+  .footer-socials a {
+    width: 20px;
+    height: 20px;
+    font-size: 8.5px;
   }
 
   .footer-bottom {
-    padding: 2px 14px 8px;
+    padding: 4px 12px 8px;
   }
 }
