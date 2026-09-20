@@ -108,6 +108,40 @@ async function broadcastNewsUpdate(newsItem, emails) {
     console.error('Error broadcasting news update:', error);
     return false;
   }
+async function sendPasswordResetEmail(email, resetToken, origin) {
+  const baseUrl = origin || process.env.BASE_URL || 'https://debateclub-one.vercel.app';
+  const resetLink = `${baseUrl}/admin.html?reset_token=${encodeURIComponent(resetToken)}&email=${encodeURIComponent(email)}`;
+
+  const resetHTML = `
+    <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 560px; margin: 0 auto; color: #1e293b; background: #ffffff; padding: 24px; border: 1px solid #e2e8f0; border-radius: 8px;">
+      <h2 style="color: #0284c7; margin-top: 0;">BIAKA Audacious Agora Debate Club</h2>
+      <h3 style="color: #0f172a; margin-bottom: 8px;">Admin Password Reset Request</h3>
+      <p>Hello,</p>
+      <p>A request was received to reset the administrator password for your BIAKA Debate Club account (<strong>${escapeHtml(email)}</strong>).</p>
+      <div style="margin: 24px 0; text-align: center;">
+        <a href="${resetLink}" style="display: inline-block; background: #0284c7; color: #ffffff; padding: 12px 24px; border-radius: 6px; text-decoration: none; font-weight: 700; font-size: 14px;">Reset My Password</a>
+      </div>
+      <p style="font-size: 13px; color: #64748b;">Or copy and paste this link into your browser:</p>
+      <p style="font-size: 12px; color: #0284c7; word-break: break-all;"><a href="${resetLink}">${resetLink}</a></p>
+      <p style="font-size: 12px; color: #dc2626; margin-top: 18px;"><strong>Note:</strong> This link is valid for 30 minutes and can only be used once.</p>
+      <hr style="margin: 20px 0; border: 0; border-top: 1px solid #e2e8f0;">
+      <p style="font-size: 11.5px; color: #94a3b8; margin-bottom: 0;">If you did not request this password reset, please ignore this email or contact the club president.</p>
+    </div>
+  `;
+
+  try {
+    await transporter.sendMail({
+      from: `"BIAKA Debate Club Admin" <${process.env.GMAIL_USER}>`,
+      to: email,
+      subject: 'Password Reset Request - BIAKA Debate Club Admin',
+      html: resetHTML,
+    });
+    console.log(`Password reset email sent to: ${email}`);
+    return true;
+  } catch (error) {
+    console.error('Error sending password reset email:', error);
+    return false;
+  }
 }
 
-module.exports = { sendRegistrationEmail, broadcastNewsUpdate };
+module.exports = { sendRegistrationEmail, broadcastNewsUpdate, sendPasswordResetEmail };

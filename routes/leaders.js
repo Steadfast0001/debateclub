@@ -21,7 +21,7 @@ const upload = multer({ storage: storage });
 // Simple middleware to check admin key
 const isAdmin = (req, res, next) => {
   const adminKey = req.headers['x-admin-key'];
-  if (adminKey === process.env.ADMIN_KEY || adminKey === 'slim.v.') {
+  if (adminKey && adminKey === process.env.ADMIN_KEY) {
     next();
   } else {
     res.status(401).json({ error: 'Unauthorized. Invalid admin key.' });

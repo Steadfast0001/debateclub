@@ -389,34 +389,220 @@ if (newsForm) {
   }
 }
 
-// Admin login logic
+// Admin auth & Password Recovery logic
 const adminLoginForm = document.querySelector('#adminLoginForm');
+const adminForgotForm = document.querySelector('#adminForgotForm');
+const adminResetForm = document.querySelector('#adminResetForm');
+
 const loginSection = document.querySelector('#admin-login-section');
+const forgotSection = document.querySelector('#admin-forgot-section');
+const resetSection = document.querySelector('#admin-reset-section');
 const dashboardSection = document.querySelector('#admin-dashboard-section');
 const logoutBtn = document.querySelector('#logoutBtn');
 
+const showForgotPasswordBtn = document.querySelector('#showForgotPasswordBtn');
+const backToLoginBtn = document.querySelector('#backToLoginBtn');
+
 function checkAdminAuth() {
+  const urlParams = new URLSearchParams(window.location.search);
+  const resetToken = urlParams.get('reset_token');
+  const resetEmail = urlParams.get('email');
+
+  // If reset token is present in URL, show the reset password form!
+  if (resetToken && resetEmail && resetSection) {
+    if (loginSection) loginSection.classList.add('hidden');
+    if (forgotSection) forgotSection.classList.add('hidden');
+    if (dashboardSection) dashboardSection.classList.add('hidden');
+    resetSection.classList.remove('hidden');
+    
+    const emailHidden = document.querySelector('#resetEmailHidden');
+    const tokenHidden = document.querySelector('#resetTokenHidden');
+    if (emailHidden) emailHidden.value = resetEmail;
+    if (tokenHidden) tokenHidden.value = resetToken;
+    return;
+  }
+
   if (localStorage.getItem('debate-admin-key')) {
     if (loginSection) loginSection.classList.add('hidden');
+    if (forgotSection) forgotSection.classList.add('hidden');
+    if (resetSection) resetSection.classList.add('hidden');
     if (dashboardSection) dashboardSection.classList.remove('hidden');
   } else {
     if (loginSection) loginSection.classList.remove('hidden');
+    if (forgotSection) forgotSection.classList.add('hidden');
+    if (resetSection) resetSection.classList.add('hidden');
     if (dashboardSection) dashboardSection.classList.add('hidden');
   }
 }
 
+// Show Forgot Password View
+if (showForgotPasswordBtn) {
+  showForgotPasswordBtn.addEventListener('click', () => {
+    if (loginSection) loginSection.classList.add('hidden');
+    if (forgotSection) forgotSection.classList.remove('hidden');
+    const emailVal = document.querySelector('#adminEmailInput')?.value;
+    if (emailVal && document.querySelector('#forgotEmailInput')) {
+      document.querySelector('#forgotEmailInput').value = emailVal;
+    }
+  });
+}
+
+// Back to Login
+if (backToLoginBtn) {
+  backToLoginBtn.addEventListener('click', () => {
+    if (forgotSection) forgotSection.classList.add('hidden');
+    if (loginSection) loginSection.classList.remove('hidden');
+  });
+}
+
+// Handle Login Submit
 if (adminLoginForm) {
-  adminLoginForm.addEventListener('submit', (e) => {
+  adminLoginForm.addEventListener('submit', async (e) => {
     e.preventDefault();
-    const key = document.querySelector('#adminKeyInput').value;
-    localStorage.setItem('debate-admin-key', key);
-    checkAdminAuth();
+    const email = document.querySelector('#adminEmailInput')?.value || '';
+    const password = document.querySelector('#adminPasswordInput')?.value || '';
+    const msgEl = document.querySelector('#adminLoginMessage');
+    const submitBtn = document.querySelector('#adminLoginBtn');
+
+    if (msgEl) {
+      msgEl.textContent = 'Authenticating...';
+      msgEl.style.color = 'var(--blue)';
+    }
+    if (submitBtn) submitBtn.disabled = true;
+
+    try {
+      const res = await fetch('/api/admin/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password })
+      });
+      const data = await res.json();
+      if (res.ok && data.success) {
+        localStorage.setItem('debate-admin-key', data.token);
+        localStorage.setItem('debate-admin-email', data.email);
+        checkAdminAuth();
+      } else {
+        if (msgEl) {
+          msgEl.textContent = data.error || 'Invalid email or password';
+          msgEl.style.color = 'var(--red)';
+        }
+      }
+    } catch (err) {
+      if (msgEl) {
+        msgEl.textContent = 'Network error. Please try again.';
+        msgEl.style.color = 'var(--red)';
+      }
+    } finally {
+      if (submitBtn) submitBtn.disabled = false;
+    }
+  });
+}
+
+// Handle Forgot Password Submit
+if (adminForgotForm) {
+  adminForgotForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const email = document.querySelector('#forgotEmailInput')?.value || '';
+    const msgEl = document.querySelector('#adminForgotMessage');
+    const submitBtn = document.querySelector('#forgotSubmitBtn');
+
+    if (msgEl) {
+      msgEl.textContent = 'Sending reset link...';
+      msgEl.style.color = 'var(--blue)';
+    }
+    if (submitBtn) submitBtn.disabled = true;
+
+    try {
+      const res = await fetch('/api/admin/forgot-password', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email })
+      });
+      const data = await res.json();
+      if (res.ok) {
+        if (msgEl) {
+          msgEl.textContent = data.message || 'Password reset link sent to your email!';
+          msgEl.style.color = 'var(--green)';
+        }
+        adminForgotForm.reset();
+      } else {
+        if (msgEl) {
+          msgEl.textContent = data.error || 'Failed to send reset email.';
+          msgEl.style.color = 'var(--red)';
+        }
+      }
+    } catch (err) {
+      if (msgEl) {
+        msgEl.textContent = 'Network error. Please try again.';
+        msgEl.style.color = 'var(--red)';
+      }
+    } finally {
+      if (submitBtn) submitBtn.disabled = false;
+    }
+  });
+}
+
+// Handle Reset Password Submit
+if (adminResetForm) {
+  adminResetForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const email = document.querySelector('#resetEmailHidden')?.value;
+    const token = document.querySelector('#resetTokenHidden')?.value;
+    const newPassword = document.querySelector('#resetNewPasswordInput')?.value;
+    const confirmPassword = document.querySelector('#resetConfirmPasswordInput')?.value;
+    const msgEl = document.querySelector('#adminResetMessage');
+    const submitBtn = document.querySelector('#resetSubmitBtn');
+
+    if (newPassword !== confirmPassword) {
+      if (msgEl) {
+        msgEl.textContent = 'Passwords do not match.';
+        msgEl.style.color = 'var(--red)';
+      }
+      return;
+    }
+
+    if (msgEl) {
+      msgEl.textContent = 'Updating password...';
+      msgEl.style.color = 'var(--blue)';
+    }
+    if (submitBtn) submitBtn.disabled = true;
+
+    try {
+      const res = await fetch('/api/admin/reset-password', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, token, newPassword })
+      });
+      const data = await res.json();
+      if (res.ok) {
+        if (msgEl) {
+          msgEl.textContent = 'Password updated successfully! Redirecting to login...';
+          msgEl.style.color = 'var(--green)';
+        }
+        setTimeout(() => {
+          window.location.href = '/admin.html';
+        }, 2000);
+      } else {
+        if (msgEl) {
+          msgEl.textContent = data.error || 'Failed to update password.';
+          msgEl.style.color = 'var(--red)';
+        }
+      }
+    } catch (err) {
+      if (msgEl) {
+        msgEl.textContent = 'Network error. Please try again.';
+        msgEl.style.color = 'var(--red)';
+      }
+    } finally {
+      if (submitBtn) submitBtn.disabled = false;
+    }
   });
 }
 
 if (logoutBtn) {
   logoutBtn.addEventListener('click', () => {
     localStorage.removeItem('debate-admin-key');
+    localStorage.removeItem('debate-admin-email');
     checkAdminAuth();
   });
 }

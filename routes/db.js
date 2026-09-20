@@ -81,9 +81,28 @@ async function initializeDatabase() {
         email VARCHAR(255) UNIQUE NOT NULL,
         password_hash VARCHAR(255) NOT NULL,
         role VARCHAR(50) DEFAULT 'admin',
+        reset_token VARCHAR(255),
+        reset_token_expiry TIMESTAMP,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       );
+      ALTER TABLE admin_users ADD COLUMN IF NOT EXISTS reset_token VARCHAR(255);
+      ALTER TABLE admin_users ADD COLUMN IF NOT EXISTS reset_token_expiry TIMESTAMP;
     `);
+
+    // Ensure default admin user exists
+    const adminCheck = await pool.query('SELECT id FROM admin_users LIMIT 1');
+    if (adminCheck.rows.length === 0) {
+      const { hashPassword } = require('./auth_utils');
+      // Create initial hash for misswhiteblue@gmail.com
+      const initialHash = await hashPassword('BiakaDebate2026!');
+      await pool.query(
+        `INSERT INTO admin_users (email, password_hash, role) 
+         VALUES ($1, $2, 'admin') 
+         ON CONFLICT (email) DO NOTHING`,
+        ['misswhiteblue@gmail.com', initialHash]
+      );
+      console.log('Seeded initial admin user: misswhiteblue@gmail.com');
+    }
 
     // Create app stats table
     await pool.query(`

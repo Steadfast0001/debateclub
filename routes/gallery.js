@@ -44,7 +44,7 @@ module.exports = async (req, res) => {
 
   // Admin auth check for POST, PUT, DELETE
   const adminKey = req.headers['x-admin-key'];
-  if (adminKey !== process.env.ADMIN_KEY && adminKey !== 'slim.v.') {
+  if (!adminKey || (process.env.ADMIN_KEY && adminKey !== process.env.ADMIN_KEY)) {
     return res.status(401).json({ error: 'Unauthorized: Admin access required' });
   }
 

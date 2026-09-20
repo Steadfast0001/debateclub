@@ -41,13 +41,65 @@
   </header>
 
   <main>
-    <section id="admin-login-section" class="info-panel">
-      <h2>Admin Login</h2>
+    <!-- 1. Admin Login Form -->
+    <section id="admin-login-section" class="info-panel" style="max-width: 440px; margin: 40px auto;">
+      <h2 style="margin-bottom: 6px;">Admin Login</h2>
+      <p style="color: var(--muted); font-size: 13px; margin-bottom: 18px;">Sign in to manage registrations, news updates, leaders, and gallery.</p>
+      
       <form id="adminLoginForm" class="club-form compact">
-        <label><span>Admin Key</span><input type="password" id="adminKeyInput" required></label>
-        <button type="submit">Login</button>
+        <label>
+          <span>Admin Email</span>
+          <input type="email" id="adminEmailInput" placeholder="admin@email.com" value="misswhiteblue@gmail.com" required>
+        </label>
+        <label>
+          <span>Password</span>
+          <input type="password" id="adminPasswordInput" placeholder="••••••••" required>
+        </label>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin: 6px 0 12px;">
+          <button type="button" id="showForgotPasswordBtn" style="background: none; border: none; color: var(--blue); padding: 0; font-size: 12.5px; cursor: pointer; text-decoration: underline;">Forgot Password?</button>
+        </div>
+        <button type="submit" id="adminLoginBtn" style="width: 100%;">Sign In</button>
       </form>
-      <p id="adminLoginMessage" style="margin-top: 10px;"></p>
+      <p id="adminLoginMessage" style="margin-top: 12px; font-weight: 600; font-size: 13px;"></p>
+    </section>
+
+    <!-- 2. Forgot Password Section -->
+    <section id="admin-forgot-section" class="info-panel hidden" style="max-width: 440px; margin: 40px auto;">
+      <h2 style="margin-bottom: 6px;">Forgot Password</h2>
+      <p style="color: var(--muted); font-size: 13px; margin-bottom: 18px;">Enter your admin email address. We will send a secure one-time password reset link to your inbox.</p>
+      
+      <form id="adminForgotForm" class="club-form compact">
+        <label>
+          <span>Admin Email</span>
+          <input type="email" id="forgotEmailInput" placeholder="misswhiteblue@gmail.com" required>
+        </label>
+        <button type="submit" id="forgotSubmitBtn" style="width: 100%; margin-top: 8px;">Send Password Reset Link</button>
+        <div style="text-align: center; margin-top: 14px;">
+          <button type="button" id="backToLoginBtn" style="background: none; border: none; color: var(--muted); padding: 0; font-size: 12.5px; cursor: pointer;">‹ Back to Login</button>
+        </div>
+      </form>
+      <p id="adminForgotMessage" style="margin-top: 12px; font-weight: 600; font-size: 13px;"></p>
+    </section>
+
+    <!-- 3. Reset Password Section (Activated via reset_token URL param) -->
+    <section id="admin-reset-section" class="info-panel hidden" style="max-width: 440px; margin: 40px auto;">
+      <h2 style="margin-bottom: 6px;">Set New Password</h2>
+      <p style="color: var(--muted); font-size: 13px; margin-bottom: 18px;">Enter your new administrator password below.</p>
+      
+      <form id="adminResetForm" class="club-form compact">
+        <input type="hidden" id="resetEmailHidden">
+        <input type="hidden" id="resetTokenHidden">
+        <label>
+          <span>New Password (min 8 characters)</span>
+          <input type="password" id="resetNewPasswordInput" minlength="8" placeholder="••••••••" required>
+        </label>
+        <label>
+          <span>Confirm New Password</span>
+          <input type="password" id="resetConfirmPasswordInput" minlength="8" placeholder="••••••••" required>
+        </label>
+        <button type="submit" id="resetSubmitBtn" style="width: 100%; margin-top: 8px;">Update Password</button>
+      </form>
+      <p id="adminResetMessage" style="margin-top: 12px; font-weight: 600; font-size: 13px;"></p>
     </section>
 
     <section id="admin-dashboard-section" class="hidden">

@@ -24,6 +24,10 @@ app.all('/api/stats', require('./routes/stats'));
 app.all('/api/visit', require('./routes/visit'));
 app.all('/api/gallery', require('./routes/gallery'));
 app.all('/api/admin/registrations', require('./routes/admin/registrations'));
+app.all('/api/admin/login', require('./routes/admin/auth'));
+app.all('/api/admin/forgot-password', require('./routes/admin/auth'));
+app.all('/api/admin/reset-password', require('./routes/admin/auth'));
+app.all('/api/admin/verify', require('./routes/admin/auth'));
 app.use('/api/leaders', require('./routes/leaders'));
 app.all('/api/contact', require('./routes/contact'));
 
