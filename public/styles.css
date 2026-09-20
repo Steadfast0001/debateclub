@@ -985,24 +985,24 @@ p {
    ========================================================================== */
 .gallery-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 16px;
+  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+  gap: 12px;
 }
 
 .gallery-photo-item {
   position: relative;
-  border-radius: 10px;
+  border-radius: 8px;
   overflow: hidden;
   cursor: pointer;
   background: #000;
   border: 1px solid var(--line);
   box-shadow: var(--shadow);
-  aspect-ratio: 16 / 10;
+  aspect-ratio: 4 / 3;
   transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
 }
 
 .gallery-photo-item:hover {
-  transform: translateY(-3px) scale(1.01);
+  transform: translateY(-2px) scale(1.02);
   box-shadow: var(--shadow-hover);
   border-color: var(--blue);
 }
@@ -1022,7 +1022,7 @@ p {
 .gallery-photo-overlay {
   position: absolute;
   inset: 0;
-  background: rgba(2, 10, 25, 0.45);
+  background: rgba(2, 10, 25, 0.4);
   opacity: 0;
   display: flex;
   align-items: center;
@@ -1035,16 +1035,16 @@ p {
 }
 
 .gallery-photo-icon {
-  width: 42px;
-  height: 42px;
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
   background: rgba(2, 132, 199, 0.95);
   color: #ffffff;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 16px;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
+  font-size: 14px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
   transform: scale(0.85);
   transition: transform 0.2s ease;
 }
@@ -1484,6 +1484,16 @@ footer {
   .leaders-grid {
     grid-template-columns: repeat(2, 1fr) !important;
     gap: 8px;
+  }
+
+  .gallery-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 8px !important;
+  }
+
+  .gallery-photo-item {
+    border-radius: 6px;
+    aspect-ratio: 1 / 1;
   }
 
   .leader-card {
