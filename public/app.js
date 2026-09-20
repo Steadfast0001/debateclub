@@ -1,6 +1,6 @@
 const logoImg = document.querySelector("#schoolLogo");
 if (logoImg) {
-  logoImg.src = "/logo.png?v=10";
+  logoImg.src = "/logo.png?v=11";
 }
 
 const translations = {
