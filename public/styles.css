@@ -1344,91 +1344,100 @@ footer {
 }
 
 /* ==========================================================================
-   SITE FOOTER (UNIVERSAL)
+   SITE FOOTER (UNIVERSAL - COMPACT)
    ========================================================================== */
 .site-footer {
-  margin-top: 48px;
+  margin-top: 28px;
   background: var(--panel);
   border-top: 1px solid var(--line);
   color: var(--ink);
-  box-shadow: 0 -1px 3px 0 rgba(0, 0, 0, 0.05);
+  box-shadow: 0 -1px 3px 0 rgba(0, 0, 0, 0.04);
 }
 
 .footer-container {
-  max-width: 1200px;
+  max-width: 1100px;
   margin: 0 auto;
-  padding: 40px 20px 24px;
+  padding: 20px 16px 10px;
   display: grid;
-  grid-template-columns: 1.3fr 1fr 1.2fr 0.8fr;
-  gap: 32px;
+  grid-template-columns: 1.2fr 1fr 1.1fr 0.7fr;
+  gap: 20px;
 }
 
 .footer-col h4 {
-  font-size: 13.5px;
+  font-size: 11px;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.5px;
   color: var(--blue);
-  margin: 0 0 14px 0;
-  padding-bottom: 6px;
-  border-bottom: 2px solid var(--line);
+  margin: 0 0 8px 0;
+  padding-bottom: 3px;
+  border-bottom: 1.5px solid var(--line);
   display: inline-block;
 }
 
 .footer-brand {
   display: flex;
   align-items: center;
-  gap: 12px;
-  margin-bottom: 12px;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.footer-logo {
+  width: 26px;
+  height: 26px;
+  object-fit: contain;
 }
 
 .footer-brand strong {
   display: block;
-  font-size: 14px;
+  font-size: 12px;
   font-weight: 700;
   color: var(--ink);
+  line-height: 1.2;
 }
 
 .footer-brand small {
   display: block;
-  font-size: 11.5px;
+  font-size: 10px;
   color: var(--muted);
+  line-height: 1.2;
 }
 
 .footer-motto {
-  font-size: 12.5px;
+  font-size: 10.5px;
   color: var(--muted);
-  line-height: 1.4;
-  margin: 0 0 16px 0;
+  line-height: 1.3;
+  margin: 0 0 8px 0;
   font-style: italic;
 }
 
 .footer-contact-item {
-  margin-bottom: 12px;
+  margin-bottom: 6px;
 }
 
 .footer-contact-item strong {
   display: block;
-  font-size: 13.5px;
+  font-size: 12px;
   color: var(--ink);
+  line-height: 1.2;
 }
 
 .footer-contact-item .president-highlight {
   color: var(--gold);
   font-weight: 800;
-  font-size: 14px;
-  letter-spacing: 0.3px;
+  font-size: 12.5px;
+  letter-spacing: 0.2px;
 }
 
 .footer-contact-item .role-badge {
   display: inline-block;
-  font-size: 11px;
+  font-size: 9.5px;
   font-weight: 700;
   color: var(--blue-dark);
   background: var(--line);
-  padding: 2px 8px;
+  padding: 1px 6px;
   border-radius: 999px;
-  margin-top: 4px;
+  margin-top: 2px;
 }
 
 :root.dark .footer-contact-item .role-badge {
@@ -1438,26 +1447,28 @@ footer {
 
 .footer-contact-item small {
   display: block;
-  font-size: 12px;
+  font-size: 10.5px;
   color: var(--muted);
-  margin-top: 4px;
+  margin-top: 2px;
+  line-height: 1.2;
 }
 
 .footer-links-list {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 4px;
 }
 
 .footer-link {
   display: flex;
   align-items: center;
-  gap: 8px;
-  font-size: 12.5px;
+  gap: 6px;
+  font-size: 11px;
   color: var(--ink);
   text-decoration: none;
   transition: color 0.15s ease, transform 0.15s ease;
   word-break: break-word;
+  line-height: 1.3;
 }
 
 .footer-link:hover {
@@ -1476,20 +1487,20 @@ footer {
 
 .footer-socials {
   display: flex;
-  gap: 8px;
-  margin-top: 8px;
+  gap: 6px;
+  margin-top: 6px;
 }
 
 .footer-socials a {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 32px;
-  height: 32px;
-  border-radius: 6px;
+  width: 24px;
+  height: 24px;
+  border-radius: 4px;
   background: var(--line);
   color: var(--ink);
-  font-size: 12px;
+  font-size: 10px;
   font-weight: 700;
   text-decoration: none;
   transition: all 0.2s ease;
@@ -1498,17 +1509,17 @@ footer {
 .footer-socials a:hover {
   background: var(--blue);
   color: #ffffff;
-  transform: translateY(-2px);
+  transform: translateY(-1px);
 }
 
 .footer-nav-links {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 4px;
 }
 
 .footer-nav-links a {
-  font-size: 13px;
+  font-size: 11.5px;
   color: var(--muted);
   text-decoration: none;
   transition: color 0.15s ease, transform 0.15s ease;
@@ -1516,12 +1527,12 @@ footer {
 
 .footer-nav-links a:hover {
   color: var(--blue);
-  transform: translateX(3px);
+  transform: translateX(2px);
 }
 
 .footer-bottom {
   border: none;
-  padding: 8px 20px 24px;
+  padding: 6px 16px 14px;
   text-align: center;
   background: transparent;
 }
@@ -1532,7 +1543,7 @@ footer {
 
 .footer-bottom p {
   margin: 0;
-  font-size: 12px;
+  font-size: 10.5px;
   color: var(--muted);
   background: transparent;
 }
@@ -1540,19 +1551,19 @@ footer {
 @media (max-width: 900px) {
   .footer-container {
     grid-template-columns: 1fr 1fr;
-    gap: 24px;
-    padding: 30px 16px 20px;
+    gap: 16px;
+    padding: 18px 14px 10px;
   }
 }
 
 @media (max-width: 600px) {
   .footer-container {
     grid-template-columns: 1fr;
-    gap: 24px;
-    padding: 24px 14px 16px;
+    gap: 16px;
+    padding: 16px 12px 10px;
   }
   
   .footer-col h4 {
-    margin-bottom: 10px;
+    margin-bottom: 6px;
   }
 }
