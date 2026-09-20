@@ -20,12 +20,12 @@ const storage = new CloudinaryStorage({
 
 const upload = multer({ 
   storage: storage,
-  limits: { fileSize: 5 * 1024 * 1024 } // 5MB limit
-}).single('image');
+  limits: { fileSize: 10 * 1024 * 1024 } // 10MB per image
+}).any();
 
 module.exports = async (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, DELETE, OPTIONS');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, x-admin-key');
 
   if (req.method === 'OPTIONS') {
@@ -54,24 +54,36 @@ module.exports = async (req, res) => {
         console.error(err);
         return res.status(500).json({ error: 'Upload error: ' + err.message });
       }
-      if (!req.file) {
+      
+      const files = req.files || (req.file ? [req.file] : []);
+      if (!files || files.length === 0) {
         return res.status(400).json({ error: 'No image uploaded' });
       }
 
-      const filePath = req.file.path;
       const title = req.body.title || '';
       const description = req.body.description || '';
       const event_date = req.body.event_date || '';
 
       try {
-        const result = await pool.query(
-          'INSERT INTO gallery_images (file_path, title, description, event_date) VALUES ($1, $2, $3, $4) RETURNING *',
-          [filePath, title, description, event_date]
-        );
-        return res.status(201).json({ success: true, image: result.rows[0] });
+        const insertedImages = [];
+        for (const file of files) {
+          const filePath = file.path;
+          const result = await pool.query(
+            'INSERT INTO gallery_images (file_path, title, description, event_date) VALUES ($1, $2, $3, $4) RETURNING *',
+            [filePath, title, description, event_date]
+          );
+          insertedImages.push(result.rows[0]);
+        }
+        return res.status(201).json({ 
+          success: true, 
+          message: `Successfully uploaded ${insertedImages.length} photo(s)!`,
+          count: insertedImages.length, 
+          images: insertedImages,
+          image: insertedImages[0] 
+        });
       } catch(e) {
         console.error(e);
-        return res.status(500).json({ error: 'Database error while saving image' });
+        return res.status(500).json({ error: 'Database error while saving images' });
       }
     });
   } else if (req.method === 'PUT') {

@@ -789,9 +789,11 @@ if (galleryUploadForm) {
     const messageEl = document.querySelector('#galleryUploadMessage');
     const adminKey = localStorage.getItem('debate-admin-key');
     const formData = new FormData(event.target);
+    const fileInput = document.querySelector('#galleryImageInput');
+    const filesCount = fileInput && fileInput.files ? fileInput.files.length : 1;
     
     try {
-      messageEl.textContent = 'Uploading...';
+      messageEl.textContent = `Uploading ${filesCount} image(s)... Please wait.`;
       messageEl.style.color = 'var(--blue)';
       const res = await fetch('/api/gallery', {
         method: 'POST',
@@ -800,14 +802,14 @@ if (galleryUploadForm) {
       });
       const data = await res.json();
       if (res.ok) {
-        messageEl.textContent = 'Image uploaded successfully!';
+        messageEl.textContent = data.message || `Successfully uploaded ${data.count || filesCount} photo(s)!`;
         messageEl.style.color = 'var(--green)';
         galleryUploadForm.reset();
         const loadBtn = document.querySelector('#loadAdminGalleryBtn');
         if(loadBtn) loadBtn.click();
         fetchGallery(); // Refresh public gallery if on the same page
       } else {
-        messageEl.textContent = data.error || 'Failed to upload image';
+        messageEl.textContent = data.error || 'Failed to upload images';
         messageEl.style.color = 'var(--red)';
       }
     } catch (err) {
