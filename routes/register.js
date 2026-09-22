@@ -40,18 +40,25 @@ module.exports = async (req, res) => {
 
     const registration = result.rows[0];
 
-    // Send email notifications
-    await sendRegistrationEmail(registration);
+    // Send email notifications asynchronously in background
+    sendRegistrationEmail(registration).catch(err => console.error('Background email notification error:', err));
 
-    // Return success response
-    res.status(201).json({
+    // Return immediate success response
+    return res.status(201).json({
       success: true,
-      message: 'Registration submitted successfully. Admin will be notified.',
+      message: 'Registration submitted successfully. Welcome to the BIAKA Debate Club!',
       registrationId: registration.id,
+      registration: {
+        id: registration.id,
+        full_name: registration.full_name,
+        department: registration.department,
+        experience: registration.experience,
+        created_at: registration.created_at
+      }
     });
 
   } catch (error) {
     console.error('Registration error:', error);
-    res.status(500).json({ error: 'Failed to submit registration' });
+    return res.status(500).json({ error: 'Failed to submit registration' });
   }
 };

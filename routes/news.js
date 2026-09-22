@@ -49,12 +49,12 @@ module.exports = async (req, res) => {
 
       const newPost = result.rows[0];
 
-      // Broadcast to all registered members
-      const emailResult = await pool.query('SELECT email FROM registrations WHERE email IS NOT NULL');
-      const emails = emailResult.rows.map(row => row.email);
-      
-      const { broadcastNewsUpdate } = require('./email');
-      await broadcastNewsUpdate(newPost, emails);
+      // Broadcast to all registered members in background
+      pool.query('SELECT email FROM registrations WHERE email IS NOT NULL').then(emailResult => {
+        const emails = emailResult.rows.map(row => row.email);
+        const { broadcastNewsUpdate } = require('./email');
+        broadcastNewsUpdate(newPost, emails).catch(err => console.error('Background news broadcast error:', err));
+      }).catch(err => console.error('Error fetching emails for broadcast:', err));
 
       return res.status(201).json({ 
         success: true, 
