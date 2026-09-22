@@ -1691,7 +1691,50 @@ footer {
 
   .mission-board {
     grid-template-columns: 1fr;
+    gap: 20px;
     width: 100%;
+    margin: 4px auto 0;
+  }
+
+  .mission-board article {
+    position: relative;
+    border-radius: 18px 18px 2px 18px;
+    padding: 15px 18px 17px;
+    background: rgba(15, 23, 42, 0.92);
+    border: 1.5px solid rgba(56, 189, 248, 0.45);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.45);
+    margin-bottom: 6px;
+  }
+
+  /* Speech bubble tail border */
+  .mission-board article::before {
+    content: "";
+    position: absolute;
+    bottom: -13px;
+    right: 22px;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 13px 13px 0 0;
+    border-color: rgba(56, 189, 248, 0.45) transparent transparent transparent;
+    display: block;
+    z-index: 1;
+  }
+
+  /* Speech bubble tail fill */
+  .mission-board article::after {
+    content: "";
+    position: absolute;
+    bottom: -10px;
+    right: 23px;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 10px 10px 0 0;
+    border-color: rgba(15, 23, 42, 0.95) transparent transparent transparent;
+    display: block;
+    z-index: 2;
   }
 
   .patrons-board {
