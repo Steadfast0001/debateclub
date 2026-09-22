@@ -1131,7 +1131,6 @@ async function fetchLeaders() {
         
         function getRoleRank(role) {
           const r = (role || "").toLowerCase().trim();
-          if (r.includes("mentor") || r.includes("adviser") || r.includes("director")) return 0;
           if (r.includes("vice president") || r.includes("vice-president") || r.includes("vice")) return 2;
           if (r.includes("president")) return 1;
           if (r.includes("secretary")) return 3;
