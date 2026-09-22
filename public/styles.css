@@ -492,6 +492,99 @@ p {
 }
 
 /* ==========================================================================
+   PATRONS & MENTORS BOARD (Directly Below Vision & Mission)
+   ========================================================================== */
+.patrons-board {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  justify-content: center;
+  max-width: 860px;
+  width: 100%;
+  margin: 16px auto 0;
+}
+
+.patron-card {
+  padding: 14px 16px;
+  background: rgba(15, 23, 42, 0.88);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 8px;
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  box-sizing: border-box;
+}
+
+.patron-card.patron-left {
+  flex-direction: row;
+  text-align: left;
+}
+
+.patron-card.patron-right {
+  flex-direction: row;
+  text-align: right;
+}
+
+.patron-photo-wrap {
+  width: 90px;
+  height: 110px;
+  min-width: 90px;
+  border-radius: 6px;
+  overflow: hidden;
+  border: 1.5px solid rgba(56, 189, 248, 0.5);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  flex-shrink: 0;
+  background: #0b1120;
+}
+
+.patron-photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 15%;
+  display: block;
+}
+
+.patron-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.patron-badge {
+  display: block;
+  margin-bottom: 2px;
+  color: #60a5fa;
+  font-size: 10.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.patron-name {
+  font-size: 13.5px;
+  font-weight: 800;
+  color: #ffffff;
+  margin: 0 0 2px 0;
+  line-height: 1.25;
+}
+
+.patron-title {
+  font-size: 10.5px;
+  font-weight: 600;
+  color: var(--gold);
+  margin: 0 0 4px 0;
+  line-height: 1.25;
+}
+
+.patron-desc {
+  font-size: 11px;
+  line-height: 1.4;
+  color: #cbd5e1;
+  margin: 0;
+}
+
+/* ==========================================================================
    BUTTONS & ACTIONS
    ========================================================================== */
 .primary-action,
@@ -1599,6 +1692,41 @@ footer {
   .mission-board {
     grid-template-columns: 1fr;
     width: 100%;
+  }
+
+  .patrons-board {
+    grid-template-columns: 1fr;
+    gap: 10px;
+    width: 100%;
+    margin-top: 10px;
+  }
+
+  .patron-card {
+    padding: 10px 12px;
+    gap: 10px;
+  }
+
+  .patron-photo-wrap {
+    width: 72px;
+    height: 92px;
+    min-width: 72px;
+  }
+
+  .patron-badge {
+    font-size: 9.5px;
+  }
+
+  .patron-name {
+    font-size: 12.5px;
+  }
+
+  .patron-title {
+    font-size: 9.5px;
+  }
+
+  .patron-desc {
+    font-size: 10px;
+    line-height: 1.35;
   }
 
   .leaders-grid {
