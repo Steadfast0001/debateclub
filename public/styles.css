@@ -1739,37 +1739,58 @@ footer {
 
   .patrons-board {
     grid-template-columns: 1fr;
-    gap: 10px;
+    gap: 12px;
     width: 100%;
-    margin-top: 10px;
+    margin-top: 12px;
   }
 
   .patron-card {
-    padding: 10px 12px;
-    gap: 10px;
+    padding: 12px 14px;
+    gap: 12px;
+    border-radius: 10px;
+    background: rgba(15, 23, 42, 0.92);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
   }
 
   .patron-photo-wrap {
-    width: 72px;
-    height: 92px;
-    min-width: 72px;
+    width: 78px;
+    height: 98px;
+    min-width: 78px;
+    border-radius: 8px;
+    border: 1.5px solid rgba(56, 189, 248, 0.6);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
   }
 
   .patron-badge {
-    font-size: 9.5px;
+    font-size: 10px;
+    font-weight: 700;
+    color: #60a5fa;
+    letter-spacing: 0.5px;
+    margin-bottom: 2px;
   }
 
   .patron-name {
-    font-size: 12.5px;
+    font-size: 13.5px;
+    font-weight: 800;
+    color: #ffffff;
+    margin: 0 0 2px 0;
+    line-height: 1.25;
   }
 
   .patron-title {
-    font-size: 9.5px;
+    font-size: 10.5px;
+    font-weight: 600;
+    color: var(--gold);
+    margin: 0 0 4px 0;
+    line-height: 1.25;
   }
 
   .patron-desc {
-    font-size: 10px;
-    line-height: 1.35;
+    font-size: 11px;
+    line-height: 1.4;
+    color: #cbd5e1;
+    margin: 0;
   }
 
   .leaders-grid {

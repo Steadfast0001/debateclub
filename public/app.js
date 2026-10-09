@@ -20,7 +20,7 @@ const translations = {
     contactSuccess: "Message sent successfully! We will get back to you soon.", contactError: "Failed to send message. Please try again later.",
     registered: "Registration submitted successfully.", noRegistrations: "No registrations yet.",
     chancellorRole: "Vice Chancellor", chancellorTitle: "Vice Chancellor, BIAKA University Institute of Buea", chancellorDesc: "Providing visionary institutional patronage, academic excellence, and leadership backing for the club.",
-    directorRole: "Director of Academic Affairs", directorTitle: "Director of Academic Affairs / Club Mentor & Adviser", directorDesc: "Guiding research depth, critical reasoning, public speaking mastery, and strategic club mentorship."
+    directorRole: "Deputy Vice Chancellor", directorTitle: "Deputy Vice Chancellor / Club Mentor & Adviser", directorDesc: "Guiding institutional excellence, research depth, critical reasoning, and strategic mentorship for the club."
   },
   fr: {
     clubName: "Club de Debat Audacieux Agora BIAKA", schoolName: "Institut Universitaire BIAKA de Buea", menuLabel: "Menu", navHome: "Accueil", navAbout: "A propos", navRegister: "Inscription", navNews: "Actualites", navContact: "Contact",
@@ -38,7 +38,7 @@ const translations = {
     contactSuccess: "Message envoye avec succes ! Nous vous repondrons bientot.", contactError: "Echec de l'envoi du message. Veuillez reessayer plus tard.",
     registered: "Inscription envoyee avec succes.", noRegistrations: "Aucune inscription pour le moment.",
     chancellorRole: "Vice-Chancelière", chancellorTitle: "Vice-Chancelière, Institut Universitaire BIAKA de Buea", chancellorDesc: "Offrant un patronage institutionnel visionnaire, l'excellence académique et le soutien au leadership du club.",
-    directorRole: "Directeur des Affaires Académiques", directorTitle: "Directeur des Affaires Académiques / Mentor et Conseiller", directorDesc: "Guidant la recherche approfondie, le raisonnement critique, la prise de parole et le mentorat stratégique."
+    directorRole: "Vice-Chancelier Adjoint", directorTitle: "Vice-Chancelier Adjoint / Mentor et Conseiller", directorDesc: "Guidant l'excellence institutionnelle, la recherche approfondie, le raisonnement critique et le mentorat stratégique."
   }
 };
 

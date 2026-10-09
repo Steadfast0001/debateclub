@@ -11,8 +11,8 @@ async function updateMentor() {
         '+237 675 405 498',
         'nemkul@biakahc.org',
         'images/director.jpg',
-        'Director of Academic Affairs / Club Mentor & Adviser',
-        'Directeur des Affaires Académiques / Mentor et Conseiller',
+        'Deputy Vice Chancellor / Club Mentor & Adviser',
+        'Vice-Chancelier Adjoint / Mentor et Conseiller',
         '%nemkul%'
       ]
     );
