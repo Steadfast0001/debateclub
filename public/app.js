@@ -131,7 +131,7 @@ function setLanguage(lang) {
   document.querySelectorAll(".language-toggle button").forEach(button => {
     button.classList.toggle("active", button.dataset.lang === lang);
   });
-  if (window.location.pathname === '/' || window.location.pathname.endsWith('index.html')) {
+  if (document.querySelector("#leadersGrid") || document.querySelector("#contactList")) {
     renderLeaders();
   }
 }
@@ -1209,16 +1209,17 @@ if (loadAdminLeadersBtn) {
           return;
         }
         adminLeadersList.innerHTML = data.leaders.map(l => `
-          <div style="padding: 12px; border: 1px solid var(--line); border-radius: 8px; background: #fafafa; display: flex; justify-content: space-between; align-items: center;">
-            <div style="display: flex; align-items: center; gap: 10px;">
-              <img src="${escapeHtml(l.photo_path)}" style="width: 50px; height: 50px; object-fit: cover; border-radius: 4px;">
-              <div>
-                <strong>${escapeHtml(l.name)}</strong><br>
-                <span style="font-size: 12px; color: var(--muted);">${escapeHtml(l.role)}</span>
+          <div style="padding: 12px; border: 1px solid var(--line); border-radius: 8px; background: var(--panel); display: flex; justify-content: space-between; align-items: center; gap: 12px;">
+            <div style="display: flex; align-items: center; gap: 12px; min-width: 0; flex: 1;">
+              <img src="${escapeHtml(l.photo_path)}" alt="${escapeHtml(l.name)}" style="width: 48px; height: 48px; object-fit: cover; border-radius: 6px; flex-shrink: 0;">
+              <div style="min-width: 0;">
+                <strong style="display: block; font-size: 13.5px; color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${escapeHtml(l.name)}</strong>
+                <span style="font-size: 11.5px; color: var(--muted);">${escapeHtml(l.role)}</span>
               </div>
-            <div style="display: flex; gap: 5px;">
-              <button onclick='editLeaderAdmin(${JSON.stringify(l).replace(/'/g, "&#39;")})' style="background: var(--blue); color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer;">Edit</button>
-              <button onclick="deleteLeader(${l.id})" style="background: var(--red); color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer;">Delete</button>
+            </div>
+            <div style="display: flex; gap: 6px; flex-shrink: 0;">
+              <button onclick='editLeaderAdmin(${JSON.stringify(l).replace(/'/g, "&#39;")})' style="background: var(--blue); color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: 600;">Edit</button>
+              <button onclick="deleteLeader(${l.id})" style="background: var(--red); color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: 600;">Delete</button>
             </div>
           </div>
         `).join('');
