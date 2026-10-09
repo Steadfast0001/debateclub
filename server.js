@@ -31,43 +31,37 @@ app.all('/api/admin/verify', require('./routes/admin/auth'));
 app.use('/api/leaders', require('./routes/leaders'));
 app.all('/api/contact', require('./routes/contact'));
 
+const sendHtml = (res, fileName) => {
+  res.setHeader('Cache-Control', 'public, max-age=0, must-revalidate');
+  res.sendFile(path.join(__dirname, 'public', fileName));
+};
+
 // Serve static HTML files without requiring .html extension
 app.use(express.static(path.join(__dirname, 'public'), { 
   extensions: ['html'],
-  maxAge: process.env.NODE_ENV === 'production' ? '1d' : 0 
+  setHeaders: (res, filePath) => {
+    if (filePath.endsWith('.html')) {
+      res.setHeader('Cache-Control', 'public, max-age=0, must-revalidate');
+    } else {
+      res.setHeader('Cache-Control', 'public, max-age=86400');
+    }
+  }
 }));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads'), { 
   maxAge: process.env.NODE_ENV === 'production' ? '1d' : 0 
 }));
 
 // Direct page links
-app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'index.html'));
-});
-
-app.get('/index', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'index.html'));
-});
-
-app.get('/register', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'register.html'));
-});
-
-app.get('/contact', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'contact.html'));
-});
-
-app.get('/news', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'news.html'));
-});
-
-app.get('/admin', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'admin.html'));
-});
+app.get('/', (req, res) => sendHtml(res, 'index.html'));
+app.get('/index', (req, res) => sendHtml(res, 'index.html'));
+app.get('/register', (req, res) => sendHtml(res, 'register.html'));
+app.get('/contact', (req, res) => sendHtml(res, 'contact.html'));
+app.get('/news', (req, res) => sendHtml(res, 'news.html'));
+app.get('/admin', (req, res) => sendHtml(res, 'admin.html'));
 
 // Fallback for static files
 app.use((req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+  sendHtml(res, 'index.html');
 });
 
 // For local development, start the server
