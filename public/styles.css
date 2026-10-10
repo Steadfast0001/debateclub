@@ -2467,108 +2467,395 @@ footer {
   line-height: 1.5;
 }
 
+/* ==========================================================================
+   BRITISH PARLIAMENTARY (BP) SUITE STYLES
+   ========================================================================== */
+.bp-hub-wrapper {
+  margin-top: 24px;
+}
+
+.bp-tab-nav {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 8px;
+  margin-bottom: 24px;
+  border-bottom: 1px solid var(--line);
+  -webkit-overflow-scrolling: touch;
+}
+
+.bp-tab-btn {
+  padding: 10px 18px;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  background: var(--paper);
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.bp-tab-btn:hover {
+  color: var(--ink);
+  border-color: var(--blue);
+  background: rgba(2, 132, 199, 0.05);
+}
+
+.bp-tab-btn.active {
+  background: var(--blue);
+  color: #ffffff;
+  border-color: var(--blue);
+  box-shadow: 0 4px 12px rgba(2, 132, 199, 0.25);
+}
+
+.bp-tab-panel {
+  display: none;
+  animation: bpFadeIn 0.25s ease forwards;
+}
+
+.bp-tab-panel.active {
+  display: block;
+}
+
+@keyframes bpFadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* BP Timer Section */
+.timer-grid {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr;
+  gap: 20px;
+}
+
+.timer-box-main {
+  background: var(--card-bg);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 24px;
+  text-align: center;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.04);
+}
+
 .timer-display {
-  font-size: 48px;
-  font-weight: 800;
-  letter-spacing: -0.03em;
+  font-size: 64px;
+  font-weight: 900;
+  letter-spacing: -0.04em;
   color: var(--blue);
   text-align: center;
-  margin: 12px 0;
+  margin: 10px 0;
   font-variant-numeric: tabular-nums;
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 }
 
-.timer-status-badge {
+.timer-poi-info {
   display: inline-block;
-  font-size: 11px;
-  font-weight: 700;
-  text-transform: uppercase;
+  font-size: 12px;
+  font-weight: 800;
   letter-spacing: 0.5px;
-  padding: 3px 10px;
+  padding: 4px 14px;
   border-radius: 9999px;
-  background: var(--line);
-  color: var(--muted);
-  text-align: center;
-  margin: 0 auto 16px;
+  background: rgba(2, 132, 199, 0.1);
+  color: var(--blue);
+  margin-bottom: 20px;
+  transition: all 0.3s ease;
 }
 
 .timer-controls {
   display: flex;
   justify-content: center;
+  flex-wrap: wrap;
   gap: 10px;
+  margin-bottom: 16px;
 }
 
-.timer-btn {
-  padding: 8px 16px;
-  border-radius: 8px;
+.timer-subcontrols {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  border-top: 1px solid var(--line);
+  padding-top: 16px;
+}
+
+.poi-timer-widget {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 16px;
+  text-align: center;
+}
+
+.poi-timer-num {
+  font-size: 32px;
+  font-weight: 800;
+  color: var(--gold);
+  font-family: monospace;
+}
+
+/* 4-Team BP Chamber Layout */
+.bp-chamber-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.bp-team-card {
+  background: var(--card-bg);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 16px;
+  position: relative;
+  transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.bp-team-card:hover {
+  border-color: var(--blue);
+  transform: translateY(-2px);
+}
+
+.bp-team-card.og { border-left: 4px solid #3b82f6; }
+.bp-team-card.oo { border-left: 4px solid #ef4444; }
+.bp-team-card.cg { border-left: 4px solid #06b6d4; }
+.bp-team-card.co { border-left: 4px solid #f97316; }
+
+.bp-team-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.bp-team-tag {
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: 4px;
+}
+
+.og .bp-team-tag { background: rgba(59, 130, 246, 0.1); color: #3b82f6; }
+.oo .bp-team-tag { background: rgba(239, 68, 68, 0.1); color: #ef4444; }
+.cg .bp-team-tag { background: rgba(6, 182, 212, 0.1); color: #06b6d4; }
+.co .bp-team-tag { background: rgba(249, 115, 22, 0.1); color: #f97316; }
+
+.bp-speaker-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 0;
+  border-bottom: 1px dashed var(--line);
   font-size: 13px;
+}
+
+.bp-speaker-row:last-child {
+  border-bottom: none;
+}
+
+.bp-speaker-role {
   font-weight: 700;
+  color: var(--muted);
+}
+
+.bp-speaker-name {
+  font-weight: 600;
+  color: var(--ink);
+}
+
+/* Adjudicator Ballot */
+.ballot-table-wrap {
+  overflow-x: auto;
+  margin-bottom: 16px;
+}
+
+.ballot-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.ballot-table th, .ballot-table td {
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  text-align: left;
+}
+
+.ballot-table th {
+  background: var(--paper);
+  font-weight: 800;
+  color: var(--ink);
+}
+
+.ballot-rank-select, .ballot-score-input {
+  width: 100%;
+  padding: 6px 8px;
+  border-radius: 6px;
   border: 1px solid var(--line);
   background: var(--paper);
   color: var(--ink);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.ballot-total-badge {
+  font-weight: 800;
+  color: var(--blue);
+}
+
+/* Motion Bank */
+.motion-filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.motion-filter-chip {
+  padding: 6px 12px;
+  border-radius: 20px;
+  border: 1px solid var(--line);
+  background: var(--paper);
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 700;
   cursor: pointer;
   transition: all 0.15s ease;
 }
 
-.timer-btn.start {
+.motion-filter-chip.active, .motion-filter-chip:hover {
   background: var(--blue);
   color: #ffffff;
   border-color: var(--blue);
 }
 
-.timer-btn.start:hover {
-  background: var(--blue-dark);
-}
-
-.timer-btn:hover {
-  background: var(--line);
-}
-
-.motion-box {
-  min-height: 90px;
-  padding: 16px;
-  border-radius: 8px;
-  background: var(--paper);
-  border: 1.5px dashed var(--line);
+.motion-card-full {
+  background: var(--card-bg);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 20px;
   margin-bottom: 16px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
 }
 
-.motion-category {
+.motion-badge-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.motion-type-badge {
   font-size: 10.5px;
   font-weight: 800;
+  padding: 2px 8px;
+  border-radius: 4px;
+  background: var(--gold);
+  color: #0f172a;
+}
+
+.motion-cat-badge {
+  font-size: 10.5px;
+  font-weight: 800;
+  padding: 2px 8px;
+  border-radius: 4px;
+  background: var(--line);
+  color: var(--muted);
+}
+
+.motion-title-large {
+  font-size: 17px;
+  font-weight: 800;
+  color: var(--ink);
+  line-height: 1.45;
+  margin: 0 0 12px 0;
+}
+
+.infoslide-box {
+  background: rgba(2, 132, 199, 0.05);
+  border-left: 3px solid var(--blue);
+  padding: 12px 14px;
+  border-radius: 0 8px 8px 0;
+  margin: 12px 0;
+  font-size: 12.5px;
+  color: var(--ink);
+  line-height: 1.5;
+}
+
+.infoslide-box strong {
+  display: block;
+  font-size: 11px;
   text-transform: uppercase;
-  color: var(--gold);
-  letter-spacing: 0.5px;
+  color: var(--blue);
   margin-bottom: 4px;
 }
 
-.motion-text {
-  font-size: 13.5px;
-  font-weight: 600;
+/* BP Glossary */
+.glossary-search-input {
+  width: 100%;
+  padding: 12px 16px;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  background: var(--paper);
+  color: var(--ink);
+  font-size: 14px;
+  margin-bottom: 16px;
+}
+
+.glossary-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 14px;
+}
+
+.glossary-card {
+  background: var(--card-bg);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 14px 16px;
+  transition: transform 0.15s ease, border-color 0.15s ease;
+}
+
+.glossary-card:hover {
+  border-color: var(--blue);
+  transform: translateY(-2px);
+}
+
+.glossary-card h4 {
+  margin: 0 0 4px 0;
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--blue);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.glossary-card .glossary-type {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: var(--line);
+  color: var(--muted);
+}
+
+.glossary-card p {
+  margin: 0;
+  font-size: 12.5px;
   color: var(--ink);
   line-height: 1.45;
-  margin: 0;
 }
 
-.motion-btn {
-  width: 100%;
-  padding: 10px;
-  border-radius: 8px;
-  background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
-  color: #ffffff;
-  font-weight: 700;
-  font-size: 13px;
-  border: none;
-  cursor: pointer;
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
-}
-
-.motion-btn:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(2, 132, 199, 0.35);
+.glossary-card .glossary-tip {
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px dashed var(--line);
+  font-size: 11.5px;
+  color: var(--gold);
+  font-style: italic;
 }
 
 /* Install App Banner */
@@ -2595,8 +2882,8 @@ footer {
   cursor: pointer;
 }
 
-@media (max-width: 768px) {
-  .tools-grid {
+@media (max-width: 860px) {
+  .timer-grid, .bp-chamber-grid {
     grid-template-columns: 1fr;
   }
 }

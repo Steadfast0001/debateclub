@@ -5,7 +5,7 @@ if (logoImg) {
 
 const translations = {
   en: {
-    clubName: "BIAKA Audacious Agora Debate Club", schoolName: "BIAKA University Institute of Buea", menuLabel: "Menu", navHome: "Home", navAbout: "About", navRegister: "Register", navNews: "News", navContact: "Contact",
+    clubName: "BIAKA Audacious Agora Debate Club", schoolName: "BIAKA University Institute of Buea", menuLabel: "Menu", navHome: "Home", navAbout: "About", navBpHub: "BP Hub", navRegister: "Register", navNews: "News", navContact: "Contact",
     heroEyebrow: "Motto: Clear thoughts, strong conviction, respect in delivery.", heroTitle: "The official debate club for sharp voices and stronger minds.", heroLead: "Join students who train in public speaking, critical thinking, research, leadership, diplomacy and respectful argument.", registerNow: "Register Now", seeUpdates: "See Updates",
     visionLabel: "Vision", visionText: "To build confident student leaders who can defend ideas with facts, discipline and respect.", missionLabel: "Mission", missionText: "To train members through debates, workshops, research tasks, school events and inter-university competitions.",
     statMembers: "Registered Members", statLeaders: "Executive Leaders", statActivities: "Planned Activities", statCampus: "Campus Community", statVisits: "Unique Visitors",
@@ -29,7 +29,7 @@ const translations = {
     pwaInstallText: "Install BIAKA Debate Club App for instant offline access.", pwaInstallBtn: "Install App"
   },
   fr: {
-    clubName: "Club de Debat Audacieux Agora BIAKA", schoolName: "Institut Universitaire BIAKA de Buea", menuLabel: "Menu", navHome: "Accueil", navAbout: "A propos", navRegister: "Inscription", navNews: "Actualites", navContact: "Contact",
+    clubName: "Club de Debat Audacieux Agora BIAKA", schoolName: "Institut Universitaire BIAKA de Buea", menuLabel: "Menu", navHome: "Accueil", navAbout: "A propos", navBpHub: "Pôle BP", navRegister: "Inscription", navNews: "Actualites", navContact: "Contact",
     heroEyebrow: "Devise: Pensees claires, conviction forte, respect dans l'expression.", heroTitle: "Le club officiel de debat pour des voix fortes et des esprits solides.", heroLead: "Rejoignez des etudiants formes a la prise de parole, a la pensee critique, a la recherche, au leadership, a la diplomatie et au debat respectueux.", registerNow: "S'inscrire", seeUpdates: "Voir les actualites",
     visionLabel: "Vision", visionText: "Former des leaders etudiants capables de defendre les idees avec des faits, de la discipline et du respect.", missionLabel: "Mission", missionText: "Former les membres a travers des debats, ateliers, recherches, evenements scolaires et competitions interuniversitaires.",
     statMembers: "Membres inscrits", statLeaders: "Dirigeants", statActivities: "Activites prevues", statCampus: "Communaute du campus", statVisits: "Visiteurs Uniques",
@@ -1405,68 +1405,139 @@ function showToast(message, type = 'info', duration = 4000) {
 window.showToast = showToast;
 
 // ==========================================================================
-// DEBATE TIMER & MOTION GENERATOR
+// BRITISH PARLIAMENTARY (BP) SUITE ENGINE & AUDIO SYNTHESIZER
 // ==========================================================================
-let timerInterval = null;
-let timerSeconds = 420; // 7 minutes standard
-let isTimerRunning = false;
 
-const debateMotions = [
-  { category: "Healthcare & Ethics", text: "This House Would mandate compulsory national health insurance for all university students." },
-  { category: "African Economics", text: "This House Believes That African nations should prioritize regional trade over international aid." },
-  { category: "Technology & Society", text: "This House Would prohibit the use of generative AI in all university examinations and coursework." },
-  { category: "Education Policy", text: "This House Believes That public speaking and debate should be mandatory in tertiary curriculum." },
-  { category: "Governance & Youth", text: "This House Would lower the minimum age requirement for parliamentary elections to 18." },
-  { category: "Media & Free Speech", text: "This House Believes That social media algorithms should be strictly regulated by independent civic bodies." }
-];
+// Web Audio API Bell Synthesizer (Zero External Assets Required)
+let audioCtx = null;
+function getAudioContext() {
+  if (!audioCtx) {
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  }
+  if (audioCtx && audioCtx.state === 'suspended') {
+    audioCtx.resume();
+  }
+  return audioCtx;
+}
+
+function playDebateBell(count = 1) {
+  try {
+    const ctx = getAudioContext();
+    if (!ctx) return;
+
+    const chime = (delay) => {
+      setTimeout(() => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(1760, ctx.currentTime); // High resonant metallic chime
+        osc.frequency.exponentialRampToValueAtTime(880, ctx.currentTime + 0.35);
+
+        gain.gain.setValueAtTime(0.5, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 1.1);
+
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+
+        osc.start();
+        osc.stop(ctx.currentTime + 1.1);
+      }, delay);
+    };
+
+    for (let i = 0; i < count; i++) {
+      chime(i * 350);
+    }
+  } catch (e) {
+    console.log('Debate bell audio note:', e);
+  }
+}
+window.playDebateBell = playDebateBell;
+
+// --- Tab Switcher ---
+function switchBpTab(tabId) {
+  document.querySelectorAll('.bp-tab-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.tab === tabId);
+  });
+  document.querySelectorAll('.bp-tab-panel').forEach(panel => {
+    panel.classList.toggle('active', panel.id === `bp-panel-${tabId}`);
+  });
+}
+window.switchBpTab = switchBpTab;
+
+// --- 7-Minute Parliamentary Speech Timer ---
+let timerInterval = null;
+let timerSeconds = 420; // 7 minutes
+let isTimerRunning = false;
 
 function updateTimerDisplay() {
   const display = document.getElementById("timerDisplay");
   const badge = document.getElementById("timerBadge");
   if (!display) return;
 
-  const mins = Math.floor(timerSeconds / 60);
-  const secs = timerSeconds % 60;
-  display.textContent = `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+  const isOvertime = timerSeconds < 0;
+  const absSecs = Math.abs(timerSeconds);
+  const mins = Math.floor(absSecs / 60);
+  const secs = absSecs % 60;
+  const formatted = `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+
+  display.textContent = isOvertime ? `-${formatted}` : formatted;
+  display.style.color = isOvertime ? "var(--red)" : (timerSeconds <= 60 ? "var(--gold)" : "var(--blue)");
 
   if (badge) {
     if (timerSeconds > 360) {
-      badge.textContent = "Protected Time (No POIs)";
-      badge.style.color = "var(--blue)";
+      badge.textContent = "Protected Time: 0:00 - 1:00 (No POIs)";
+      badge.style.background = "rgba(59, 130, 246, 0.12)";
+      badge.style.color = "#2563eb";
     } else if (timerSeconds > 60) {
-      badge.textContent = "Open Floor (POIs Allowed 🔔)";
-      badge.style.color = "var(--green)";
+      badge.textContent = "Open Floor: 1:00 - 6:00 (POIs Allowed 🔔)";
+      badge.style.background = "rgba(34, 197, 94, 0.12)";
+      badge.style.color = "#16a34a";
     } else if (timerSeconds > 0) {
-      badge.textContent = "Protected Finish (No POIs ⚠️)";
-      badge.style.color = "var(--gold)";
+      badge.textContent = "Protected Finish: 6:00 - 7:00 (No POIs ⚠️)";
+      badge.style.background = "rgba(234, 179, 8, 0.15)";
+      badge.style.color = "#ca8a04";
+    } else if (timerSeconds >= -20) {
+      badge.textContent = "Time Expired: 20s Grace Period (Conclude! 🔔🔔)";
+      badge.style.background = "rgba(239, 68, 68, 0.15)";
+      badge.style.color = "#dc2626";
     } else {
-      badge.textContent = "Time Expired (Wrap Up! 🔔🔔)";
-      badge.style.color = "var(--red)";
+      badge.textContent = "Hard Cutoff / Overtime Penalty 🛑";
+      badge.style.background = "rgba(239, 68, 68, 0.25)";
+      badge.style.color = "#b91c1c";
     }
   }
 }
 
 function startDebateTimer() {
+  getAudioContext();
   if (isTimerRunning) return;
   isTimerRunning = true;
   const startBtn = document.getElementById("timerStartBtn");
   if (startBtn) startBtn.textContent = "Running...";
 
   timerInterval = setInterval(() => {
-    if (timerSeconds > 0) {
-      timerSeconds--;
-      updateTimerDisplay();
-      if (timerSeconds === 360) {
-        showToast("🔔 1 Minute Mark: POIs are now OPEN!", "info");
-      } else if (timerSeconds === 60) {
-        showToast("⚠️ 6 Minute Mark: POIs are now CLOSED!", "info");
-      } else if (timerSeconds === 0) {
-        showToast("🔔🔔 7 Minute Mark: Time is UP! Please conclude.", "error");
-      }
-    } else {
-      clearInterval(timerInterval);
-      isTimerRunning = false;
-      if (startBtn) startBtn.textContent = "Start";
+    timerSeconds--;
+    updateTimerDisplay();
+
+    // 1-minute bell (floor opens)
+    if (timerSeconds === 360) {
+      playDebateBell(1);
+      showToast("🔔 1 Minute Mark: POIs are now OPEN!", "info");
+    }
+    // 6-minute bell (floor closes)
+    else if (timerSeconds === 60) {
+      playDebateBell(1);
+      showToast("⚠️ 6 Minute Mark: Protected finish — POIs are CLOSED!", "info");
+    }
+    // 7-minute bell (time up)
+    else if (timerSeconds === 0) {
+      playDebateBell(2);
+      showToast("🔔🔔 7 Minute Mark: Time is UP! Please conclude speech.", "error");
+    }
+    // 7:20 hard cutoff
+    else if (timerSeconds === -20) {
+      playDebateBell(3);
+      showToast("🛑 7:20 Overtime: Chair must gavel debater to sit.", "error");
     }
   }, 1000);
 }
@@ -1487,21 +1558,598 @@ function resetDebateTimer() {
   if (startBtn) startBtn.textContent = "Start";
 }
 
-function getRandomMotion() {
-  const motionText = document.getElementById("motionText");
-  const motionCat = document.getElementById("motionCategory");
-  if (!motionText || !motionCat) return;
+// --- 15-Second POI Mini Stopwatch ---
+let poiInterval = null;
+let poiSeconds = 15;
 
-  const random = debateMotions[Math.floor(Math.random() * debateMotions.length)];
-  motionCat.textContent = random.category;
-  motionText.textContent = `"${random.text}"`;
-  showToast("New debate motion generated! 🎙️", "success", 2500);
+function startPoiTimer() {
+  getAudioContext();
+  clearInterval(poiInterval);
+  poiSeconds = 15;
+  const poiDisplay = document.getElementById("poiTimerDisplay");
+  if (poiDisplay) poiDisplay.textContent = "15s";
+
+  poiInterval = setInterval(() => {
+    if (poiSeconds > 0) {
+      poiSeconds--;
+      if (poiDisplay) poiDisplay.textContent = `${poiSeconds}s`;
+    } else {
+      clearInterval(poiInterval);
+      playDebateBell(1);
+      showToast("⏱️ POI Limit Reached (15s Max)! Speaker must resume.", "info");
+    }
+  }, 1000);
+}
+
+function resetPoiTimer() {
+  clearInterval(poiInterval);
+  poiSeconds = 15;
+  const poiDisplay = document.getElementById("poiTimerDisplay");
+  if (poiDisplay) poiDisplay.textContent = "15s";
+}
+
+// --- 15-Minute Preparation Countdown Clock ---
+let prepInterval = null;
+let prepSeconds = 900; // 15 mins
+let isPrepRunning = false;
+
+function updatePrepDisplay() {
+  const display = document.getElementById("prepDisplay");
+  if (!display) return;
+  const mins = Math.floor(prepSeconds / 60);
+  const secs = prepSeconds % 60;
+  display.textContent = `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+}
+
+function startPrepTimer() {
+  getAudioContext();
+  if (isPrepRunning) return;
+  isPrepRunning = true;
+  const btn = document.getElementById("prepStartBtn");
+  if (btn) btn.textContent = "Running...";
+
+  prepInterval = setInterval(() => {
+    if (prepSeconds > 0) {
+      prepSeconds--;
+      updatePrepDisplay();
+
+      if (prepSeconds === 600) {
+        playDebateBell(1);
+        showToast("📢 10 Mins Left: Finalize framework & main case arguments!", "info");
+      } else if (prepSeconds === 300) {
+        playDebateBell(1);
+        showToast("📢 5 Mins Left: Prepare individual speeches and anticipated rebuttals!", "info");
+      } else if (prepSeconds === 60) {
+        playDebateBell(2);
+        showToast("⚠️ 1 Min Left: Please take your seats in the chamber!", "info");
+      }
+    } else {
+      clearInterval(prepInterval);
+      isPrepRunning = false;
+      playDebateBell(3);
+      showToast("🔔🔔🔔 15 Minutes Prep Expired! Prime Minister, take the floor.", "success");
+      if (btn) btn.textContent = "Start Prep";
+    }
+  }, 1000);
+}
+
+function pausePrepTimer() {
+  clearInterval(prepInterval);
+  isPrepRunning = false;
+  const btn = document.getElementById("prepStartBtn");
+  if (btn) btn.textContent = "Resume";
+}
+
+function resetPrepTimer() {
+  clearInterval(prepInterval);
+  isPrepRunning = false;
+  prepSeconds = 900;
+  updatePrepDisplay();
+  const btn = document.getElementById("prepStartBtn");
+  if (btn) btn.textContent = "Start Prep";
 }
 
 window.startDebateTimer = startDebateTimer;
 window.pauseDebateTimer = pauseDebateTimer;
 window.resetDebateTimer = resetDebateTimer;
+window.startPoiTimer = startPoiTimer;
+window.resetPoiTimer = resetPoiTimer;
+window.startPrepTimer = startPrepTimer;
+window.pausePrepTimer = pausePrepTimer;
+window.resetPrepTimer = resetPrepTimer;
+
+// ==========================================================================
+// 4-TEAM BP ROOM MATCHER & PRACTICE ALLOCATOR
+// ==========================================================================
+const sampleDebaters = [
+  "Tercy Wainwul", "Bryan Eyong", "Blessing Nkem", "David Tabi",
+  "Sarah Mba", "Emmanuel Ndip", "Faith Bih", "Kelvin Fongod", "Dr. Nemkul Samuel (Adjudicator)"
+];
+
+function loadSampleDebaters() {
+  const area = document.getElementById("roomDebatersInput");
+  if (area) {
+    area.value = sampleDebaters.join("\n");
+  }
+}
+window.loadSampleDebaters = loadSampleDebaters;
+
+let lastBpAllocation = null;
+
+function generateBpRoom() {
+  const input = document.getElementById("roomDebatersInput")?.value || "";
+  const names = input.split("\n").map(n => n.trim()).filter(n => n.length > 0);
+
+  if (names.length < 8) {
+    showToast("Please enter at least 8 debater names to fill the BP room.", "error");
+    return;
+  }
+
+  // Shuffle names
+  const shuffled = [...names].sort(() => Math.random() - 0.5);
+
+  lastBpAllocation = {
+    og: { pm: shuffled[0], dpm: shuffled[1] },
+    oo: { lo: shuffled[2], dlo: shuffled[3] },
+    cg: { mg: shuffled[4], gw: shuffled[5] },
+    co: { mo: shuffled[6], ow: shuffled[7] },
+    chair: shuffled[8] || "Appointed Club Chair"
+  };
+
+  document.getElementById("ogPm").textContent = lastBpAllocation.og.pm;
+  document.getElementById("ogDpm").textContent = lastBpAllocation.og.dpm;
+  document.getElementById("ooLo").textContent = lastBpAllocation.oo.lo;
+  document.getElementById("ooDlo").textContent = lastBpAllocation.oo.dlo;
+  document.getElementById("cgMg").textContent = lastBpAllocation.cg.mg;
+  document.getElementById("cgGw").textContent = lastBpAllocation.cg.gw;
+  document.getElementById("coMo").textContent = lastBpAllocation.co.mo;
+  document.getElementById("coOw").textContent = lastBpAllocation.co.ow;
+  document.getElementById("roomChair").textContent = lastBpAllocation.chair;
+
+  document.getElementById("bpRoomResult").classList.remove("hidden");
+  showToast("4-Team BP Room successfully allocated! 🏛️", "success");
+}
+window.generateBpRoom = generateBpRoom;
+
+function copyBpRoomWhatsApp() {
+  if (!lastBpAllocation) {
+    showToast("Generate a room allocation first.", "error");
+    return;
+  }
+  const currentMotion = document.getElementById("motionText")?.textContent || "Official Practice Motion";
+  const text = `🏛️ *BIAKA DEBATE CLUB - BRITISH PARLIAMENTARY ROOM*
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+📜 *MOTION:* ${currentMotion}
+
+📍 *OPENING GOVERNMENT (OG)*
+• PM: ${lastBpAllocation.og.pm}
+• DPM: ${lastBpAllocation.og.dpm}
+
+📍 *OPENING OPPOSITION (OO)*
+• LO: ${lastBpAllocation.oo.lo}
+• DLO: ${lastBpAllocation.oo.dlo}
+
+📍 *CLOSING GOVERNMENT (CG)*
+• MG: ${lastBpAllocation.cg.mg}
+• GW: ${lastBpAllocation.cg.gw}
+
+📍 *CLOSING OPPOSITION (CO)*
+• MO: ${lastBpAllocation.co.mo}
+• OW: ${lastBpAllocation.co.ow}
+
+⚖️ *CHAIR / ADJUDICATOR:* ${lastBpAllocation.chair}
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+Prep Time: 15 Minutes. Good luck debaters!`;
+
+  navigator.clipboard.writeText(text).then(() => {
+    showToast("BP Room copied to clipboard! Paste directly into WhatsApp.", "success");
+  });
+}
+window.copyBpRoomWhatsApp = copyBpRoomWhatsApp;
+
+// ==========================================================================
+// BP MOTION BANK WITH TYPES & INFOSLIDES
+// ==========================================================================
+const bpMotionsBank = [
+  {
+    type: "THW",
+    category: "AI & Technology",
+    text: "This House Would ban the use of autonomous generative AI in university grading and admissions.",
+    infoslide: "Generative AI systems are increasingly deployed in higher education institutions to grade essays, detect plagiarism, and screen scholarship applications."
+  },
+  {
+    type: "THBT",
+    category: "African Economics & Development",
+    text: "This House Believes That African nations should adopt a single continental currency under the AfCFTA.",
+    infoslide: "The African Continental Free Trade Area (AfCFTA) creates the largest free trade area in the world by number of participating countries."
+  },
+  {
+    type: "THR",
+    category: "Healthcare & Bioethics",
+    text: "This House Regrets the commercialization and private patenting of life-saving pharmaceutical drugs.",
+    infoslide: "Pharmaceutical companies spend billions on R&D but often patent drugs for 20 years, making them inaccessible to developing nations."
+  },
+  {
+    type: "TH, as [Actor], W",
+    category: "Geopolitics & Governance",
+    text: "This House, as the African Union, Would suspend and sanction member states that grant foreign military base concessions.",
+    infoslide: "Multiple global powers (US, France, China, UAE, Russia) maintain military installations across the Horn of Africa and the Sahel."
+  },
+  {
+    type: "THS",
+    category: "Education Policy",
+    text: "This House Supports making public speaking and structured debating a mandatory requirement for all university graduates.",
+    infoslide: "Civic institutions report a decline in civil discourse and leadership communication among emerging university graduates."
+  },
+  {
+    type: "THW",
+    category: "Law & Criminal Justice",
+    text: "This House Would abolish mandatory minimum sentencing laws for non-violent offenses.",
+    infoslide: "Mandatory minimum sentencing strips judicial discretion, resulting in uniform prison terms regardless of individual circumstances."
+  },
+  {
+    type: "THBT",
+    category: "Youth & Political Leadership",
+    text: "This House Believes That youth quotas should be legally enforced in national parliaments across Africa.",
+    infoslide: "Over 60% of Africa's population is under 25, yet the average age of national parliamentarians remains above 55."
+  },
+  {
+    type: "THR",
+    category: "Environment & Energy",
+    text: "This House Regrets the global narrative that holds developing nations equally responsible for carbon reduction targets.",
+    infoslide: "Developing nations produce less than 5% of historical global emissions while suffering severe climatic disruption."
+  }
+];
+
+let currentMotionFilter = "ALL";
+
+function filterMotions(type, btnElem) {
+  currentMotionFilter = type;
+  document.querySelectorAll(".motion-filter-chip").forEach(b => b.classList.remove("active"));
+  if (btnElem) btnElem.classList.add("active");
+  getRandomMotion();
+}
+window.filterMotions = filterMotions;
+
+function getRandomMotion() {
+  const filtered = currentMotionFilter === "ALL" 
+    ? bpMotionsBank 
+    : bpMotionsBank.filter(m => m.type === currentMotionFilter);
+
+  if (filtered.length === 0) return;
+  const m = filtered[Math.floor(Math.random() * filtered.length)];
+
+  const typeEl = document.getElementById("motionTypeBadge");
+  const catEl = document.getElementById("motionCategory");
+  const textEl = document.getElementById("motionText");
+  const infoEl = document.getElementById("motionInfoslide");
+
+  if (typeEl) typeEl.textContent = m.type;
+  if (catEl) catEl.textContent = m.category;
+  if (textEl) textEl.textContent = `"${m.text}"`;
+  
+  if (infoEl) {
+    if (m.infoslide) {
+      infoEl.innerHTML = `<strong>Infoslide / Context:</strong> ${m.infoslide}`;
+      infoEl.classList.remove("hidden");
+    } else {
+      infoEl.classList.add("hidden");
+    }
+  }
+
+  showToast(`New ${m.type} motion loaded! 📜`, "success", 2000);
+}
 window.getRandomMotion = getRandomMotion;
+
+// ==========================================================================
+// BP ADJUDICATOR BALLOT & SPEAKER SCORE CALCULATOR
+// ==========================================================================
+function updateBallotScores() {
+  const teams = ['og', 'oo', 'cg', 'co'];
+  const ranks = [];
+  let hasTie = false;
+
+  teams.forEach(t => {
+    const s1 = parseFloat(document.getElementById(`${t}Score1`)?.value) || 0;
+    const s2 = parseFloat(document.getElementById(`${t}Score2`)?.value) || 0;
+    const total = s1 + s2;
+    const totalEl = document.getElementById(`${t}TotalScore`);
+    if (totalEl) totalEl.textContent = total > 0 ? total : '—';
+
+    const rankSelect = document.getElementById(`${t}Rank`);
+    if (rankSelect && rankSelect.value) {
+      if (ranks.includes(rankSelect.value)) {
+        hasTie = true;
+      }
+      ranks.push(rankSelect.value);
+    }
+  });
+
+  const tieWarn = document.getElementById("ballotTieWarning");
+  if (tieWarn) {
+    tieWarn.classList.toggle("hidden", !hasTie);
+  }
+}
+window.updateBallotScores = updateBallotScores;
+
+function copyBallotWhatsApp() {
+  const motion = document.getElementById("motionText")?.textContent || "Practice Round Motion";
+  const chair = document.getElementById("ballotChairName")?.value || "Chief Adjudicator";
+  
+  const getTeamData = (code, name) => {
+    const rank = document.getElementById(`${code}Rank`)?.value || "N/A";
+    const s1 = document.getElementById(`${code}Score1`)?.value || "—";
+    const s2 = document.getElementById(`${code}Score2`)?.value || "—";
+    const total = document.getElementById(`${code}TotalScore`)?.textContent || "—";
+    const pts = rank === '1' ? '3 pts' : rank === '2' ? '2 pts' : rank === '3' ? '1 pt' : '0 pts';
+    return `• *${name}*: ${rank} Rank (${pts}) | Scores: ${s1}, ${s2} (Total: ${total})`;
+  };
+
+  const text = `⚖️ *BIAKA DEBATE CLUB - OFFICIAL BP BALLOT*
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+📜 *MOTION:* ${motion}
+👨‍⚖️ *CHAIR:* ${chair}
+
+📊 *ROUND RESULTS:*
+${getTeamData('og', 'Opening Government (OG)')}
+${getTeamData('oo', 'Opening Opposition (OO)')}
+${getTeamData('cg', 'Closing Government (CG)')}
+${getTeamData('co', 'Closing Opposition (CO)')}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+Recorded via BIAKA British Parliamentary System`;
+
+  navigator.clipboard.writeText(text).then(() => {
+    showToast("Ballot results copied to clipboard for WhatsApp! 📊", "success");
+  });
+}
+window.copyBallotWhatsApp = copyBallotWhatsApp;
+
+// ==========================================================================
+// BP 8-SPEAKER ROLE MASTERCLASS
+// ==========================================================================
+const bpRolesMasterclass = {
+  pm: {
+    title: "Prime Minister (PM)",
+    team: "Opening Government (OG)",
+    duty: "Sets the definitions, builds the case framework, establishes the model/policy mechanism, and delivers the opening substantive arguments.",
+    dos: [
+      "Define ambiguous terms fairly without unfair narrowing (no squirreling).",
+      "Explain the exact policy mechanism and state burden.",
+      "Deliver 2 to 3 well-mechanized positive arguments with deep impacts."
+    ],
+    donts: [
+      "Do not define the debate into a tautology or truism.",
+      "Do not spend more than 1 minute on definitions.",
+      "Do not leave the team without concrete comparative benefits."
+    ]
+  },
+  lo: {
+    title: "Leader of Opposition (LO)",
+    team: "Opening Opposition (OO)",
+    duty: "Clashes directly with the PM's definitions, presents the Opposition framework/counter-model, rebuts OG arguments, and builds constructive OO case.",
+    dos: [
+      "Explicitly state your stance: status quo defense or counter-model.",
+      "Directly challenge the root premises of OG's policy mechanism.",
+      "Deliver independent opposition constructive points (not just rebuttal)."
+    ],
+    donts: [
+      "Do not challenge definitions unless OG's definition is literally impossible to debate.",
+      "Do not just list negative consequences without weighing stakeholder impacts."
+    ]
+  },
+  dpm: {
+    title: "Deputy Prime Minister (DPM)",
+    team: "Opening Government (OG)",
+    duty: "Defends PM's case from LO attack, deepens and rebuilds OG mechanisms, refutes LO counter-model, and adds new analysis or a final supporting point.",
+    dos: [
+      "Rebuild OG's key arguments before adding new material.",
+      "Prove why LO's counter-proposal is either worse or non-comparative.",
+      "Cement why OG wins the opening half of the table."
+    ],
+    donts: [
+      "Do not abandon PM's model or change the definition.",
+      "Do not just repeat PM's speech word-for-word."
+    ]
+  },
+  dlo: {
+    title: "Deputy Leader of Opposition (DLO)",
+    team: "Opening Opposition (OO)",
+    duty: "Rebuts DPM and PM, reinforces LO constructive arguments, and secures OO's victory over the entire opening half.",
+    dos: [
+      "Synthesize the key clashes of the top half of the table.",
+      "Demonstrate why OO's harms outweigh OG's speculative benefits.",
+      "Take at least 1 POI from Closing Government."
+    ],
+    donts: [
+      "Do not introduce a whole new counter-model at DLO stage.",
+      "Do not ignore CG's points during POIs."
+    ]
+  },
+  mg: {
+    title: "Member of Government (MG)",
+    team: "Closing Government (CG)",
+    duty: "Delivers the Extension! Must bring new analytical depth, new stakeholder perspectives, or a vertical mechanistic breakthrough while remaining consistent with OG.",
+    dos: [
+      "Deliver a clear, distinct Extension within the first 2-3 minutes.",
+      "Explain why CG's extension is the decisive, most impactful reason to pass the motion.",
+      "Engage directly with Opening Opposition's strongest lines."
+    ],
+    donts: [
+      "NEVER KNIFE OG! Do not contradict Opening Government's core stance.",
+      "Do not just rehash OG's arguments in different vocabulary."
+    ]
+  },
+  mo: {
+    title: "Member of Opposition (MO)",
+    team: "Closing Opposition (CO)",
+    duty: "Delivers the Closing Opposition Extension! Attacks CG's extension, engages OG, and introduces CO's unique philosophy or stakeholder harm.",
+    dos: [
+      "Introduce CO's unique extension points with clear weighing.",
+      "Clash directly with the new claims brought by the Member of Government.",
+      "Establish CO's unique comparative advantage over OO."
+    ],
+    donts: [
+      "Do not knife Opening Opposition.",
+      "Do not leave the extension until the 6th minute."
+    ]
+  },
+  gw: {
+    title: "Government Whip (GW)",
+    team: "Closing Government (CG)",
+    duty: "Weighs the debate thematically through 2-3 major clashes, proves why CG's extension beats both Opposition teams and OG.",
+    dos: [
+      "Synthesize the debate through high-level comparative clashes.",
+      "Weigh CG's extension as the crucial tipping point of the round.",
+      "Take 1 POI from Closing Opposition."
+    ],
+    donts: [
+      "STRICT GOLDEN RULE: ZERO NEW ARGUMENTS! Whips cannot introduce new substantive points.",
+      "Do not spend the entire speech only rebutting without thematic weighing."
+    ]
+  },
+  ow: {
+    title: "Opposition Whip (OW)",
+    team: "Closing Opposition (CO)",
+    duty: "The final speech of the debate! Provides ultimate thematic adjudication weighing, defends CO extension, and proves why CO wins the room.",
+    dos: [
+      "Summarize the entire debate under clear comparative metrics.",
+      "Show why CO's extension took down CG and proved greater harms than OO.",
+      "End with a commanding, authoritative round summary."
+    ],
+    donts: [
+      "ABSOLUTELY NO NEW SUBSTANTIVE MATTER! Strictly forbidden in BP rules.",
+      "Do not ignore CG's whip clash."
+    ]
+  }
+};
+
+function selectBpRole(roleKey) {
+  const r = bpRolesMasterclass[roleKey];
+  if (!r) return;
+
+  const titleEl = document.getElementById("roleGuideTitle");
+  const teamEl = document.getElementById("roleGuideTeam");
+  const dutyEl = document.getElementById("roleGuideDuty");
+  const dosEl = document.getElementById("roleGuideDos");
+  const dontsEl = document.getElementById("roleGuideDonts");
+
+  if (titleEl) titleEl.textContent = r.title;
+  if (teamEl) teamEl.textContent = r.team;
+  if (dutyEl) dutyEl.textContent = r.duty;
+  if (dosEl) dosEl.innerHTML = r.dos.map(d => `<li>✅ ${d}</li>`).join("");
+  if (dontsEl) dontsEl.innerHTML = r.donts.map(d => `<li>❌ ${d}</li>`).join("");
+
+  document.querySelectorAll(".bp-role-btn").forEach(b => {
+    b.classList.toggle("active", b.dataset.role === roleKey);
+  });
+}
+window.selectBpRole = selectBpRole;
+
+// ==========================================================================
+// SEARCHABLE BILINGUAL BP GLOSSARY (EN / FR)
+// ==========================================================================
+const bpGlossaryItems = [
+  {
+    term: "Extension",
+    type: "Closing Half",
+    defEn: "New substantive arguments, new stakeholder mechanisms, or deeper analytical justification brought by the Member (MG or MO) in the closing half.",
+    defFr: "Nouveaux arguments de fond, nouveaux mécanismes ou approfondissement analytique apporté par le Membre (MG ou MO) en seconde moitié de table.",
+    tip: "Essential for CG and CO. Without an extension, you cannot beat your opening team."
+  },
+  {
+    term: "Point of Information (POI)",
+    type: "Chamber Interjection",
+    defEn: "A concise 15-second interjection or question offered by the opposing bench between the 1st and 6th minute of a speech.",
+    defFr: "Une intervention ou question concise de 15 secondes maximum posée par le camp adverse entre la 1ère et la 6ème minute du discours.",
+    tip: "Every debater should offer POIs consistently and accept 1 to 2 POIs during their own speech."
+  },
+  {
+    term: "Knifing",
+    type: "Rule Violation",
+    defEn: "When a closing team (CG or CO) contradicts or disowns the framework, definitions, or core case of their opening team.",
+    defFr: "Lorsqu'une équipe de fermeture (CG ou CO) contredit ou désavoue le cadre ou les arguments de son équipe d'ouverture.",
+    tip: "Strictly penalized in BP adjudication! Always build upon opening's foundation without contradicting it."
+  },
+  {
+    term: "Fiat",
+    type: "Debate Convention",
+    defEn: "The theoretical assumption that if the government passes a policy motion, the proposed law or action will be enacted without parliamentary obstruction.",
+    defFr: "L'hypothèse selon laquelle si le gouvernement propose une motion de politique, elle sera adoptée et mise en application.",
+    tip: "Opposition cannot argue 'the government won't pass this bill' — clash on the consequences after implementation."
+  },
+  {
+    term: "Framing & Characterization",
+    type: "Strategy",
+    defEn: "Setting the lens, context, and stakeholder realities through which the adjudicator evaluates which impacts are most plausible and urgent.",
+    defFr: "Définir le contexte et les réalités des parties prenantes permettant aux juges d'évaluer les impacts les plus urgents.",
+    tip: "He who wins the framing usually wins the round."
+  },
+  {
+    term: "Whip Restrictions",
+    type: "Rule Requirement",
+    defEn: "The absolute prohibition against introducing new constructive arguments during Government Whip (GW) or Opposition Whip (OW) speeches.",
+    defFr: "L'interdiction formelle d'introduire de nouveaux arguments de fond lors des discours des Whips (GW ou OW).",
+    tip: "Whips must weigh existing arguments and prove why their extension wins the round."
+  },
+  {
+    term: "Comparative & Delta",
+    type: "Adjudication Metric",
+    defEn: "The net difference (delta) between the world of Government and the world of Opposition. Debaters must prove why their side creates better outcomes.",
+    defFr: "La différence nette (delta) entre le monde proposé par le Gouvernement et celui de l'Opposition.",
+    tip: "Don't just prove a problem exists; prove why your world improves it comparatively."
+  },
+  {
+    term: "Squirreling",
+    type: "Invalid Definition",
+    defEn: "Illegitimately restricting or twisting a motion's definition to avoid the core clash or debate a trivial, uncompetitive sub-issue.",
+    defFr: "Restreindre ou détourner illégitimement la définition de la motion pour éviter le débat principal.",
+    tip: "Debate the motion in the spirit it was set by the Adjudication Core."
+  }
+];
+
+function renderBpGlossary(items) {
+  const container = document.getElementById("bpGlossaryGrid");
+  if (!container) return;
+
+  if (items.length === 0) {
+    container.innerHTML = `<p style="grid-column: 1 / -1; text-align: center; color: var(--muted);">No matching BP debate terms found.</p>`;
+    return;
+  }
+
+  container.innerHTML = items.map(item => `
+    <article class="glossary-card">
+      <h4>
+        <span>${escapeHtml(item.term)}</span>
+        <span class="glossary-type">${escapeHtml(item.type)}</span>
+      </h4>
+      <p>${currentLang === 'fr' ? escapeHtml(item.defFr) : escapeHtml(item.defEn)}</p>
+      <div class="glossary-tip">💡 ${escapeHtml(item.tip)}</div>
+    </article>
+  `).join("");
+}
+
+function searchBpGlossary(query) {
+  const q = String(query || "").toLowerCase().trim();
+  const filtered = bpGlossaryItems.filter(item => 
+    item.term.toLowerCase().includes(q) ||
+    item.type.toLowerCase().includes(q) ||
+    item.defEn.toLowerCase().includes(q) ||
+    item.defFr.toLowerCase().includes(q)
+  );
+  renderBpGlossary(filtered);
+}
+window.searchBpGlossary = searchBpGlossary;
+
+// Initialize Glossary and Motion on page load
+document.addEventListener("DOMContentLoaded", () => {
+  renderBpGlossary(bpGlossaryItems);
+  getRandomMotion();
+  selectBpRole('pm');
+  updateTimerDisplay();
+  updatePrepDisplay();
+});
+renderBpGlossary(bpGlossaryItems);
 
 // ==========================================================================
 // PWA SERVICE WORKER REGISTRATION
@@ -1541,4 +2189,5 @@ function installPWA() {
   }
 }
 window.installPWA = installPWA;
+
 
