@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="British Parliamentary (BP) Debate Suite - Championship speech timers, automated team allocators, motion bank with infoslides, adjudicator ballots, and 8-speaker role masterclass.">
+  <title>BP Debate Suite - BIAKA Audacious Agora Debate Club</title>
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://debateclub-one.vercel.app/bp-hub">
+  <meta property="og:title" content="British Parliamentary Debate Suite - BIAKA Debate Club">
+  <meta property="og:description" content="Official BP Debate practice lab, 7-minute parliamentary speech timer with bell chimes, 15-min prep clock, 4-team room allocator, motion bank, and digital adjudicator ballot.">
+  <meta property="og:image" content="https://images.unsplash.com/photo-1523580846011-d3a5bc25702b?auto=format&fit=crop&w=1200&h=630&q=80">
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:url" content="https://debateclub-one.vercel.app/bp-hub">
+  <meta name="twitter:title" content="British Parliamentary Debate Suite - BIAKA Debate Club">
+  <meta name="twitter:description" content="Official BP Debate practice lab, 7-minute parliamentary speech timer with bell chimes, 15-min prep clock, 4-team room allocator, motion bank, and digital adjudicator ballot.">
+  <meta name="twitter:image" content="https://images.unsplash.com/photo-1523580846011-d3a5bc25702b?auto=format&fit=crop&w=1200&h=630&q=80">
+  
+  <link rel="manifest" href="/manifest.json">
+  <link rel="icon" type="image/png" href="/favicon.png?v=23">
+  <link rel="shortcut icon" href="/favicon.ico?v=23">
+  <link rel="apple-touch-icon" href="/logo.png?v=23">
+  <link rel="stylesheet" href="/styles.css?v=23">
+  <script>
+    window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+  </script>
+  <script defer src="/_vercel/insights/script.js"></script>
+</head>
+<body>
+  <div id="pwaInstallBanner" class="pwa-install-banner" style="display:none;">
+    <div class="pwa-install-info">
+      <strong>📱 BIAKA Debate Club App</strong>
+      <span data-i18n="pwaInstallText">Install BIAKA Debate Club App for instant offline access.</span>
+    </div>
+    <div class="pwa-install-actions">
+      <button type="button" class="btn btn-primary" onclick="installPWA()" data-i18n="pwaInstallBtn">Install App</button>
+      <button type="button" class="btn btn-secondary" onclick="document.getElementById('pwaInstallBanner').style.display='none'">✕</button>
+    </div>
+  </div>
+
+  <header class="site-header">
+    <a class="brand" href="/" aria-label="BIAKA Audacious Agora Debate Club home">
+      <img id="schoolLogo" src="/logo.png?v=12" alt="BIAKA University Institute of Buea logo" width="38" height="38" style="height: 38px; width: auto; max-height: 38px; object-fit: contain; display: block;">
+      <span>
+        <strong data-i18n="clubName">BIAKA Audacious Agora Debate Club</strong>
+        <small data-i18n="schoolName">BIAKA University Institute of Buea</small>
+      </span>
+    </a>
+    <button class="menu-button" id="menuButton" type="button" aria-label="Open navigation" data-i18n="menuLabel">Menu</button>
+    <nav id="mainNav" aria-label="Primary navigation">
+      <div class="nav-links">
+        <a href="/" data-i18n="navHome">Home</a>
+        <a href="/#about" data-i18n="navAbout">About</a>
+        <a href="/bp-hub" class="active" data-i18n="navBpHub">BP Hub</a>
+        <a href="/register" data-i18n="navRegister">Register</a>
+        <a href="/news" data-i18n="navNews">News</a>
+        <a href="/contact" data-i18n="navContact">Contact</a>
+      </div>
+      <div class="nav-controls">
+        <button id="themeToggle" class="theme-toggle" type="button" aria-label="Toggle dark mode" title="Toggle dark/light mode">🌙</button>
+        <div class="language-toggle" aria-label="Language selector">
+          <button type="button" class="active" data-lang="en">ENG</button>
+          <button type="button" data-lang="fr">FRE</button>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <section id="bp-hub" aria-label="British Parliamentary Debate Hub">
+      <div class="section-heading">
+        <p class="eyebrow">British Parliamentary Debate Suite</p>
+        <h2>BP Practice Lab & Championship Tools</h2>
+      </div>
+
+      <div class="bp-hub-wrapper">
+        <!-- Navigation Tab Bar -->
+        <div class="bp-tab-nav" role="tablist">
+          <button type="button" class="bp-tab-btn active" data-tab="timers" onclick="switchBpTab('timers')">⏱️ Speech & Prep Timers</button>
+          <button type="button" class="bp-tab-btn" data-tab="rooms" onclick="switchBpTab('rooms')">🔀 4-Team Room Matcher</button>
+          <button type="button" class="bp-tab-btn" data-tab="motions" onclick="switchBpTab('motions')">📚 Motion Bank & Infoslides</button>
+          <button type="button" class="bp-tab-btn" data-tab="ballot" onclick="switchBpTab('ballot')">⚖️ Adjudicator Ballot</button>
+          <button type="button" class="bp-tab-btn" data-tab="roles" onclick="switchBpTab('roles')">🎓 8-Speaker Masterclass</button>
+          <button type="button" class="bp-tab-btn" data-tab="glossary" onclick="switchBpTab('glossary')">📖 BP Debater Glossary</button>
+        </div>
+
+        <!-- TAB 1: TIMERS -->
+        <div id="bp-panel-timers" class="bp-tab-panel active">
+          <div class="timer-grid">
+            <div class="timer-box-main">
+              <h3>⏱️ 7-Minute Parliamentary Speech Timer</h3>
+              <p class="tool-desc">Features realistic Web Audio bell alerts at 1:00 (POIs Open), 6:00 (POIs Closed), 7:00 (Time Expired), and 7:20 (Overtime Hard Stop).</p>
+              <div class="timer-display" id="timerDisplay">07:00</div>
+              <div class="timer-poi-info" id="timerBadge">Protected Time: 0:00 - 1:00 (No POIs)</div>
+              
+              <div class="timer-controls">
+                <button type="button" id="timerStartBtn" class="btn btn-primary" onclick="startDebateTimer()">Start Speech</button>
+                <button type="button" class="btn btn-secondary" onclick="pauseDebateTimer()">Pause</button>
+                <button type="button" class="btn btn-secondary" onclick="resetDebateTimer()">Reset</button>
+                <button type="button" class="btn btn-secondary" onclick="playDebateBell(1)" title="Manual Bell Chime">🔔 Gavel Bell</button>
+              </div>
+
+              <div class="timer-subcontrols">
+                <button type="button" class="btn btn-secondary" style="font-size:12px;" onclick="startPoiTimer()">⚡ 15s POI Clock</button>
+                <button type="button" class="btn btn-secondary" style="font-size:12px;" onclick="resetPoiTimer()">Reset POI</button>
+                <span id="poiTimerDisplay" style="font-weight:800; font-family:monospace; font-size:15px; align-self:center; color:var(--gold); margin-left:8px;">15s</span>
+              </div>
+            </div>
+
+            <div class="timer-box-main">
+              <h3>⏳ 15-Minute Preparation Clock</h3>
+              <p class="tool-desc">Official countdown after motion release with milestone notifications at 10m (Framework), 5m (Speech Prep), and 1m (Take Seats).</p>
+              <div class="timer-display" id="prepDisplay" style="color:var(--ink);">15:00</div>
+              <div class="timer-poi-info" style="background:rgba(234, 179, 8, 0.12); color:#ca8a04;">Preparation Phase (No Electronics / Research Only)</div>
+              
+              <div class="timer-controls">
+                <button type="button" id="prepStartBtn" class="btn btn-primary" onclick="startPrepTimer()">Start Prep</button>
+                <button type="button" class="btn btn-secondary" onclick="pausePrepTimer()">Pause</button>
+                <button type="button" class="btn btn-secondary" onclick="resetPrepTimer()">Reset</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 2: ROOM MATCHER -->
+        <div id="bp-panel-rooms" class="bp-tab-panel">
+          <div class="timer-box-main" style="text-align:left; max-width:840px; margin:0 auto;">
+            <h3 style="margin-bottom:8px;">🔀 4-Team Room Allocator</h3>
+            <p class="tool-desc">Paste or type 8 debater names (one per line). The system will automatically construct Opening Government, Opening Opposition, Closing Government, and Closing Opposition.</p>
+            
+            <textarea id="roomDebatersInput" style="width:100%; min-height:120px; padding:12px; border-radius:8px; border:1px solid var(--line); font-family:inherit; font-size:13px; margin-bottom:12px;" placeholder="Enter debater names (one per line)..."></textarea>
+            
+            <div style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:20px;">
+              <button type="button" class="btn btn-primary" onclick="generateBpRoom()">Generate BP Room</button>
+              <button type="button" class="btn btn-secondary" onclick="loadSampleDebaters()">Load Club Roster</button>
+              <button type="button" class="btn btn-secondary" onclick="copyBpRoomWhatsApp()">📋 Copy for WhatsApp</button>
+            </div>
+
+            <div id="bpRoomResult" class="hidden">
+              <div class="bp-chamber-grid">
+                <div class="bp-team-card og">
+                  <div class="bp-team-header">
+                    <strong style="color:#3b82f6;">Opening Government (OG)</strong>
+                    <span class="bp-team-tag">Gov 1</span>
+                  </div>
+                  <div class="bp-speaker-row"><span class="bp-speaker-role">Prime Minister (PM):</span> <span class="bp-speaker-name" id="ogPm">—</span></div>
+                  <div class="bp-speaker-row"><span class="bp-speaker-role">Deputy PM (DPM):</span> <span class="bp-speaker-name" id="ogDpm">—</span></div>
+                </div>
+
+                <div class="bp-team-card oo">
+                  <div class="bp-team-header">
+                    <strong style="color:#ef4444;">Opening Opposition (OO)</strong>
+                    <span class="bp-team-tag">Opp 1</span>
+                  </div>
+                  <div class="bp-speaker-row"><span class="bp-speaker-role">Leader of Opp (LO):</span> <span class="bp-speaker-name" id="ooLo">—</span></div>
+                  <div class="bp-speaker-row"><span class="bp-speaker-role">Deputy LO (DLO):</span> <span class="bp-speaker-name" id="ooDlo">—</span></div>
+                </div>
+
+                <div class="bp-team-card cg">
+                  <div class="bp-team-header">
+                    <strong style="color:#06b6d4;">Closing Government (CG)</strong>
+                    <span class="bp-team-tag">Gov 2</span>
+                  </div>
+                  <div class="bp-speaker-row"><span class="bp-speaker-role">Member of Gov (MG):</span> <span class="bp-speaker-name" id="cgMg">—</span></div>
+                  <div class="bp-speaker-row"><span class="bp-speaker-role">Gov Whip (GW):</span> <span class="bp-speaker-name" id="cgGw">—</span></div>
+                </div>
+
+                <div class="bp-team-card co">
+                  <div class="bp-team-header">
+                    <strong style="color:#f97316;">Closing Opposition (CO)</strong>
+                    <span class="bp-team-tag">Opp 2</span>
+                  </div>
+                  <div class="bp-speaker-row"><span class="bp-speaker-role">Member of Opp (MO):</span> <span class="bp-speaker-name" id="coMo">—</span></div>
+                  <div class="bp-speaker-row"><span class="bp-speaker-role">Opp Whip (OW):</span> <span class="bp-speaker-name" id="coOw">—</span></div>
+                </div>
+              </div>
+
+              <div style="margin-top:16px; padding:12px 16px; background:var(--paper); border:1px dashed var(--line); border-radius:8px; display:flex; justify-content:space-between; align-items:center;">
+                <strong>⚖️ Appointed Chair Judge:</strong>
+                <span id="roomChair" style="font-weight:700; color:var(--blue);">—</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 3: MOTION BANK -->
+        <div id="bp-panel-motions" class="bp-tab-panel">
+          <div class="timer-box-main" style="text-align:left; max-width:840px; margin:0 auto;">
+            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; margin-bottom:12px;">
+              <h3 style="margin:0;">📚 British Parliamentary Motion Bank</h3>
+              <button type="button" class="btn btn-primary" onclick="getRandomMotion()">🎲 New Random Motion</button>
+            </div>
+            
+            <div class="motion-filter-bar">
+              <button type="button" class="motion-filter-chip active" onclick="filterMotions('ALL', this)">All Types</button>
+              <button type="button" class="motion-filter-chip" onclick="filterMotions('THW', this)">THW (Policy)</button>
+              <button type="button" class="motion-filter-chip" onclick="filterMotions('THBT', this)">THBT (Belief)</button>
+              <button type="button" class="motion-filter-chip" onclick="filterMotions('THR', this)">THR (Regret)</button>
+              <button type="button" class="motion-filter-chip" onclick="filterMotions('THS', this)">THS (Support)</button>
+              <button type="button" class="motion-filter-chip" onclick="filterMotions('TH, as [Actor], W', this)">Actor Motions</button>
+            </div>
+
+            <div class="motion-card-full">
+              <div class="motion-badge-row">
+                <span id="motionTypeBadge" class="motion-type-badge">THW</span>
+                <span id="motionCategory" class="motion-cat-badge">AI & Technology</span>
+              </div>
+              <h4 id="motionText" class="motion-title-large">"This House Would ban the use of autonomous generative AI in university grading and admissions."</h4>
+              <div id="motionInfoslide" class="infoslide-box">
+                <strong>Infoslide / Context:</strong> Generative AI systems are increasingly deployed in higher education institutions to grade essays, detect plagiarism, and screen scholarship applications.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 4: ADJUDICATOR BALLOT -->
+        <div id="bp-panel-ballot" class="bp-tab-panel">
+          <div class="timer-box-main" style="text-align:left; max-width:900px; margin:0 auto;">
+            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; margin-bottom:14px;">
+              <div>
+                <h3 style="margin:0 0 4px 0;">⚖️ Adjudicator Round Ballot</h3>
+                <small style="color:var(--muted);">Standard BP Scoring (1st = 3 pts, 2nd = 2 pts, 3rd = 1 pt, 4th = 0 pts | Speaker Scale 65–85)</small>
+              </div>
+              <div style="display:flex; gap:8px;">
+                <button type="button" class="btn btn-primary" onclick="copyBallotWhatsApp()">📋 Copy for WhatsApp</button>
+              </div>
+            </div>
+
+            <div style="margin-bottom:14px;">
+              <label style="font-size:12px; font-weight:700; color:var(--muted); display:block; margin-bottom:4px;">Chair / Lead Adjudicator Name:</label>
+              <input type="text" id="ballotChairName" placeholder="e.g. Dr. Nemkul Samuel / Tercy Wainwul" style="width:100%; max-width:340px; padding:8px 12px; border:1px solid var(--line); border-radius:6px; background:var(--paper); color:var(--ink);">
+            </div>
+
+            <div id="ballotTieWarning" class="hidden" style="padding:10px 14px; background:rgba(239, 68, 68, 0.1); border-left:4px solid #ef4444; color:#dc2626; border-radius:4px; font-size:13px; font-weight:700; margin-bottom:14px;">
+              ⚠️ Warning: Tied ranks detected! In British Parliamentary debate, each team must receive a unique rank (1st, 2nd, 3rd, 4th).
+            </div>
+
+            <div class="ballot-table-wrap">
+              <table class="ballot-table">
+                <thead>
+                  <tr>
+                    <th>Team Position</th>
+                    <th>Rank (1st–4th)</th>
+                    <th>Speaker 1 Score</th>
+                    <th>Speaker 2 Score</th>
+                    <th>Team Total</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><strong style="color:#3b82f6;">Opening Government (OG)</strong></td>
+                    <td>
+                      <select id="ogRank" class="ballot-rank-select" onchange="updateBallotScores()">
+                        <option value="">Select Rank</option>
+                        <option value="1">1st (3 pts)</option>
+                        <option value="2">2nd (2 pts)</option>
+                        <option value="3">3rd (1 pt)</option>
+                        <option value="4">4th (0 pts)</option>
+                      </select>
+                    </td>
+                    <td><input type="number" id="ogScore1" class="ballot-score-input" placeholder="PM (e.g. 75)" min="50" max="100" oninput="updateBallotScores()"></td>
+                    <td><input type="number" id="ogScore2" class="ballot-score-input" placeholder="DPM (e.g. 76)" min="50" max="100" oninput="updateBallotScores()"></td>
+                    <td><span id="ogTotalScore" class="ballot-total-badge">—</span></td>
+                  </tr>
+                  <tr>
+                    <td><strong style="color:#ef4444;">Opening Opposition (OO)</strong></td>
+                    <td>
+                      <select id="ooRank" class="ballot-rank-select" onchange="updateBallotScores()">
+                        <option value="">Select Rank</option>
+                        <option value="1">1st (3 pts)</option>
+                        <option value="2">2nd (2 pts)</option>
+                        <option value="3">3rd (1 pt)</option>
+                        <option value="4">4th (0 pts)</option>
+                      </select>
+                    </td>
+                    <td><input type="number" id="ooScore1" class="ballot-score-input" placeholder="LO (e.g. 74)" min="50" max="100" oninput="updateBallotScores()"></td>
+                    <td><input type="number" id="ooScore2" class="ballot-score-input" placeholder="DLO (e.g. 75)" min="50" max="100" oninput="updateBallotScores()"></td>
+                    <td><span id="ooTotalScore" class="ballot-total-badge">—</span></td>
+                  </tr>
+                  <tr>
+                    <td><strong style="color:#06b6d4;">Closing Government (CG)</strong></td>
+                    <td>
+                      <select id="cgRank" class="ballot-rank-select" onchange="updateBallotScores()">
+                        <option value="">Select Rank</option>
+                        <option value="1">1st (3 pts)</option>
+                        <option value="2">2nd (2 pts)</option>
+                        <option value="3">3rd (1 pt)</option>
+                        <option value="4">4th (0 pts)</option>
+                      </select>
+                    </td>
+                    <td><input type="number" id="cgScore1" class="ballot-score-input" placeholder="MG (e.g. 77)" min="50" max="100" oninput="updateBallotScores()"></td>
+                    <td><input type="number" id="cgScore2" class="ballot-score-input" placeholder="GW (e.g. 76)" min="50" max="100" oninput="updateBallotScores()"></td>
+                    <td><span id="cgTotalScore" class="ballot-total-badge">—</span></td>
+                  </tr>
+                  <tr>
+                    <td><strong style="color:#f97316;">Closing Opposition (CO)</strong></td>
+                    <td>
+                      <select id="coRank" class="ballot-rank-select" onchange="updateBallotScores()">
+                        <option value="">Select Rank</option>
+                        <option value="1">1st (3 pts)</option>
+                        <option value="2">2nd (2 pts)</option>
+                        <option value="3">3rd (1 pt)</option>
+                        <option value="4">4th (0 pts)</option>
+                      </select>
+                    </td>
+                    <td><input type="number" id="coScore1" class="ballot-score-input" placeholder="MO (e.g. 78)" min="50" max="100" oninput="updateBallotScores()"></td>
+                    <td><input type="number" id="coScore2" class="ballot-score-input" placeholder="OW (e.g. 77)" min="50" max="100" oninput="updateBallotScores()"></td>
+                    <td><span id="coTotalScore" class="ballot-total-badge">—</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 5: 8-SPEAKER MASTERCLASS -->
+        <div id="bp-panel-roles" class="bp-tab-panel">
+          <div class="timer-box-main" style="text-align:left; max-width:900px; margin:0 auto;">
+            <h3 style="margin-bottom:8px;">🎓 The 8 Speaker Roles of British Parliamentary Debate</h3>
+            <p class="tool-desc">Click on any role to inspect their exact duties, tactical responsibilities, dos, and strict BP golden rules.</p>
+            
+            <div style="display:flex; flex-wrap:wrap; gap:8px; margin-bottom:16px;">
+              <button type="button" class="btn btn-secondary bp-role-btn active" data-role="pm" onclick="selectBpRole('pm')">PM (OG)</button>
+              <button type="button" class="btn btn-secondary bp-role-btn" data-role="dpm" onclick="selectBpRole('dpm')">DPM (OG)</button>
+              <button type="button" class="btn btn-secondary bp-role-btn" data-role="lo" onclick="selectBpRole('lo')">LO (OO)</button>
+              <button type="button" class="btn btn-secondary bp-role-btn" data-role="dlo" onclick="selectBpRole('dlo')">DLO (OO)</button>
+              <button type="button" class="btn btn-secondary bp-role-btn" data-role="mg" onclick="selectBpRole('mg')">MG (CG)</button>
+              <button type="button" class="btn btn-secondary bp-role-btn" data-role="gw" onclick="selectBpRole('gw')">GW (CG)</button>
+              <button type="button" class="btn btn-secondary bp-role-btn" data-role="mo" onclick="selectBpRole('mo')">MO (CO)</button>
+              <button type="button" class="btn btn-secondary bp-role-btn" data-role="ow" onclick="selectBpRole('ow')">OW (CO)</button>
+            </div>
+
+            <div style="background:var(--card-bg); border:1px solid var(--line); border-radius:10px; padding:20px;">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                <h4 id="roleGuideTitle" style="margin:0; font-size:18px; color:var(--blue);">Prime Minister (PM)</h4>
+                <span id="roleGuideTeam" class="bp-team-tag" style="background:rgba(59, 130, 246, 0.1); color:#3b82f6;">Opening Government (OG)</span>
+              </div>
+              <p id="roleGuideDuty" style="font-size:13.5px; line-height:1.55; color:var(--ink); margin-bottom:16px;">
+                Sets the definitions, builds the case framework, establishes the model/policy mechanism, and delivers the opening substantive arguments.
+              </p>
+              
+              <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+                <div style="background:var(--paper); padding:14px; border-radius:8px; border:1px solid var(--line);">
+                  <strong style="color:#16a34a; font-size:12.5px; display:block; margin-bottom:8px;">✅ Golden Responsibilities (Dos):</strong>
+                  <ul id="roleGuideDos" style="margin:0; padding-left:16px; font-size:12.5px; line-height:1.5; color:var(--ink);">
+                    <li>Define ambiguous terms fairly without unfair narrowing (no squirreling).</li>
+                    <li>Explain the exact policy mechanism and state burden.</li>
+                  </ul>
+                </div>
+                <div style="background:var(--paper); padding:14px; border-radius:8px; border:1px solid var(--line);">
+                  <strong style="color:#dc2626; font-size:12.5px; display:block; margin-bottom:8px;">❌ Critical Pitfalls (Don'ts):</strong>
+                  <ul id="roleGuideDonts" style="margin:0; padding-left:16px; font-size:12.5px; line-height:1.5; color:var(--ink);">
+                    <li>Do not define the debate into a tautology or truism.</li>
+                    <li>Do not spend more than 1 minute on definitions.</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 6: GLOSSARY -->
+        <div id="bp-panel-glossary" class="bp-tab-panel">
+          <div class="timer-box-main" style="text-align:left; max-width:900px; margin:0 auto;">
+            <h3 style="margin-bottom:6px;">📖 Searchable BP Debater Glossary (English / French)</h3>
+            <p class="tool-desc">Quick lookup for international championship terms, rules, and tactical jargon.</p>
+            
+            <input type="text" class="glossary-search-input" placeholder="Search BP terms (e.g. Extension, Knifing, Fiat, Whip, POI)..." oninput="searchBpGlossary(this.value)">
+
+            <div id="bpGlossaryGrid" class="glossary-grid">
+              <!-- Rendered dynamically -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-container">
+      <!-- Col 1: Club Info -->
+      <div class="footer-col footer-brand-col">
+        <div class="footer-brand">
+          <img src="/logo.png?v=12" alt="BIAKA Crest" width="34" height="34" class="footer-logo">
+          <div>
+            <strong data-i18n="clubName">BIAKA Audacious Agora Debate Club</strong>
+            <small data-i18n="schoolName">BIAKA University Institute of Buea</small>
+          </div>
+        </div>
+        <p class="footer-motto" data-i18n="heroEyebrow">Motto: Clear thoughts, strong conviction, respect in delivery.</p>
+        <div class="footer-socials">
+          <a href="https://facebook.com/biakadebateclub" target="_blank" rel="noreferrer" class="fb-icon" aria-label="Facebook" title="Facebook">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+          </a>
+          <a href="https://instagram.com/biakadebateclub" target="_blank" rel="noreferrer" class="ig-icon" aria-label="Instagram" title="Instagram">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+          </a>
+          <a href="https://x.com/biakadebate" target="_blank" rel="noreferrer" class="x-icon" aria-label="X (Twitter)" title="X (Twitter)">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+          </a>
+          <a href="https://wa.me/237650141680" target="_blank" rel="noreferrer" class="wa-icon" aria-label="WhatsApp" title="WhatsApp">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.316 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.818-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <!-- Col 2: President Contact -->
+      <div class="footer-col">
+        <h4 data-i18n="footerPresident">President's Office</h4>
+        <div class="footer-contact-item">
+          <strong class="president-highlight">TERCY WAINWUL</strong>
+          <span class="role-badge" data-i18n="footerPresidentRole">Club President</span>
+        </div>
+        <div class="footer-links-list">
+          <a href="tel:+237650141680" class="footer-link">
+            <span>📞</span> <span>+237 650 141 680</span>
+          </a>
+          <a href="mailto:misswhiteblue@gmail.com" class="footer-link">
+            <span>✉️</span> <span>misswhiteblue@gmail.com</span>
+          </a>
+          <a href="https://wa.me/237650141680" target="_blank" rel="noreferrer" class="footer-link">
+            <span>💬</span> <span>WhatsApp Direct</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Col 3: School Info & Website -->
+      <div class="footer-col">
+        <h4 data-i18n="schoolContacts">School Contact</h4>
+        <div class="footer-contact-item">
+          <strong data-i18n="schoolName">BIAKA University Institute of Buea</strong>
+          <small data-i18n="schoolAddress">📍 Bokoko, Biaka Street, Buea, Cameroon</small>
+        </div>
+        <div class="footer-links-list">
+          <a href="https://biakahc.org/contact/" target="_blank" rel="noreferrer" class="footer-link highlighted-link">
+            <span>🌐</span> <span data-i18n="schoolWebsite">School Website (biakahc.org)</span>
+          </a>
+          <a href="mailto:infocm@biakahc.org" class="footer-link">
+            <span>✉️</span> <span>infocm@biakahc.org</span>
+          </a>
+          <a href="tel:+237671710796" class="footer-link">
+            <span>📞</span> <span>+237 671 710 796</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Col 4: Quick Navigation -->
+      <div class="footer-col">
+        <h4 data-i18n="footerNav">Navigation</h4>
+        <div class="footer-nav-links">
+          <a href="/" data-i18n="navHome">Home</a>
+          <a href="/#about" data-i18n="navAbout">About</a>
+          <a href="/bp-hub" class="active" data-i18n="navBpHub">BP Hub</a>
+          <a href="/register" data-i18n="navRegister">Register</a>
+          <a href="/news" data-i18n="navNews">News</a>
+          <a href="/contact" data-i18n="navContact">Contact</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p data-i18n="footerText">BIAKA Audacious Agora Debate Club - Built for student leadership, civic reasoning and public speaking.</p>
+    </div>
+  </footer>
+
+  <div id="toastContainer" class="toast-container" aria-live="polite"></div>
+
+  <script src="app.js?v=23"></script>
+</body>
+</html>

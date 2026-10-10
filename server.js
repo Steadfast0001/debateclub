@@ -54,6 +54,9 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads'), {
 // Direct page links
 app.get('/', (req, res) => sendHtml(res, 'index.html'));
 app.get('/index', (req, res) => sendHtml(res, 'index.html'));
+app.get('/bp-hub', (req, res) => sendHtml(res, 'bp-hub.html'));
+app.get('/bp', (req, res) => sendHtml(res, 'bp-hub.html'));
+app.get('/bp-suite', (req, res) => sendHtml(res, 'bp-hub.html'));
 app.get('/register', (req, res) => sendHtml(res, 'register.html'));
 app.get('/contact', (req, res) => sendHtml(res, 'contact.html'));
 app.get('/news', (req, res) => sendHtml(res, 'news.html'));
