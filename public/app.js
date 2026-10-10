@@ -20,7 +20,13 @@ const translations = {
     contactSuccess: "Message sent successfully! We will get back to you soon.", contactError: "Failed to send message. Please try again later.",
     registered: "Registration submitted successfully.", noRegistrations: "No registrations yet.",
     chancellorRole: "Vice Chancellor", chancellorTitle: "Vice Chancellor, BIAKA University Institute of Buea", chancellorDesc: "Providing visionary institutional patronage, academic excellence, and leadership backing for the club.",
-    directorRole: "Deputy Vice Chancellor", directorTitle: "Deputy Vice Chancellor / Club Mentor & Adviser", directorDesc: "Guiding institutional excellence, research depth, critical reasoning, and strategic mentorship for the club."
+    directorRole: "Deputy Vice Chancellor", directorTitle: "Deputy Vice Chancellor / Club Mentor & Adviser", directorDesc: "Guiding institutional excellence, research depth, critical reasoning, and strategic mentorship for the club.",
+    toolsEyebrow: "Interactive Training", toolsTitle: "Debate Practice Lab",
+    timerTitle: "⏱️ Parliamentary Speech Timer", timerDesc: "Standard 7-minute parliamentary speech timer with protected time indicators for Points of Information (POI).",
+    timerStart: "Start", timerPause: "Pause", timerReset: "Reset",
+    motionGenTitle: "🎯 Motion Generator", motionGenDesc: "Need practice topics? Generate competitive, thought-provoking debate motions across economics, tech, governance, and ethics.",
+    motionGenBtn: "Generate New Motion",
+    pwaInstallText: "Install BIAKA Debate Club App for instant offline access.", pwaInstallBtn: "Install App"
   },
   fr: {
     clubName: "Club de Debat Audacieux Agora BIAKA", schoolName: "Institut Universitaire BIAKA de Buea", menuLabel: "Menu", navHome: "Accueil", navAbout: "A propos", navRegister: "Inscription", navNews: "Actualites", navContact: "Contact",
@@ -38,7 +44,13 @@ const translations = {
     contactSuccess: "Message envoye avec succes ! Nous vous repondrons bientot.", contactError: "Echec de l'envoi du message. Veuillez reessayer plus tard.",
     registered: "Inscription envoyee avec succes.", noRegistrations: "Aucune inscription pour le moment.",
     chancellorRole: "Vice-Chancelière", chancellorTitle: "Vice-Chancelière, Institut Universitaire BIAKA de Buea", chancellorDesc: "Offrant un patronage institutionnel visionnaire, l'excellence académique et le soutien au leadership du club.",
-    directorRole: "Vice-Chancelier Adjoint", directorTitle: "Vice-Chancelier Adjoint / Mentor et Conseiller", directorDesc: "Guidant l'excellence institutionnelle, la recherche approfondie, le raisonnement critique et le mentorat stratégique."
+    directorRole: "Vice-Chancelier Adjoint", directorTitle: "Vice-Chancelier Adjoint / Mentor et Conseiller", directorDesc: "Guidant l'excellence institutionnelle, la recherche approfondie, le raisonnement critique et le mentorat stratégique.",
+    toolsEyebrow: "Entraînement Interactif", toolsTitle: "Laboratoire de Pratique du Débat",
+    timerTitle: "⏱️ Chronomètre de Discours Parlementaire", timerDesc: "Chronomètre standard de 7 minutes pour discours parlementaire avec indicateurs de points d'information (POI).",
+    timerStart: "Démarrer", timerPause: "Pause", timerReset: "Réinitialiser",
+    motionGenTitle: "🎯 Générateur de Sujets de Débat", motionGenDesc: "Besoin de sujets pour vous entraîner ? Générez des motions stimulantes en économie, tech, gouvernance et éthique.",
+    motionGenBtn: "Générer un Nouveau Sujet",
+    pwaInstallText: "Installez l'application BIAKA Debate Club pour un accès direct hors ligne.", pwaInstallBtn: "Installer l'App"
   }
 };
 
@@ -271,6 +283,9 @@ if (registrationForm) {
       if (response.ok) {
         messageEl.textContent = translations[currentLang].registered;
         messageEl.style.color = "var(--green)";
+        if (typeof showToast === 'function') {
+          showToast(translations[currentLang].registered || "Registration submitted successfully! 🎉", "success");
+        }
         event.target.reset();
         // Refresh member count
         registrations.unshift(data);
@@ -278,11 +293,17 @@ if (registrationForm) {
       } else {
         messageEl.textContent = data.error || "Registration failed";
         messageEl.style.color = "var(--red)";
+        if (typeof showToast === 'function') {
+          showToast(data.error || "Registration failed. Please check inputs.", "error");
+        }
       }
     } catch (error) {
       console.error("Registration error:", error);
       messageEl.textContent = "Network error. Please try again.";
       messageEl.style.color = "var(--red)";
+      if (typeof showToast === 'function') {
+        showToast("Network error. Please try again.", "error");
+      }
     } finally {
       submitBtn.disabled = false;
     }
@@ -1312,16 +1333,24 @@ if (publicContactForm) {
       });
 
       if (response.ok) {
-        msg.textContent = translations[currentLang]?.contactSuccess || "Message sent successfully!";
+        const successText = translations[currentLang]?.contactSuccess || "Message sent successfully!";
+        msg.textContent = successText;
         msg.style.color = "var(--green)";
+        if (typeof showToast === 'function') {
+          showToast(successText, "success");
+        }
         publicContactForm.reset();
       } else {
         const err = await response.json();
         throw new Error(err.error || "Failed to send");
       }
     } catch (error) {
-      msg.textContent = translations[currentLang]?.contactError || "Failed to send message.";
+      const errorText = error.message || translations[currentLang]?.contactError || "Failed to send message.";
+      msg.textContent = errorText;
       msg.style.color = "var(--red)";
+      if (typeof showToast === 'function') {
+        showToast(errorText, "error");
+      }
       console.error(error);
     } finally {
       btn.textContent = originalText;
@@ -1329,3 +1358,187 @@ if (publicContactForm) {
     }
   });
 }
+
+// ==========================================================================
+// TOAST NOTIFICATION SYSTEM
+// ==========================================================================
+function showToast(message, type = 'info', duration = 4000) {
+  let container = document.getElementById('toastContainer');
+  if (!container) {
+    container = document.createElement('div');
+    container.id = 'toastContainer';
+    container.className = 'toast-container';
+    document.body.appendChild(container);
+  }
+
+  const toast = document.createElement('div');
+  toast.className = `toast ${type}`;
+  
+  const icon = type === 'success' ? '✅' : (type === 'error' ? '⚠️' : 'ℹ️');
+  toast.innerHTML = `
+    <span class="toast-icon">${icon}</span>
+    <span class="toast-msg">${escapeHtml(message)}</span>
+    <button class="toast-close" type="button" aria-label="Close notification">&times;</button>
+  `;
+
+  container.appendChild(toast);
+
+  requestAnimationFrame(() => {
+    toast.classList.add('show');
+  });
+
+  const closeToast = () => {
+    toast.classList.remove('show');
+    setTimeout(() => {
+      if (toast.parentNode) {
+        toast.parentNode.removeChild(toast);
+      }
+    }, 300);
+  };
+
+  toast.querySelector('.toast-close').addEventListener('click', closeToast);
+
+  if (duration > 0) {
+    setTimeout(closeToast, duration);
+  }
+}
+window.showToast = showToast;
+
+// ==========================================================================
+// DEBATE TIMER & MOTION GENERATOR
+// ==========================================================================
+let timerInterval = null;
+let timerSeconds = 420; // 7 minutes standard
+let isTimerRunning = false;
+
+const debateMotions = [
+  { category: "Healthcare & Ethics", text: "This House Would mandate compulsory national health insurance for all university students." },
+  { category: "African Economics", text: "This House Believes That African nations should prioritize regional trade over international aid." },
+  { category: "Technology & Society", text: "This House Would prohibit the use of generative AI in all university examinations and coursework." },
+  { category: "Education Policy", text: "This House Believes That public speaking and debate should be mandatory in tertiary curriculum." },
+  { category: "Governance & Youth", text: "This House Would lower the minimum age requirement for parliamentary elections to 18." },
+  { category: "Media & Free Speech", text: "This House Believes That social media algorithms should be strictly regulated by independent civic bodies." }
+];
+
+function updateTimerDisplay() {
+  const display = document.getElementById("timerDisplay");
+  const badge = document.getElementById("timerBadge");
+  if (!display) return;
+
+  const mins = Math.floor(timerSeconds / 60);
+  const secs = timerSeconds % 60;
+  display.textContent = `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+
+  if (badge) {
+    if (timerSeconds > 360) {
+      badge.textContent = "Protected Time (No POIs)";
+      badge.style.color = "var(--blue)";
+    } else if (timerSeconds > 60) {
+      badge.textContent = "Open Floor (POIs Allowed 🔔)";
+      badge.style.color = "var(--green)";
+    } else if (timerSeconds > 0) {
+      badge.textContent = "Protected Finish (No POIs ⚠️)";
+      badge.style.color = "var(--gold)";
+    } else {
+      badge.textContent = "Time Expired (Wrap Up! 🔔🔔)";
+      badge.style.color = "var(--red)";
+    }
+  }
+}
+
+function startDebateTimer() {
+  if (isTimerRunning) return;
+  isTimerRunning = true;
+  const startBtn = document.getElementById("timerStartBtn");
+  if (startBtn) startBtn.textContent = "Running...";
+
+  timerInterval = setInterval(() => {
+    if (timerSeconds > 0) {
+      timerSeconds--;
+      updateTimerDisplay();
+      if (timerSeconds === 360) {
+        showToast("🔔 1 Minute Mark: POIs are now OPEN!", "info");
+      } else if (timerSeconds === 60) {
+        showToast("⚠️ 6 Minute Mark: POIs are now CLOSED!", "info");
+      } else if (timerSeconds === 0) {
+        showToast("🔔🔔 7 Minute Mark: Time is UP! Please conclude.", "error");
+      }
+    } else {
+      clearInterval(timerInterval);
+      isTimerRunning = false;
+      if (startBtn) startBtn.textContent = "Start";
+    }
+  }, 1000);
+}
+
+function pauseDebateTimer() {
+  clearInterval(timerInterval);
+  isTimerRunning = false;
+  const startBtn = document.getElementById("timerStartBtn");
+  if (startBtn) startBtn.textContent = "Resume";
+}
+
+function resetDebateTimer() {
+  clearInterval(timerInterval);
+  isTimerRunning = false;
+  timerSeconds = 420;
+  updateTimerDisplay();
+  const startBtn = document.getElementById("timerStartBtn");
+  if (startBtn) startBtn.textContent = "Start";
+}
+
+function getRandomMotion() {
+  const motionText = document.getElementById("motionText");
+  const motionCat = document.getElementById("motionCategory");
+  if (!motionText || !motionCat) return;
+
+  const random = debateMotions[Math.floor(Math.random() * debateMotions.length)];
+  motionCat.textContent = random.category;
+  motionText.textContent = `"${random.text}"`;
+  showToast("New debate motion generated! 🎙️", "success", 2500);
+}
+
+window.startDebateTimer = startDebateTimer;
+window.pauseDebateTimer = pauseDebateTimer;
+window.resetDebateTimer = resetDebateTimer;
+window.getRandomMotion = getRandomMotion;
+
+// ==========================================================================
+// PWA SERVICE WORKER REGISTRATION
+// ==========================================================================
+if ('serviceWorker' in navigator && (window.location.protocol === 'https:' || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js').then((reg) => {
+      console.log('Debate Club PWA ServiceWorker active');
+    }).catch((err) => {
+      console.log('Debate Club PWA ServiceWorker skipped:', err);
+    });
+  });
+}
+
+// PWA Installation Handler
+let deferredPrompt = null;
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  const banner = document.getElementById('pwaInstallBanner');
+  if (banner) {
+    banner.style.display = 'flex';
+  }
+});
+
+function installPWA() {
+  if (deferredPrompt) {
+    deferredPrompt.prompt();
+    deferredPrompt.userChoice.then((choiceResult) => {
+      if (choiceResult.outcome === 'accepted') {
+        showToast('Thank you for installing BIAKA Debate Club App! 🎉', 'success');
+      }
+      deferredPrompt = null;
+      const banner = document.getElementById('pwaInstallBanner');
+      if (banner) banner.style.display = 'none';
+    });
+  }
+}
+window.installPWA = installPWA;
+

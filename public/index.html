@@ -53,16 +53,28 @@
   <title>BIAKA Audacious Agora Debate Club</title>
   <link rel="preconnect" href="https://images.unsplash.com">
   <link rel="dns-prefetch" href="https://images.unsplash.com">
-  <link rel="icon" type="image/png" href="/favicon.png?v=20">
-  <link rel="shortcut icon" href="/favicon.ico?v=20">
-  <link rel="apple-touch-icon" href="/logo.png?v=20">
-  <link rel="stylesheet" href="/styles.css?v=20">
+  <link rel="manifest" href="/manifest.json">
+  <link rel="icon" type="image/png" href="/favicon.png?v=21">
+  <link rel="shortcut icon" href="/favicon.ico?v=21">
+  <link rel="apple-touch-icon" href="/logo.png?v=21">
+  <link rel="stylesheet" href="/styles.css?v=21">
   <script>
     window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
   </script>
   <script defer src="/_vercel/insights/script.js"></script>
 </head>
 <body>
+  <div id="pwaInstallBanner" class="pwa-install-banner" style="display:none;">
+    <div class="pwa-install-info">
+      <strong>📱 BIAKA Debate Club App</strong>
+      <span data-i18n="pwaInstallText">Install BIAKA Debate Club App for instant offline access.</span>
+    </div>
+    <div class="pwa-install-actions">
+      <button type="button" class="btn btn-primary" onclick="installPWA()" data-i18n="pwaInstallBtn">Install App</button>
+      <button type="button" class="btn btn-secondary" onclick="document.getElementById('pwaInstallBanner').style.display='none'">✕</button>
+    </div>
+  </div>
+
   <header class="site-header">
     <a class="brand" href="/" aria-label="BIAKA Audacious Agora Debate Club home">
       <img id="schoolLogo" src="/logo.png?v=12" alt="BIAKA University Institute of Buea logo" width="38" height="38" style="height: 38px; width: auto; max-height: 38px; object-fit: contain; display: block;">
@@ -184,6 +196,34 @@
       </div>
       <div id="publicGalleryGrid" class="gallery-grid">
         <!-- Dynamic images will be inserted here -->
+      </div>
+    </section>
+
+    <section id="practice-lab" aria-label="Debate Practice Lab">
+      <div class="section-heading">
+        <p class="eyebrow" data-i18n="toolsEyebrow">Interactive Training</p>
+        <h2 data-i18n="toolsTitle">Debate Practice Lab</h2>
+      </div>
+      <div class="tools-grid">
+        <article class="tool-card">
+          <h3 data-i18n="timerTitle">⏱️ Parliamentary Speech Timer</h3>
+          <p data-i18n="timerDesc">Standard 7-minute parliamentary speech timer with protected time indicators for Points of Information (POI).</p>
+          <div class="timer-display" id="timerDisplay">07:00</div>
+          <div class="timer-poi-info" id="timerBadge">Protected Time (No POIs)</div>
+          <div class="timer-controls">
+            <button type="button" id="timerStartBtn" class="btn btn-primary" onclick="startDebateTimer()" data-i18n="timerStart">Start</button>
+            <button type="button" class="btn btn-secondary" onclick="pauseDebateTimer()" data-i18n="timerPause">Pause</button>
+            <button type="button" class="btn btn-secondary" onclick="resetDebateTimer()" data-i18n="timerReset">Reset</button>
+          </div>
+        </article>
+
+        <article class="tool-card">
+          <h3 data-i18n="motionGenTitle">🎯 Motion Generator</h3>
+          <p data-i18n="motionGenDesc">Need practice topics? Generate competitive, thought-provoking debate motions across economics, tech, governance, and ethics.</p>
+          <span class="motion-category" id="motionCategory">AI & Ethics</span>
+          <div class="motion-box" id="motionText">"This House believes that artificial intelligence should be banned from autonomous academic grading."</div>
+          <button type="button" class="btn btn-primary" onclick="getRandomMotion()" data-i18n="motionGenBtn">Generate New Motion</button>
+        </article>
       </div>
     </section>
 
@@ -323,6 +363,8 @@
     </div>
   </div>
 
-  <script src="app.js?v=20"></script>
+  <div id="toastContainer" class="toast-container" aria-live="polite"></div>
+
+  <script src="app.js?v=21"></script>
 </body>
 </html>

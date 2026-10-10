@@ -1,4 +1,6 @@
 User-agent: *
 Allow: /
+Disallow: /admin
+Disallow: /api/admin/
 
-Sitemap: https://biakadebateclub.vercel.app/sitemap.xml
+Sitemap: https://debateclub-one.vercel.app/sitemap.xml

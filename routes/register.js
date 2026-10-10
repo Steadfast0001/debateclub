@@ -3,6 +3,21 @@
 
 const pool = require('./db');
 const { sendRegistrationEmail } = require('./email');
+const { createRateLimiter } = require('./rateLimiter');
+
+const registerRateLimiter = createRateLimiter({
+  windowMs: 15 * 60 * 1000,
+  max: 10,
+  message: 'Too many registration attempts from this network. Please wait a few minutes and try again.'
+});
+
+function sanitize(str) {
+  return String(str || '').trim();
+}
+
+function isValidEmail(email) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+}
 
 module.exports = async (req, res) => {
   // CORS headers
@@ -19,12 +34,39 @@ module.exports = async (req, res) => {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
+  // Apply rate limiter
+  let rateLimitBlocked = false;
+  registerRateLimiter(req, res, () => {
+    rateLimitBlocked = false;
+  });
+  if (res.statusCode === 429) {
+    return;
+  }
+
   try {
-    const { name, email, department, phone, experience, reason } = req.body;
+    let { name, email, department, phone, experience, reason } = req.body;
+    name = sanitize(name);
+    email = sanitize(email);
+    department = sanitize(department);
+    phone = sanitize(phone);
+    experience = sanitize(experience);
+    reason = sanitize(reason);
 
     // Validate input
     if (!name || !email || !department || !phone || !experience || !reason) {
-      return res.status(400).json({ error: 'All fields are required' });
+      return res.status(400).json({ error: 'All fields are required.' });
+    }
+
+    if (name.length < 2 || name.length > 100) {
+      return res.status(400).json({ error: 'Full name must be between 2 and 100 characters.' });
+    }
+
+    if (!isValidEmail(email)) {
+      return res.status(400).json({ error: 'Please provide a valid email address.' });
+    }
+
+    if (phone.length < 8 || phone.length > 25) {
+      return res.status(400).json({ error: 'Please provide a valid phone or WhatsApp number.' });
     }
 
     // Get client IP address
