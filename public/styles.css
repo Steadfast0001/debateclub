@@ -940,11 +940,107 @@ p {
 }
 
 /* ==========================================================================
-   NEWS GRID
+   NEWS GRID & SOCIAL CHANNELS BAR
    ========================================================================== */
-.news-grid {
+.social-channels-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 12px 20px;
+  margin-bottom: 24px;
+  box-shadow: var(--shadow);
+}
+
+.social-bar-label {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--ink);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.social-badges-wrap {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.social-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 6px 14px;
+  border-radius: 9999px;
+  font-size: 12px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid transparent;
+}
+
+.social-chip.fb {
+  background: rgba(24, 119, 242, 0.1);
+  color: #1877f2;
+  border-color: rgba(24, 119, 242, 0.25);
+}
+.social-chip.fb:hover {
+  background: #1877f2;
+  color: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(24, 119, 242, 0.35);
+}
+
+.social-chip.ig {
+  background: rgba(225, 48, 108, 0.1);
+  color: #e1306c;
+  border-color: rgba(225, 48, 108, 0.25);
+}
+.social-chip.ig:hover {
+  background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+  color: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(225, 48, 108, 0.35);
+}
+
+.social-chip.x {
+  background: rgba(15, 20, 25, 0.08);
+  color: var(--ink);
+  border-color: var(--line);
+}
+:root.dark .social-chip.x {
+  background: rgba(255, 255, 255, 0.1);
+  color: #f1f5f9;
+}
+.social-chip.x:hover {
+  background: #0f1419;
+  color: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(15, 20, 25, 0.35);
+}
+
+.social-chip.wa {
+  background: rgba(37, 211, 102, 0.12);
+  color: #16a34a;
+  border-color: rgba(37, 211, 102, 0.3);
+}
+.social-chip.wa:hover {
+  background: #25d366;
+  color: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(37, 211, 102, 0.35);
+}
+
+.news-grid,
+.news-grid-4col {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: repeat(4, 1fr);
   gap: 18px;
   width: 100%;
 }
@@ -954,17 +1050,21 @@ p {
   display: flex;
   flex-direction: column;
   border-radius: 12px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow);
   transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.2s ease, border-color 0.2s ease;
 }
 
 .news-card:hover {
-  transform: translateY(-3px);
+  transform: translateY(-4px);
   box-shadow: var(--shadow-hover);
   border-color: var(--blue);
 }
 
 .news-media {
-  min-height: 180px;
+  min-height: 165px;
+  height: 165px;
   background-position: center top;
   background-size: cover;
   transition: transform 0.3s ease;
@@ -987,14 +1087,14 @@ p {
 }
 
 .news-body {
-  padding: 18px;
+  padding: 16px;
   display: flex;
   flex-direction: column;
   flex: 1;
 }
 
 .news-body h3 {
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 700;
   margin-bottom: 8px;
   color: var(--ink);
@@ -1002,17 +1102,34 @@ p {
 }
 
 .news-text {
-  font-size: 13px;
-  line-height: 1.6;
+  font-size: 12.5px;
+  line-height: 1.55;
   color: var(--muted);
 }
 
-.news-card:first-child {
-  grid-column: 1 / -1;
+@media (max-width: 1200px) {
+  .news-grid,
+  .news-grid-4col {
+    grid-template-columns: repeat(3, 1fr);
+  }
 }
 
-.news-card:first-child .news-media {
-  min-height: 240px;
+@media (max-width: 900px) {
+  .news-grid,
+  .news-grid-4col {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .news-grid,
+  .news-grid-4col {
+    grid-template-columns: 1fr;
+  }
+  .social-channels-bar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 }
 
 /* ==========================================================================
