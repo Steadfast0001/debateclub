@@ -74,33 +74,98 @@
           <p data-i18n="welcomeText">Welcome to the Biaka Audacious Agora Debate Club! After our Pan Africa 2026 Success and with <span class="president-name">TERCY WAINWUL</span> Raising BIAKA Visibility Flag High, we are building something big. This comes with a lot of Opportunities at hands - Competitions, Leadership, Training and Networking.</p>
           <p data-i18n="registrationInstruction">Fill in this 1 mins form to Register.</p>
         </article>
-        <form id="registrationForm" class="club-form">
-        <label>
-          <span data-i18n="fieldName">Full Name</span>
-          <input type="text" name="name" required placeholder="E.g., Jane Doe">
-        </label>
-        
-        <label>
-          <span data-i18n="fieldEmail">Email Address</span>
-          <input type="email" name="email" required placeholder="E.g., jane@example.com">
-        </label>
+                <form id="registrationForm" class="club-form" style="max-width: 680px; margin: 0 auto; background: var(--panel); border: 1px solid var(--line); border-radius: 16px; padding: 2.5rem; box-shadow: var(--shadow);">
+          <!-- Step Progress Indicator -->
+          <div style="margin-bottom: 2rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+              <span id="stepProgressLabel" style="font-size: 13px; font-weight: 700; color: var(--gold); text-transform: uppercase; letter-spacing: 0.05em;">Step 1 of 4: Personal Information</span>
+              <span id="stepProgressPercent" style="font-size: 13px; font-weight: 700; color: var(--muted);">25% Complete</span>
+            </div>
+            <div style="width: 100%; height: 6px; background: var(--line); border-radius: 10px; overflow: hidden;">
+              <div id="stepProgressBar" style="width: 25%; height: 100%; background: var(--gold); transition: width 0.3s ease; border-radius: 10px;"></div>
+            </div>
+          </div>
 
-        <label>
-          <span data-i18n="fieldDepartment">Department + Level</span>
-          <input type="text" name="department" required placeholder="E.g., Nursing, Level 200">
-        </label>
-          <label class="wide"><span data-i18n="fieldPhone">Phone Number / WhatsApp Number</span><input name="phone" required></label>
-          <label><span data-i18n="fieldExperience">Debate Experience</span>
-            <select name="experience" required>
-              <option value="">Select experience level</option>
-              <option value="Beginner: Never Debated">Beginner: Never Debated</option>
-              <option value="Intermediate: Some Experience">Intermediate: Some Experience</option>
-              <option value="Advanced: Competed Before">Advanced: Competed Before</option>
-            </select>
-          </label>
-          <label class="wide"><span data-i18n="fieldReason">Why do you want to Join the Biaka Audacious Agora Debate Club?</span><textarea name="reason" rows="5" required></textarea></label>
-          <button type="submit" data-i18n="submitRegistration">Submit Registration</button>
-          <p id="formMessage" class="form-message"></p>
+          <!-- STEP 1: PERSONAL INFORMATION -->
+          <div id="regStep1" class="wizard-step">
+            <h3 style="margin-top: 0; font-size: 1.35rem; color: var(--ink); margin-bottom: 0.5rem;">Personal Profile</h3>
+            <p style="font-size: 13.5px; color: var(--muted); margin-bottom: 1.5rem;">Enter your primary identity and communication channels.</p>
+            <label style="margin-bottom: 1rem; display: block;">
+              <span style="font-size: 13px; font-weight: 600; color: var(--ink);">Full Legal Name</span>
+              <input type="text" id="regName" name="name" required placeholder="E.g., Jane N. Tanyi" style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid var(--line); background: var(--paper); color: var(--ink); font-size: 14px;">
+            </label>
+            <label style="margin-bottom: 1rem; display: block;">
+              <span style="font-size: 13px; font-weight: 600; color: var(--ink);">Email Address</span>
+              <input type="email" id="regEmail" name="email" required placeholder="E.g., jane@biakahc.org" style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid var(--line); background: var(--paper); color: var(--ink); font-size: 14px;">
+            </label>
+            <label style="margin-bottom: 1.5rem; display: block;">
+              <span style="font-size: 13px; font-weight: 600; color: var(--ink);">WhatsApp Number (For Direct Team Roster & Announcements)</span>
+              <input type="tel" id="regPhone" name="phone" required placeholder="E.g., +237 650 141 680" style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid var(--line); background: var(--paper); color: var(--ink); font-size: 14px;">
+            </label>
+            <div style="display: flex; justify-content: flex-end;">
+              <button type="button" class="btn btn-primary" onclick="goToRegStep(2)" style="padding: 12px 28px; font-weight: 600; border-radius: 8px;">Next: Academic Details →</button>
+            </div>
+          </div>
+
+          <!-- STEP 2: ACADEMIC DETAILS -->
+          <div id="regStep2" class="wizard-step hidden">
+            <h3 style="margin-top: 0; font-size: 1.35rem; color: var(--ink); margin-bottom: 0.5rem;">Academic Details</h3>
+            <p style="font-size: 13.5px; color: var(--muted); margin-bottom: 1.5rem;">Your campus faculty standing at BIAKA University Institute of Buea.</p>
+            <label style="margin-bottom: 1rem; display: block;">
+              <span style="font-size: 13px; font-weight: 600; color: var(--ink);">Faculty / Department & Level</span>
+              <input type="text" id="regDepartment" name="department" required placeholder="E.g., Nursing Sciences, Level 300" style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid var(--line); background: var(--paper); color: var(--ink); font-size: 14px;">
+            </label>
+            <label style="margin-bottom: 1.5rem; display: block;">
+              <span style="font-size: 13px; font-weight: 600; color: var(--ink);">Student Matricule / ID Number (Optional)</span>
+              <input type="text" id="regMatricule" name="matricule" placeholder="E.g., BUIB/2024/0981" style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid var(--line); background: var(--paper); color: var(--ink); font-size: 14px;">
+            </label>
+            <div style="display: flex; justify-content: space-between;">
+              <button type="button" class="btn btn-secondary" onclick="goToRegStep(1)" style="padding: 12px 24px;">← Back</button>
+              <button type="button" class="btn btn-primary" onclick="goToRegStep(3)" style="padding: 12px 28px; font-weight: 600;">Next: Debate Experience →</button>
+            </div>
+          </div>
+
+          <!-- STEP 3: DEBATE EXPERIENCE -->
+          <div id="regStep3" class="wizard-step hidden">
+            <h3 style="margin-top: 0; font-size: 1.35rem; color: var(--ink); margin-bottom: 0.5rem;">Debate Background & Motivation</h3>
+            <p style="font-size: 13.5px; color: var(--muted); margin-bottom: 1.5rem;">Help us pair you with matching training pods and senior mentors.</p>
+            <label style="margin-bottom: 1rem; display: block;">
+              <span style="font-size: 13px; font-weight: 600; color: var(--ink);">Prior Debate / Public Speaking Experience</span>
+              <select id="regExperience" name="experience" required style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid var(--line); background: var(--paper); color: var(--ink); font-size: 14px;">
+                <option value="">Select experience level</option>
+                <option value="Beginner: Never Debated">Novice / Beginner: Never Debated Before</option>
+                <option value="Intermediate: Some Experience">Intermediate: Some School / Club Experience</option>
+                <option value="Advanced: Competed Before">Championship Veteran: Tournament Competitor</option>
+              </select>
+            </label>
+            <label style="margin-bottom: 1.5rem; display: block;">
+              <span style="font-size: 13px; font-weight: 600; color: var(--ink);">Why do you want to join the BIAKA Audacious Agora Debate Club?</span>
+              <textarea id="regReason" name="reason" rows="4" required placeholder="What rhetorical, civic, or leadership goals do you wish to achieve?" style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid var(--line); background: var(--paper); color: var(--ink); font-size: 14px; font-family: inherit;"></textarea>
+            </label>
+            <div style="display: flex; justify-content: space-between;">
+              <button type="button" class="btn btn-secondary" onclick="goToRegStep(2)" style="padding: 12px 24px;">← Back</button>
+              <button type="button" class="btn btn-primary" onclick="goToRegStep(4)" style="padding: 12px 28px; font-weight: 600;">Review & Submit →</button>
+            </div>
+          </div>
+
+          <!-- STEP 4: REVIEW & CONFIRMATION -->
+          <div id="regStep4" class="wizard-step hidden">
+            <h3 style="margin-top: 0; font-size: 1.35rem; color: var(--ink); margin-bottom: 0.5rem;">Review & Confirmation</h3>
+            <p style="font-size: 13.5px; color: var(--muted); margin-bottom: 1.5rem;">Please review your details before final induction submission.</p>
+            <div style="background: var(--paper); border: 1px solid var(--line); border-radius: 10px; padding: 1.25rem; margin-bottom: 1.5rem; font-size: 13.5px; line-height: 1.6;">
+              <div><strong>Name:</strong> <span id="revName">—</span></div>
+              <div><strong>Email:</strong> <span id="revEmail">—</span></div>
+              <div><strong>Phone:</strong> <span id="revPhone">—</span></div>
+              <div><strong>Department:</strong> <span id="revDepartment">—</span></div>
+              <div><strong>Experience:</strong> <span id="revExperience">—</span></div>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <button type="button" class="btn btn-secondary" onclick="goToRegStep(3)" style="padding: 12px 24px;">← Edit Details</button>
+              <button type="submit" id="submitRegBtn" class="btn btn-primary" style="padding: 14px 32px; font-size: 15px; font-weight: 700;">Complete Registration 🏛️</button>
+            </div>
+          </div>
+
+          <p id="formMessage" class="form-message" style="margin-top: 1.25rem; font-size: 14px; font-weight: 600;"></p>
         </form>
       </div>
     </section>

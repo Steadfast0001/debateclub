@@ -2274,3 +2274,66 @@ function autoRankBallot() {
   showToast("⚡ Ballot ranks automatically calculated by speaker scores!", "success");
 }
 window.autoRankBallot = autoRankBallot;
+
+
+// ==========================================================================
+// 4-STAGE PROGRESSIVE REGISTRATION WIZARD LOGIC
+// ==========================================================================
+let currentRegStep = 1;
+
+function goToRegStep(step) {
+  // Validate current step before advancing
+  if (step > currentRegStep) {
+    if (currentRegStep === 1) {
+      const name = document.getElementById("regName")?.value.trim();
+      const email = document.getElementById("regEmail")?.value.trim();
+      const phone = document.getElementById("regPhone")?.value.trim();
+      if (!name || !email || !phone) {
+        showToast("Please fill in your Name, Email and WhatsApp number.", "error");
+        return;
+      }
+    } else if (currentRegStep === 2) {
+      const dept = document.getElementById("regDepartment")?.value.trim();
+      if (!dept) {
+        showToast("Please provide your Department and Level.", "error");
+        return;
+      }
+    } else if (currentRegStep === 3) {
+      const exp = document.getElementById("regExperience")?.value;
+      const reason = document.getElementById("regReason")?.value.trim();
+      if (!exp || !reason) {
+        showToast("Please select your experience and state your motivation.", "error");
+        return;
+      }
+      // Populate review step
+      document.getElementById("revName").textContent = document.getElementById("regName")?.value || "—";
+      document.getElementById("revEmail").textContent = document.getElementById("regEmail")?.value || "—";
+      document.getElementById("revPhone").textContent = document.getElementById("regPhone")?.value || "—";
+      document.getElementById("revDepartment").textContent = document.getElementById("regDepartment")?.value || "—";
+      document.getElementById("revExperience").textContent = document.getElementById("regExperience")?.value || "—";
+    }
+  }
+
+  // Update UI step
+  for (let i = 1; i <= 4; i++) {
+    const el = document.getElementById(`regStep${i}`);
+    if (el) el.classList.toggle("hidden", i !== step);
+  }
+
+  currentRegStep = step;
+  const progressBar = document.getElementById("stepProgressBar");
+  const progressPercent = document.getElementById("stepProgressPercent");
+  const progressLabel = document.getElementById("stepProgressLabel");
+
+  const stepLabels = [
+    "Step 1 of 4: Personal Information",
+    "Step 2 of 4: Academic Details",
+    "Step 3 of 4: Debate Background",
+    "Step 4 of 4: Review & Confirmation"
+  ];
+
+  if (progressBar) progressBar.style.width = `${step * 25}%`;
+  if (progressPercent) progressPercent.textContent = `${step * 25}% Complete`;
+  if (progressLabel) progressLabel.textContent = stepLabels[step - 1];
+}
+window.goToRegStep = goToRegStep;

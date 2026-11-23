@@ -1,20 +1,20 @@
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=JetBrains+Mono:wght@500;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@500;700;800&family=Poppins:wght@500;600;700;800&display=swap');
 :root {
-  --ink: #0a1424;
+  --ink: #091A14;
   --ink-secondary: #334155;
   --muted: #64748b;
   --line: #e2e8f0;
   --line-strong: #cbd5e1;
-  --paper: #f8fafc;
+  --paper: #F9FAF8;
   --panel: #ffffff;
   --panel-elevated: #ffffff;
-  --blue: #0f2342;
-  --blue-dark: #09172c;
+  --blue: #0B3D2E;
+  --blue-dark: #06261C;
   --blue-light: #e0f2fe;
   --blue-glow: rgba(2, 132, 199, 0.18);
   --green: #059669;
   --green-light: #d1fae5;
-  --gold: #d4af37;
+  --gold: #F4B22A;
   --gold-light: #fef3c7;
   --red: #dc2626;
   --red-light: #fee2e2;
@@ -32,16 +32,16 @@
   --muted: #94a3b8;
   --line: #1e293b;
   --line-strong: #334155;
-  --paper: #070d18;
-  --panel: #0d1728;
-  --panel-elevated: #132038;
-  --blue: #3b82f6;
-  --blue-dark: #0284c7;
+  --paper: #081A12;
+  --panel: #0E291E;
+  --panel-elevated: #15392B;
+  --blue: #14533C;
+  --blue-dark: #0B3D2E;
   --blue-light: rgba(56, 189, 248, 0.12);
   --blue-glow: rgba(56, 189, 248, 0.25);
   --green: #34d399;
   --green-light: rgba(52, 211, 153, 0.15);
-  --gold: #f5d061;
+  --gold: #F6C14B;
   --gold-light: rgba(251, 191, 36, 0.15);
   --red: #f87171;
   --red-light: rgba(248, 113, 113, 0.15);
@@ -58,7 +58,7 @@ body {
   margin: 0;
   color: var(--ink);
   background: var(--paper);
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   line-height: 1.55;
@@ -3139,4 +3139,177 @@ h1, h2, h3, .hero-title, .brand strong, .motion-title-large {
 .stage-controls {
   display: flex;
   gap: 1rem;
+}
+
+
+/* Visual Design System: Poppins & Inter Hierarchy */
+h1, h2, h3, h4, .hero-title, .brand strong, .motion-title-large, .section-title {
+  font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif !important;
+  letter-spacing: -0.02em;
+}
+body, p, span, button, input, textarea, select {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+.timer-display, #stageTimerDisplay, #poiTimerDisplay, .ballot-total-badge {
+  font-family: 'JetBrains Mono', monospace !important;
+}
+
+/* Nav Redesign: Sticky shrink, smooth glass, active indicator */
+.site-header {
+  transition: padding 0.3s ease, background 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+.site-header.scrolled {
+  padding-top: 10px !important;
+  padding-bottom: 10px !important;
+  box-shadow: 0 4px 20px -2px rgba(8, 26, 18, 0.1);
+  border-bottom: 1px solid var(--line);
+}
+.nav-link {
+  position: relative;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+.nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 50%;
+  width: 0;
+  height: 2px;
+  background: var(--gold);
+  transition: width 0.25s ease, left 0.25s ease;
+  border-radius: 2px;
+}
+.nav-link:hover::after, .nav-link.active::after {
+  width: 100%;
+  left: 0;
+}
+.btn-primary {
+  background: var(--blue) !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(244, 178, 42, 0.2) !important;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+.btn-primary:hover {
+  background: var(--blue-dark) !important;
+  transform: translateY(-1.5px);
+  box-shadow: 0 8px 24px -4px rgba(11, 61, 46, 0.35), 0 0 16px rgba(244, 178, 42, 0.25) !important;
+}
+.btn-secondary {
+  border: 1px solid var(--line-strong) !important;
+  background: var(--surface) !important;
+  color: var(--ink) !important;
+  transition: all 0.2s ease !important;
+}
+.btn-secondary:hover {
+  border-color: var(--gold) !important;
+  color: var(--gold) !important;
+  background: rgba(244, 178, 42, 0.08) !important;
+  transform: translateY(-1px);
+}
+
+/* Modern Conversion Hero Grid */
+.hero-conversion-grid {
+  display: grid;
+  grid-template-columns: 1.25fr 0.95fr;
+  gap: 3.5rem;
+  align-items: center;
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 4rem 1.5rem 5rem;
+}
+@media (max-width: 960px) {
+  .hero-conversion-grid {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+    padding: 2.5rem 1rem 3.5rem;
+    text-align: center;
+  }
+}
+.hero-badge-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  border-radius: 30px;
+  background: rgba(11, 61, 46, 0.08);
+  border: 1px solid rgba(11, 61, 46, 0.2);
+  color: var(--blue);
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+}
+:root.dark .hero-badge-pill {
+  background: rgba(20, 83, 60, 0.25);
+  border-color: rgba(244, 178, 42, 0.35);
+  color: #F6C14B;
+}
+.hero-title-lead {
+  font-size: clamp(2.5rem, 4.8vw, 4.2rem);
+  font-weight: 700;
+  line-height: 1.08;
+  color: var(--ink);
+  margin: 0 0 1.25rem 0;
+}
+.hero-subtitle-lead {
+  font-size: clamp(1.05rem, 1.4vw, 1.25rem);
+  line-height: 1.6;
+  color: var(--muted);
+  margin-bottom: 2rem;
+  max-width: 600px;
+}
+@media (max-width: 960px) {
+  .hero-subtitle-lead { margin-left: auto; margin-right: auto; }
+}
+.hero-actions-wrap {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-bottom: 2.5rem;
+}
+@media (max-width: 960px) {
+  .hero-actions-wrap { justify-content: center; }
+}
+.hero-metrics-strip {
+  display: flex;
+  gap: 2.5rem;
+  border-top: 1px solid var(--line);
+  padding-top: 1.75rem;
+}
+@media (max-width: 960px) {
+  .hero-metrics-strip { justify-content: center; gap: 1.5rem; }
+}
+.metric-number {
+  font-size: 1.85rem;
+  font-weight: 800;
+  font-family: 'Poppins', sans-serif;
+  color: var(--blue);
+  line-height: 1;
+  margin-bottom: 4px;
+}
+:root.dark .metric-number { color: #F6C14B; }
+.metric-label {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+/* Hero 3D Stage Card */
+.hero-stage-card {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  padding: 2rem;
+  box-shadow: 0 20px 40px -10px rgba(8, 26, 18, 0.12), 0 0 0 1px rgba(244, 178, 42, 0.1);
+  position: relative;
+  overflow: hidden;
+  text-align: left;
+}
+:root.dark .hero-stage-card {
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(244, 178, 42, 0.25);
 }
