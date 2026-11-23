@@ -1,3 +1,7 @@
+
+let leadersCache = null;
+let leadersCacheTime = 0;
+const CACHE_TTL = 60000; // 60 seconds
 const express = require('express');
 const router = express.Router();
 const multer = require('multer');

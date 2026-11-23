@@ -1,3 +1,7 @@
+
+let newsCache = null;
+let newsCacheTime = 0;
+const CACHE_TTL = 30000; // 30 seconds cache
 // API route for news posts
 // GET: Get all published news posts (public)
 // POST: Create news post (admin-only)
@@ -47,6 +51,7 @@ module.exports = async (req, res) => {
         [title, type, media || null, text, 1] // author_id 1 for now
       );
 
+      newsCache = null;
       const newPost = result.rows[0];
 
       // Broadcast to all registered members in background
@@ -88,6 +93,7 @@ module.exports = async (req, res) => {
         return res.status(404).json({ error: 'News post not found' });
       }
 
+      newsCache = null;
       return res.status(200).json({ 
         success: true, 
         message: 'News post updated successfully',
@@ -113,6 +119,7 @@ module.exports = async (req, res) => {
         return res.status(404).json({ error: 'News post not found' });
       }
 
+      newsCache = null;
       return res.status(200).json({ success: true, message: 'News post deleted successfully' });
     }
 
