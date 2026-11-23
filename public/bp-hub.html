@@ -29,6 +29,10 @@
     window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
   </script>
   <script defer src="/_vercel/insights/script.js"></script>
+  <!-- Google Fonts Preconnect & Academic Editorial Hierarchy -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=JetBrains+Mono:wght@500;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
   <div id="pwaInstallBanner" class="pwa-install-banner" style="display:none;">
@@ -94,7 +98,15 @@
             <div class="timer-box-main">
               <h3>⏱️ 7-Minute Parliamentary Speech Timer</h3>
               <p class="tool-desc">Features realistic Web Audio bell alerts at 1:00 (POIs Open), 6:00 (POIs Closed), 7:00 (Time Expired), and 7:20 (Overtime Hard Stop).</p>
+              
+              <div style="display:flex; justify-content:center; gap:8px; margin-bottom:12px; flex-wrap:wrap;">
+                <button type="button" class="btn btn-secondary" style="font-size:11px; padding:4px 10px;" onclick="setTimerPreset('7m')">7m (BP Standard)</button>
+                <button type="button" class="btn btn-secondary" style="font-size:11px; padding:4px 10px;" onclick="setTimerPreset('5m')">5m (Novice / Junior)</button>
+                <button type="button" class="btn btn-secondary" style="font-size:11px; padding:4px 10px;" onclick="setTimerPreset('8m')">8m (World Schools)</button>
+                <button type="button" class="btn btn-primary" style="font-size:11px; padding:4px 10px;" onclick="toggleStageFullscreen()">📽️ Stage Fullscreen</button>
+              </div>
               <div class="timer-display" id="timerDisplay">07:00</div>
+
               <div class="timer-poi-info" id="timerBadge">Protected Time: 0:00 - 1:00 (No POIs)</div>
               
               <div class="timer-controls">
@@ -226,6 +238,7 @@
                 <small style="color:var(--muted);">Standard BP Scoring (1st = 3 pts, 2nd = 2 pts, 3rd = 1 pt, 4th = 0 pts | Speaker Scale 65–85)</small>
               </div>
               <div style="display:flex; gap:8px;">
+                <button type="button" class="btn btn-secondary" onclick="autoRankBallot()">⚡ Auto-Rank by Scores</button>
                 <button type="button" class="btn btn-primary" onclick="copyBallotWhatsApp()">📋 Copy for WhatsApp</button>
               </div>
             </div>
@@ -470,5 +483,31 @@
   <div id="toastContainer" class="toast-container" aria-live="polite"></div>
 
   <script src="app.js?v=23"></script>
+
+  <!-- BP Stage Fullscreen Modal -->
+  <div id="stageFullscreenModal" class="stage-fullscreen-modal hidden">
+    <div style="position:absolute; top:20px; right:20px;">
+      <button type="button" class="btn btn-secondary" style="background:rgba(255,255,255,0.1); color:#fff; border:none;" onclick="toggleStageFullscreen()">✕ Exit Stage</button>
+    </div>
+    <select class="stage-speaker-select" id="stageSpeakerSelect">
+      <option value="PM">Prime Minister (PM) — Opening Gov</option>
+      <option value="LO">Leader of Opposition (LO) — Opening Opp</option>
+      <option value="DPM">Deputy Prime Minister (DPM) — Opening Gov</option>
+      <option value="DLO">Deputy Leader of Opp (DLO) — Opening Opp</option>
+      <option value="MG">Member of Government (MG) — Closing Gov</option>
+      <option value="MO">Member of Opposition (MO) — Closing Opp</option>
+      <option value="GW">Government Whip (GW) — Closing Gov</option>
+      <option value="OW">Opposition Whip (OW) — Closing Opp</option>
+    </select>
+    <div id="stageTimerDisplay" class="stage-timer-digits">07:00</div>
+    <div id="stageTimerBadge" class="stage-poi-badge">Protected Time: 0:00 - 1:00 (No POIs)</div>
+    <div class="stage-controls">
+      <button type="button" class="btn btn-primary" style="padding:12px 28px; font-size:16px;" onclick="startDebateTimer()">Start Speech</button>
+      <button type="button" class="btn btn-secondary" style="padding:12px 24px; font-size:16px;" onclick="pauseDebateTimer()">Pause</button>
+      <button type="button" class="btn btn-secondary" style="padding:12px 24px; font-size:16px;" onclick="resetDebateTimer()">Reset</button>
+      <button type="button" class="btn btn-secondary" style="padding:12px 24px; font-size:16px;" onclick="playDebateBell(1)">🔔 Gavel Bell</button>
+    </div>
+  </div>
+
 </body>
 </html>

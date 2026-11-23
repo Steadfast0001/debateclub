@@ -1,5 +1,6 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=JetBrains+Mono:wght@500;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
 :root {
-  --ink: #0f172a;
+  --ink: #0a1424;
   --ink-secondary: #334155;
   --muted: #64748b;
   --line: #e2e8f0;
@@ -7,13 +8,13 @@
   --paper: #f8fafc;
   --panel: #ffffff;
   --panel-elevated: #ffffff;
-  --blue: #0284c7;
-  --blue-dark: #0369a1;
+  --blue: #0f2342;
+  --blue-dark: #09172c;
   --blue-light: #e0f2fe;
   --blue-glow: rgba(2, 132, 199, 0.18);
   --green: #059669;
   --green-light: #d1fae5;
-  --gold: #d97706;
+  --gold: #d4af37;
   --gold-light: #fef3c7;
   --red: #dc2626;
   --red-light: #fee2e2;
@@ -31,16 +32,16 @@
   --muted: #94a3b8;
   --line: #1e293b;
   --line-strong: #334155;
-  --paper: #0b1120;
-  --panel: #111a2e;
-  --panel-elevated: #16223b;
-  --blue: #38bdf8;
+  --paper: #070d18;
+  --panel: #0d1728;
+  --panel-elevated: #132038;
+  --blue: #3b82f6;
   --blue-dark: #0284c7;
   --blue-light: rgba(56, 189, 248, 0.12);
   --blue-glow: rgba(56, 189, 248, 0.25);
   --green: #34d399;
   --green-light: rgba(52, 211, 153, 0.15);
-  --gold: #fbbf24;
+  --gold: #f5d061;
   --gold-light: rgba(251, 191, 36, 0.15);
   --red: #f87171;
   --red-light: rgba(248, 113, 113, 0.15);
@@ -3075,3 +3076,67 @@ footer {
   }
 }
 
+
+
+h1, h2, h3, .hero-title, .brand strong, .motion-title-large {
+  font-family: 'Cormorant Garamond', Georgia, serif !important;
+  letter-spacing: -0.01em;
+}
+.timer-display, #stageTimerDisplay, #poiTimerDisplay, .ballot-total-badge {
+  font-family: 'JetBrains Mono', monospace !important;
+}
+.timer-bell-pulse {
+  animation: timerGoldPulse 0.8s ease-out;
+}
+@keyframes timerGoldPulse {
+  0% { box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.7); }
+  50% { box-shadow: 0 0 0 25px rgba(212, 175, 55, 0.2); }
+  100% { box-shadow: 0 0 0 0 rgba(212, 175, 55, 0); }
+}
+/* BP Stage Fullscreen Modal */
+.stage-fullscreen-modal {
+  position: fixed;
+  inset: 0;
+  background: #070d18;
+  color: #f8fafc;
+  z-index: 99999;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+  text-align: center;
+}
+.stage-speaker-select {
+  background: #0d1728;
+  color: #f5d061;
+  border: 1px solid rgba(245, 208, 97, 0.4);
+  padding: 8px 16px;
+  font-size: 1.1rem;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-weight: 700;
+}
+.stage-timer-digits {
+  font-size: clamp(96px, 18vw, 210px);
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 800;
+  color: #f5d061;
+  line-height: 1;
+  margin: 1rem 0;
+  letter-spacing: -0.04em;
+}
+.stage-poi-badge {
+  font-size: clamp(18px, 2.5vw, 28px);
+  padding: 8px 24px;
+  border-radius: 30px;
+  background: rgba(212, 175, 55, 0.15);
+  border: 1px solid rgba(212, 175, 55, 0.35);
+  color: #f8fafc;
+  margin-bottom: 2rem;
+}
+.stage-controls {
+  display: flex;
+  gap: 1rem;
+}

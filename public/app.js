@@ -2191,3 +2191,86 @@ function installPWA() {
 window.installPWA = installPWA;
 
 
+
+
+// ==========================================================================
+// BP HUB INNOVATIONS: PRESETS, STAGE FULLSCREEN & AUTO-RANK
+// ==========================================================================
+let currentPreset = '7m';
+let speechTotalSeconds = 420;
+
+function setTimerPreset(preset) {
+  currentPreset = preset;
+  if (preset === '5m') {
+    speechTotalSeconds = 300;
+  } else if (preset === '8m') {
+    speechTotalSeconds = 480;
+  } else {
+    speechTotalSeconds = 420; // 7m BP Standard
+  }
+  resetDebateTimer();
+  showToast(`Timer calibrated to ${preset} round.`, "info");
+}
+window.setTimerPreset = setTimerPreset;
+
+function toggleStageFullscreen() {
+  const modal = document.getElementById("stageFullscreenModal");
+  if (!modal) return;
+  if (modal.classList.contains("hidden")) {
+    modal.classList.remove("hidden");
+    if (document.documentElement.requestFullscreen) {
+      document.documentElement.requestFullscreen().catch(() => {});
+    }
+  } else {
+    modal.classList.add("hidden");
+    if (document.exitFullscreen && document.fullscreenElement) {
+      document.exitFullscreen().catch(() => {});
+    }
+  }
+}
+window.toggleStageFullscreen = toggleStageFullscreen;
+
+function triggerBellVisualPulse() {
+  const box = document.querySelector(".timer-box-main");
+  if (box) {
+    box.classList.remove("timer-bell-pulse");
+    void box.offsetWidth;
+    box.classList.add("timer-bell-pulse");
+  }
+  const stageDisplay = document.getElementById("stageTimerDisplay");
+  if (stageDisplay) {
+    stageDisplay.classList.remove("timer-bell-pulse");
+    void stageDisplay.offsetWidth;
+    stageDisplay.classList.add("timer-bell-pulse");
+  }
+}
+window.triggerBellVisualPulse = triggerBellVisualPulse;
+
+// Auto-Rank Ballot by total score
+function autoRankBallot() {
+  const teams = [
+    { code: 'og', name: 'Opening Government' },
+    { code: 'oo', name: 'Opening Opposition' },
+    { code: 'cg', name: 'Closing Government' },
+    { code: 'co', name: 'Closing Opposition' }
+  ];
+
+  const scoredTeams = teams.map(t => {
+    const s1 = parseFloat(document.getElementById(`${t.code}Score1`)?.value) || 0;
+    const s2 = parseFloat(document.getElementById(`${t.code}Score2`)?.value) || 0;
+    return { ...t, total: s1 + s2 };
+  });
+
+  scoredTeams.sort((a, b) => b.total - a.total);
+
+  scoredTeams.forEach((team, index) => {
+    const rankSelect = document.getElementById(`${team.code}Rank`);
+    if (rankSelect) {
+      rankSelect.value = String(index + 1);
+    }
+  });
+
+  updateBallotScores();
+  showToast("⚡ Ballot ranks automatically calculated by speaker scores!", "success");
+}
+window.autoRankBallot = autoRankBallot;
