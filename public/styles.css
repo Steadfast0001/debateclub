@@ -3313,3 +3313,12 @@ body, p, span, button, input, textarea, select {
 :root.dark .hero-stage-card {
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(244, 178, 42, 0.25);
 }
+
+
+/* Universal utility hidden rule */
+.hidden {
+  display: none !important;
+}
+.stage-fullscreen-modal.hidden {
+  display: none !important;
+}
